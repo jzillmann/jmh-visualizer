@@ -1,5 +1,8 @@
 import React from 'react';
-import MainNavi from './MainNavi.jsx';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import Container from './Container.jsx';
+import FileDrop from './FileDrop.jsx';
+import About from './About.jsx';
 
 class App extends React.Component {
 
@@ -20,10 +23,13 @@ class App extends React.Component {
     render() {
         return (
             <div>
-              <MainNavi/>
-              <section style={ { padding: 20 } }>
-                { this.props.children }
-              </section>
+              <Router history={ hashHistory }>
+                <Route path="/" component={ Container }>
+                  <IndexRoute component={ FileDrop } />
+                  <Route path="/" component={ FileDrop } />
+                  <Route path="/about" component={ About } />
+                </Route>
+              </Router>
             </div>
             );
     }

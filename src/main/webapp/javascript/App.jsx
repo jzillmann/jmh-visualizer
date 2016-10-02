@@ -6,27 +6,42 @@ import About from './About.jsx';
 
 class App extends React.Component {
 
-    getInitialState() {
-        return {
-            rawReports: [],
-            dataUploaded: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            count: props.initialCount,
+            dataUploaded: props.ups
+        // rawReports: []
         };
+        this.handleUserInput = this.handleUserInput.bind(this);
     }
 
-    handleUserInput(rawReports) {
+    // handleUserInput(rawReports) {
+    handleUserInput() {
         this.setState({
-            filterText: rawReports,
-            dataUploaded: true
+            dataUploaded: true,
+            count: 23
+        // rawReports: rawReports
         });
     }
 
     render() {
+        console.log('___' + this.state.count)
         return (
             <div>
+              /
+              { this.state.count },
+              { this.state.abc }___=
+              { 666 }
+              { true + '' }_+_+_=-=_+
               <Router history={ hashHistory }>
                 <Route path="/" component={ Container }>
-                  <IndexRoute component={ FileDrop } />
-                  <Route path="/" component={ FileDrop } />
+                  <IndexRoute xyz={ this.state.dataUploaded } onFileUpload={ this.handleUserInput } component={ FileDrop } />
+                  <Route
+                         xyz={ 23 }
+                         onFileUpload={ this.handleUserInput }
+                         path="/"
+                         component={ FileDrop } />
                   <Route path="/about" component={ About } />
                 </Route>
               </Router>
@@ -36,7 +51,11 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    children: React.PropTypes.node,
+    initialCount: React.PropTypes.number,
+    ups: React.PropTypes.bool
+}
+App.defaultProps = {
+    initialCount: 2,
+    ups: false
 };
-
 export default App;

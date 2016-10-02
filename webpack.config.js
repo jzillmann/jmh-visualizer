@@ -2,7 +2,7 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var SOURCE_DIR = path.resolve(__dirname, 'src/main/webapp');
+var SOURCE_DIR = path.resolve(__dirname, 'src');
 var JAVASCRIPT_DIR = SOURCE_DIR + '/javascript';
 var BUILD_DIR = path.resolve(__dirname, 'build/public');
 

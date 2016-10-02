@@ -2,7 +2,7 @@
   "name": "jmh-visualizer",
   "version": "0.0.1",
   "description": "Visualize the benchmark results of a JMH execution",
-  "main": "index.js",
+  "main": "index.jsx",
   "scripts": {
     "watch": "webpack -d --watch",
     "webpack": "webpack",

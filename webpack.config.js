@@ -18,7 +18,7 @@ var config = {
                 // Options to configure babel with
                 query: {
                     plugins: ['transform-runtime'],
-                    presets: ['es2015', 'react'],
+                    presets: ['es2015', 'stage-0', 'react'],
                 }
             },
             {

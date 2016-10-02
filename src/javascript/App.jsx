@@ -4,7 +4,17 @@ import Container from './Container.jsx';
 import FileDrop from './FileDrop.jsx';
 import About from './About.jsx';
 
-class App extends React.Component {
+export default class App extends React.Component {
+
+    static propTypes = {
+        initialCount: React.PropTypes.number,
+        ups: React.PropTypes.bool
+    };
+
+    static defaultProps = {
+        initialCount: 3,
+        ups: false
+    };
 
     constructor(props) {
         super(props);
@@ -50,12 +60,3 @@ class App extends React.Component {
     }
 }
 
-App.propTypes = {
-    initialCount: React.PropTypes.number,
-    ups: React.PropTypes.bool
-}
-App.defaultProps = {
-    initialCount: 2,
-    ups: false
-};
-export default App;

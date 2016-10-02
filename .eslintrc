@@ -4,6 +4,7 @@
   "extends": [
     "eslint:recommended", "plugin:react/recommended"
   ],
+  "parser": "babel-eslint",
   // Enable ES6 support. If you want to use custom Babel
   // features, you will need to enable a custom parser
   // as described in a section below.

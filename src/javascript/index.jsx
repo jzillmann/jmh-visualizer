@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import AppState from './AppState.jsx';
 import App from './components/App.jsx';
 import { providedBenchmarks } from './providedBenchmarks.jsx';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function render(appState) {
     console.debug('!!!!1:' + appState.dataUploaded)

@@ -1,6 +1,5 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var SOURCE_DIR = path.resolve(__dirname, 'src');
 var JAVASCRIPT_DIR = SOURCE_DIR + '/javascript';
@@ -10,11 +9,10 @@ var config = {
     module: {
         loaders: [
             {
+                test: /\.jsx?$/,
                 loader: 'babel-loader',
                 // Skip any files outside of your project's `src` directory
                 include: [JAVASCRIPT_DIR],
-                // Only run `.js` and `.jsx` files through Babel
-                test: /\.jsx?$/,
                 // Options to configure babel with
                 query: {
                     plugins: ['transform-runtime'],
@@ -22,8 +20,32 @@ var config = {
                 }
             },
             {
-                test: /(\.scss|\.css)$/,
-                loader: ExtractTextPlugin.extract('style', 'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass?sourceMap!toolbox')
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
+            },
+            {
+                test: /\.png$/,
+                loader: "url-loader?limit=100000"
+            },
+            {
+                test: /\.jpg$/,
+                loader: "file-loader"
+            },
+            {
+                test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url?limit=10000&mimetype=application/font-woff'
+            },
+            {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url?limit=10000&mimetype=application/octet-stream'
+            },
+            {
+                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file'
+            },
+            {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url?limit=10000&mimetype=image/svg+xml'
             }
         ]
     },
@@ -35,9 +57,6 @@ var config = {
     plugins: [
         new HtmlWebpackPlugin({
             template: SOURCE_DIR + '/index.html'
-        }),
-        new ExtractTextPlugin('bundle.css', {
-            allChunks: true
         })
     ]
 };

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import BenchmarkReport from './BenchmarkReport.jsx';
 
 function groupBy(xs, key) {
     return xs.reduce(function(rv, x) {
@@ -24,7 +25,7 @@ function benchmarkToClassName(item) {
     return item.benchmark.split('.').reverse()[1];
 }
 
-export default class Benchmarks extends Component {
+export default class BenchmarkList extends Component {
 
     static propTypes = {
         benchmarks: React.PropTypes.array.isRequired,
@@ -53,7 +54,8 @@ export default class Benchmarks extends Component {
               <div ref="main" className="container bs-docs-container">
                 <div className="row">
                   <div className="col-md-10" role="main">
-                    { JSON.stringify(groupByClassName, null, "\t") }
+                    { groupByClassName.map((i) => <BenchmarkReport key={ i.key } name={ i.key } methodBenchmarks={ i.values } />
+                      ) }
                   </div>
                   <div className="col-md-2 bs-docs-sidebar-holder">
                     aaa

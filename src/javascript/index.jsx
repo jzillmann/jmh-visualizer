@@ -14,5 +14,5 @@ const appState = new AppState({
     renderFunction: render
 })
 console.debug(providedBenchmarks.length)
-// appState.uploadBenchmarks(providedBenchmarks)
-appState.uploadBenchmarks([])
+appState.uploadBenchmarks(providedBenchmarks)
+//appState.uploadBenchmarks([])

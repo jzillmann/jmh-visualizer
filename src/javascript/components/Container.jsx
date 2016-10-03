@@ -6,9 +6,16 @@ class Container extends Component {
         return (
             <div>
               <MainNavi/>
-              <section style={ { padding: 20 } }>
-                { this.props.children }
-              </section>
+              <div ref="main" className="container bs-docs-container">
+                <div className="row">
+                  <div className="col-md-10" role="main">
+                    { this.props.children }
+                  </div>
+                  <div className="col-md-2 bs-docs-sidebar-holder">
+                    aaa
+                  </div>
+                </div>
+              </div>
             </div>
             );
     }

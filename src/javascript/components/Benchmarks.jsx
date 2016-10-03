@@ -50,7 +50,7 @@ export default class Benchmarks extends Component {
 
         return (
             <div>
-              <pre>{ JSON.stringify(groupByClassName, null, "\t") }</pre>
+              <pre className="container">{ JSON.stringify(groupByClassName, null, "\t") }</pre>
             </div>
             );
     }

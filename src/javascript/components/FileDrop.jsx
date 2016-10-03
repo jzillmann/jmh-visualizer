@@ -1,5 +1,6 @@
 import React from 'react';
 import Dropzone from 'react-dropzone'
+import FaCloudUpload from 'react-icons/lib/fa/cloud-upload'
 
 class FileDrop extends React.Component {
 
@@ -38,10 +39,11 @@ class FileDrop extends React.Component {
     render() {
         return (
             <div>
-              <Dropzone onDrop={ this.onDrop.bind(this) }>
-                <div>
-                  <i>Drop your JMH results in JSON format!</i>
+              <Dropzone onDrop={ this.onDrop.bind(this) } multiple={ true } style={ { width: 400, height: 200, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed', borderRadius: 5, display: 'table-cell', textAlign: 'center', verticalAlign: 'middle' } }>
+                <div className="container">
+                  Drop your JMH JSON files here!
                 </div>
+                <h3><FaCloudUpload/></h3>
               </Dropzone>
             </div>
             );

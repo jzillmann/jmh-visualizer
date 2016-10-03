@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Scrollspy } from 'react-scrollspy';
+import Nav from 'react-bootstrap/lib/Nav'
+import NavItem from 'react-bootstrap/lib/NavItem'
 import AutoAffix from 'react-overlays/lib/AutoAffix';
 import BenchmarkReport from './BenchmarkReport.jsx';
 
@@ -33,6 +34,14 @@ export default class BenchmarkList extends Component {
         benchmarks: React.PropTypes.array.isRequired,
     };
 
+    state = {
+        activeNavItemHref: null
+    }
+
+    handleNavItemSelect(key, e) {
+        window.location = e.target.href;
+    }
+
     render() {
 
         const benchmarks = this.props.benchmarks;
@@ -63,14 +72,14 @@ export default class BenchmarkList extends Component {
                   </div>
                   <div className="col-md-2 bs-docs-sidebar-holder">
                     <AutoAffix viewportOffsetTop={ 15 } container={ this }>
-                      <Scrollspy items={ groupByClassName.map((element) => element.key) } currentClassName="is-current">
-                        { groupByClassName.map((element) => <li key={ element.key }>
-                                                              <a href={ "#" + element.key }>
+                      <div className="bs-docs-sidebar hidden-print" role="complementary">
+                        <Nav className="bs-docs-sidenav" activeHref={ this.state.activeNavItemHref } onSelect={ this.handleNavItemSelect }>
+                          { groupByClassName.map((element) => <NavItem href={ "#" + element.key } key={ element.key }>
                                                                 { element.key }
-                                                              </a>
-                                                            </li>
-                          ) }
-                      </Scrollspy>
+                                                              </NavItem>
+                            ) }
+                        </Nav>
+                      </div>
                     </AutoAffix>
                   </div>
                 </div>

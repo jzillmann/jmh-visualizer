@@ -10,7 +10,7 @@ export default class App extends React.Component {
     };
 
     render() {
-        console.debug('!!!!3:' + this.props.appControl.dataUploaded)
+        console.debug('!!!!3:' + this.props.appControl.dataUploaded + '/' + this.props.appControl.benchmarks)
         var mainView;
         if (this.props.appControl.dataUploaded) {
             mainView = <Benchmarks benchmarks={ this.props.appControl.benchmarks } />

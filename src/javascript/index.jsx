@@ -1,28 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import AppState from './AppState.jsx';
 import App from './components/App.jsx';
 import { providedBenchmarks } from './providedBenchmarks.jsx';
 
-//global state
-const appControl = {
-    dataUploaded: false,
-    benchmarks: [],
-    uploadBenchmarks: function(benchmarks) {
-        this.dataUploaded = true;
-        this.benchmarks = benchmarks;
-        render(this)
-    }
-//TODO reset is just a page refresh
+function render(appState) {
+    console.debug('!!!!1:' + appState.dataUploaded)
+    ReactDOM.render(<App appControl={ appState } />, document.getElementById('main'));
 }
 
-function render(appControl) {
-    console.debug('!!!!1:' + appControl.dataUploaded)
-    ReactDOM.render(<App appControl={ appControl } something={ appControl.dataUploaded } />, document.getElementById('main'));
-}
-
+const appState = new AppState({
+    renderFunction: render
+})
 console.debug(providedBenchmarks.length)
-if (providedBenchmarks.length > 0) {
-    appControl.uploadBenchmarks(providedBenchmarks)
-}
-
-render(appControl)
+// appState.uploadBenchmarks(providedBenchmarks)
+appState.uploadBenchmarks([])

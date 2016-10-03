@@ -50,7 +50,16 @@ export default class Benchmarks extends Component {
 
         return (
             <div>
-              <pre className="container">{ JSON.stringify(groupByClassName, null, "\t") }</pre>
+              <div ref="main" className="container bs-docs-container">
+                <div className="row">
+                  <div className="col-md-10" role="main">
+                    { JSON.stringify(groupByClassName, null, "\t") }
+                  </div>
+                  <div className="col-md-2 bs-docs-sidebar-holder">
+                    aaa
+                  </div>
+                </div>
+              </div>
             </div>
             );
     }

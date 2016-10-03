@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 
+
 // Gathered report for one benchmark class
 export default class BenchmarkReport extends Component {
     static propTypes = {
@@ -21,7 +22,7 @@ export default class BenchmarkReport extends Component {
     render() {
         return (
             <div>
-              <h3>{ this.props.name }</h3>
+              <h3 id={ this.props.name }>{ this.props.name }</h3>
               <Button bsSize="small" onClick={ ::this.flipShowJson }>
                 Show JSON
               </Button>

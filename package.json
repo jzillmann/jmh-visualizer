@@ -20,7 +20,9 @@
     "react-bootstrap": "^0.30.3",
     "react-dom": "^15.3.2",
     "react-dropzone": "^3.6.0",
-    "react-icons": "^2.2.1"
+    "react-icons": "^2.2.1",
+    "react-overlays": "^0.6.10",
+    "react-scrollspy": "^2.3.1"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",

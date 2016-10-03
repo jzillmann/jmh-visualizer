@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Scrollspy } from 'react-scrollspy';
+import AutoAffix from 'react-overlays/lib/AutoAffix';
 import BenchmarkReport from './BenchmarkReport.jsx';
 
 function groupBy(xs, key) {
@@ -48,17 +50,28 @@ export default class BenchmarkList extends Component {
             console.debug(element)
         });
 
-
         return (
             <div>
               <div ref="main" className="container bs-docs-container">
                 <div className="row">
+                  <p>
+                    { groupByClassName.length } different Benchmark classes detected!
+                  </p>
                   <div className="col-md-10" role="main">
-                    { groupByClassName.map((i) => <BenchmarkReport key={ i.key } name={ i.key } methodBenchmarks={ i.values } />
+                    { groupByClassName.map((element) => <BenchmarkReport key={ element.key } name={ element.key } methodBenchmarks={ element.values } />
                       ) }
                   </div>
                   <div className="col-md-2 bs-docs-sidebar-holder">
-                    aaa
+                    <AutoAffix viewportOffsetTop={ 15 } container={ this }>
+                      <Scrollspy items={ groupByClassName.map((element) => element.key) } currentClassName="is-current">
+                        { groupByClassName.map((element) => <li key={ element.key }>
+                                                              <a href={ "#" + element.key }>
+                                                                { element.key }
+                                                              </a>
+                                                            </li>
+                          ) }
+                      </Scrollspy>
+                    </AutoAffix>
                   </div>
                 </div>
               </div>

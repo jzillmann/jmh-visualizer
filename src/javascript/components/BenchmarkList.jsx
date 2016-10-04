@@ -65,28 +65,46 @@ export default class BenchmarkList extends Component {
 
         this.state = {
             currentBenchmarkClassName: selectedBenchmarkClassName,
-            benchmarksGroupedByClassName: groupByClassName
+            benchmarksGroupedByClassName: groupByClassName,
+            scrollTrackingDisabled: false
         };
+        this.setCurrentBenchmark = this.setCurrentBenchmark.bind(this);
+        this.handleNavItemSelect = this.handleNavItemSelect.bind(this);
     }
 
 
-    setCurrentBenchmark(benchmarkClassName) {
-        console.debug("setCurrentBenchmark:" + benchmarkClassName);
-        // setTimeout(() => {
-        this.setState({
-            currentBenchmarkClassName: benchmarkClassName
-        });
-    // });
+    setCurrentBenchmark(benchmarkClassName, type) {
+        console.debug("setCurrentBenchmark:" + benchmarkClassName + ' - ' + type);
+        const newActive = document.getElementById('a_' + benchmarkClassName).parentElement;
+        const oldActive = document.getElementById('a_' + this.state.currentBenchmarkClassName).parentElement;
+
+
+        if (newActive != oldActive) {
+            newActive.className = 'active'
+            oldActive.className = ''
+            console.debug(document.getElementById('a_' + benchmarkClassName).parentElement);
+            this.setState({
+                currentBenchmarkClassName: benchmarkClassName
+            });
+        }
+    }
+
+    changeWaypoint(benchmarkClassName, type) {
+        if (this.state.scrollTrackingDisabled) {
+            console.debug('igore scroll ' + benchmarkClassName + " - " + type);
+        } else {
+            this.setCurrentBenchmark(benchmarkClassName, type)
+        }
     }
 
     renderWaypoint(benchmarkClassName) {
         return (
             <Waypoint
                       onEnter={ ({previousPosition}) => (
-                                previousPosition === Waypoint.above && this.setCurrentBenchmark(benchmarkClassName)
+                                previousPosition === Waypoint.above && this.changeWaypoint(benchmarkClassName, 'enter')
                                 ) }
                       onLeave={ ({currentPosition}) => (
-                                currentPosition === Waypoint.above && this.setCurrentBenchmark(benchmarkClassName)
+                                currentPosition === Waypoint.above && this.changeWaypoint(benchmarkClassName, 'leave')
                                 ) }
                       topOffset={ 10 }
                       bottomOffset={ -10 } />
@@ -94,9 +112,26 @@ export default class BenchmarkList extends Component {
     }
 
     handleNavItemSelect(key, e) {
+        const link = e.target.href;
+        const benchmarkClassName = link.substring(link.indexOf('#') + 1);
+        this.setCurrentBenchmark(benchmarkClassName, 'click')
+        this.setState({
+            scrollTrackingDisabled: true
+        })
         window.location = e.target.href;
-        const {hash} = window.location;
-    // this.setCurrentBenchmark(hash.substring(0))
+
+        const component = this;
+        setTimeout(function() {
+            component.setState({
+                scrollTrackingDisabled: false
+            })
+        }, 250);
+    }
+
+    shouldComponentUpdate() {
+        console.debug('shouldUpdate');
+        //TODO check for changed benchmarks (in case we can have changed benchmarks)
+        return false;
     }
 
     render() {
@@ -121,7 +156,7 @@ export default class BenchmarkList extends Component {
                     <AutoAffix viewportOffsetTop={ 15 } container={ this }>
                       <div className="bs-docs-sidebar hidden-print" role="complementary">
                         <Nav className="bs-docs-sidenav" activeHref={ "#" + this.state.currentBenchmarkClassName } onSelect={ this.handleNavItemSelect }>
-                          { this.state.benchmarksGroupedByClassName.map((element) => <NavItem href={ "#" + element.key } key={ element.key }>
+                          { this.state.benchmarksGroupedByClassName.map((element) => <NavItem id={ 'a_' + element.key } href={ "#" + element.key } key={ element.key }>
                                                                                        { element.key }
                                                                                      </NavItem>
                             ) }

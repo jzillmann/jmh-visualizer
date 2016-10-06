@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Badge from 'react-bootstrap/lib/Badge'
 import Nav from 'react-bootstrap/lib/Nav'
 import NavItem from 'react-bootstrap/lib/NavItem'
 import AutoAffix from 'react-overlays/lib/AutoAffix';
@@ -54,9 +55,7 @@ export default class BenchmarkList extends Component {
         // });
 
         var selectedBenchmarkClassName;
-        console.debug("_-_" + window.location);
         const {hash} = window.location;
-        console.debug(hash == '');
         if (hash == null || hash == '') {
             selectedBenchmarkClassName = groupByClassName[0].key
         } else {
@@ -82,7 +81,6 @@ export default class BenchmarkList extends Component {
         if (newActive != oldActive) {
             newActive.className = 'active'
             oldActive.className = ''
-            console.debug(document.getElementById('a_' + benchmarkClassName).parentElement);
             this.setState({
                 currentBenchmarkClassName: benchmarkClassName
             });
@@ -91,7 +89,7 @@ export default class BenchmarkList extends Component {
 
     changeWaypoint(benchmarkClassName, type) {
         if (this.state.scrollTrackingDisabled) {
-            console.debug('igore scroll ' + benchmarkClassName + " - " + type);
+            console.debug('Ignore scroll ' + benchmarkClassName + " - " + type);
         } else {
             this.setCurrentBenchmark(benchmarkClassName, type)
         }
@@ -106,8 +104,8 @@ export default class BenchmarkList extends Component {
                       onLeave={ ({currentPosition}) => (
                                 currentPosition === Waypoint.above && this.changeWaypoint(benchmarkClassName, 'leave')
                                 ) }
-                      topOffset={ 10 }
-                      bottomOffset={ -10 } />
+                      topOffset={ 90 }
+                      bottomOffset={ -90 } />
             );
     }
 
@@ -129,23 +127,19 @@ export default class BenchmarkList extends Component {
     }
 
     shouldComponentUpdate() {
-        console.debug('shouldUpdate');
         //TODO check for changed benchmarks (in case we can have changed benchmarks)
         return false;
     }
 
     render() {
-        console.debug("render");
-
-
         return (
-            <div>
+            <div style={ { paddingBottom: 250 + 'px' } }>
               <div ref="main" className="container bs-docs-container">
                 <div className="row">
-                  <p>
-                    { this.state.benchmarksGroupedByClassName.length } different Benchmark classes detected!
-                  </p>
                   <div className="col-md-10" role="main">
+                    <Badge>
+                      { this.state.benchmarksGroupedByClassName.length }
+                    </Badge> different Benchmark classes detected!
                     { this.state.benchmarksGroupedByClassName.map((element) => <div key={ element.key }>
                                                                                  { this.renderWaypoint(element.key) }
                                                                                  <BenchmarkReport name={ element.key } methodBenchmarks={ element.values } />

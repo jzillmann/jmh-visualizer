@@ -3,7 +3,7 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import Popover from 'react-bootstrap/lib/Popover'
 
-import { VictoryChart, VictoryGroup, VictoryBar, VictoryTheme, VictoryLabel, VictoryTooltip, VictoryAxis } from 'victory';
+import { VictoryChart, VictoryGroup, VictoryBar, VictoryTheme, VictoryLabel, VictoryTooltip, VictoryAxis, VictoryContainer } from 'victory';
 
 
 
@@ -47,7 +47,11 @@ export default class BenchmarkReport extends Component {
             <div>
               <h3 id={ this.props.name }>{ this.props.name }</h3>
               <div style={ { fontFamily: 'sans-serif', fontSize: '0.75em' } }>
-                <VictoryChart height={ 200 } domainPadding={ { x: 36 } } padding={ { top: 0, bottom: 27, left: 27, right: 27 } }>
+                <VictoryChart
+                              height={ 200 }
+                              domainPadding={ { x: 36 } }
+                              padding={ { top: 0, bottom: 27, left: 27, right: 27 } }
+                              containerComponent={ <VictoryContainer title={ this.props.name } /> }>
                   <VictoryGroup
                                 horizontal
                                 domain={ { x: [0, maxScore] } }

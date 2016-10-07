@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import Popover from 'react-bootstrap/lib/Popover'
-import { Chart, Bars, Transform, Layer, Ticks } from 'rumble-charts'
+
+import { VictoryChart, VictoryGroup, VictoryBar, VictoryTheme, VictoryLabel, VictoryTooltip, VictoryAxis } from 'victory';
 
 
 
@@ -24,49 +25,40 @@ export default class BenchmarkReport extends Component {
     }
 
     render() {
-        const series2 = [{
-            name: 'read01ColumnOverAndOver',
-            data: [1, 2, 3]
-        }, {
-            name: 'read02ColumnOverAndOver',
-            data: [5, 7, 11]
-        }, {
-            name: 'James',
-            data: [13, 17, 19]
-        }];
-        const series = this.props.methodBenchmarks.map((element) => {
+        const series = this.props.methodBenchmarks.map((element, i) => {
             const splitted = element.benchmark.split('.');
             const methodName = splitted[splitted.length - 1];
             return {
+                index: i,
                 name: methodName,
-                data: [element.primaryMetric.score]
+                data: [Math.round(element.primaryMetric.score)],
+                empty: ''
             }
         })
+        const maxScore = series.map(elem => elem.data).reduce((previous, current) => Math.max(previous, current)
+        );
+        const benchmarkMode = this.props.methodBenchmarks[0].mode
+        const scoreUnit = this.props.methodBenchmarks[0].primaryMetric.scoreUnit
+        console.debug(maxScore)
         console.debug(series);
+        // series.pop()
 
         return (
             <div>
               <h3 id={ this.props.name }>{ this.props.name }</h3>
               <div style={ { fontFamily: 'sans-serif', fontSize: '0.75em' } }>
-                <Chart
-                       width={ 500 }
-                       height={ 250 }
-                       series={ series }
-                       minY={ 0 }>
-                  <Layer width='80%' height='90%' position='top center'>
-                    <Ticks
-                           axis='x'
-                           label={ ({index, props}) => props.series[index].name }
-                           labelStyle={ { textAnchor: 'middle', dominantBaseline: 'text-before-edge', fill: 'lightgray' } }
-                           labelAttributes={ { y: 3 } } />
-                  </Layer>
-                  <Bars
-                        colors='category10'
-                        innerPadding='1.5%'
-                        groupPadding='3%'
-                        barAttributes={ { onMouseMove: e => e.target.style.fillOpacity = 1, onMouseLeave: e => e.target.style.fillOpacity = 0.8 } }
-                        barStyle={ { fillOpacity: 0.8, transition: 'all 250ms' } } />
-                </Chart>
+                <VictoryChart height={ 200 } domainPadding={ { x: 36 } } padding={ { top: 0, bottom: 27, left: 27, right: 27 } }>
+                  <VictoryGroup
+                                horizontal
+                                domain={ { x: [0, maxScore] } }
+                                offset={ 27 }
+                                style={ { data: { width: 16 }, labels: { fontSize: 7 } } }
+                                colorScale={ "qualitative" }>
+                    { series.reverse().map((element) => <VictoryBar key={ element.index } data={ [{ x: 1, y: element.data, label: element.name }] } />
+                      ) }
+                  </VictoryGroup>
+                  <VictoryAxis label={ benchmarkMode + ': ' + scoreUnit } style={ { axis: { stroke: "#756f6a" }, tickLabels: { fontSize: 10, padding: 0 }, axisLabel: { fontSize: 16, padding: 25 } } } />
+                </VictoryChart>
               </div>
               <Button bsSize="small" onClick={ ::this.flipShowJson }>
                 Show JSON

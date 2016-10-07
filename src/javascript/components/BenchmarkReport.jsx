@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
-import Popover from 'react-bootstrap/lib/Popover'
 
-import { VictoryChart, VictoryGroup, VictoryBar, VictoryTheme, VictoryLabel, VictoryTooltip, VictoryAxis, VictoryContainer } from 'victory';
-
-
+import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar } from 'recharts';
 
 // Gathered report for one benchmark class
 export default class BenchmarkReport extends Component {
@@ -31,7 +28,7 @@ export default class BenchmarkReport extends Component {
             return {
                 index: i,
                 name: methodName,
-                data: [Math.round(element.primaryMetric.score)],
+                data: Math.round(element.primaryMetric.score),
                 empty: ''
             }
         })
@@ -43,26 +40,31 @@ export default class BenchmarkReport extends Component {
         console.debug(series);
         // series.pop()
 
+        //TODO left pedding should depend on max label
+
         return (
             <div>
               <h3 id={ this.props.name }>{ this.props.name }</h3>
               <div style={ { fontFamily: 'sans-serif', fontSize: '0.75em' } }>
-                <VictoryChart
-                              height={ 200 }
-                              domainPadding={ { x: 36 } }
-                              padding={ { top: 0, bottom: 27, left: 27, right: 27 } }
-                              containerComponent={ <VictoryContainer title={ this.props.name } /> }>
-                  <VictoryGroup
-                                horizontal
-                                domain={ { x: [0, maxScore] } }
-                                offset={ 27 }
-                                style={ { data: { width: 16 }, labels: { fontSize: 7 } } }
-                                colorScale={ "qualitative" }>
-                    { series.reverse().map((element) => <VictoryBar key={ element.index } data={ [{ x: 1, y: element.data, label: element.name }] } />
-                      ) }
-                  </VictoryGroup>
-                  <VictoryAxis label={ benchmarkMode + ': ' + scoreUnit } style={ { axis: { stroke: "#756f6a" }, tickLabels: { fontSize: 10, padding: 0 }, axisLabel: { fontSize: 16, padding: 25 } } } />
-                </VictoryChart>
+                <BarChart
+                          layout="vertical"
+                          width={ 700 }
+                          height={ 300 }
+                          data={ series }
+                          margin={ { top: 20, right: 30, left: 120, bottom: 5 } }>
+                  <XAxis type="number" />
+                  <YAxis dataKey="name" type="category" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Tooltip/>
+                  <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: '#337ab7', type: 'rect' }] } height={ 30 } />
+                  <Bar
+                       dataKey="data"
+                       stroke="#337ab7"
+                       fill="#337ab7"
+                       unit={ ` ${scoreUnit}` }
+                       label
+                       isAnimationActive={ false } />
+                </BarChart>
               </div>
               <Button bsSize="small" onClick={ ::this.flipShowJson }>
                 Show JSON

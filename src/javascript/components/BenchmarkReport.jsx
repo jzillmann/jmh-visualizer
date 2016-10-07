@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
+import ErrorBar from './ErrorBar.jsx';
 
-import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar } from 'recharts';
+import { ComposedChart, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, Line, ReferenceLine, ReferenceDot } from 'recharts';
 
 // Gathered report for one benchmark class
 export default class BenchmarkReport extends Component {
@@ -29,7 +30,8 @@ export default class BenchmarkReport extends Component {
                 index: i,
                 name: methodName,
                 data: Math.round(element.primaryMetric.score),
-                empty: ''
+                error: Math.round(element.primaryMetric.scoreError),
+                subScores: element.primaryMetric.rawData.reduce((previous, current) => previous.concat(current)),
             }
         })
         const maxScore = series.map(elem => elem.data).reduce((previous, current) => Math.max(previous, current)
@@ -46,16 +48,20 @@ export default class BenchmarkReport extends Component {
             <div>
               <h3 id={ this.props.name }>{ this.props.name }</h3>
               <div style={ { fontFamily: 'sans-serif', fontSize: '0.75em' } }>
-                <BarChart
-                          layout="vertical"
-                          width={ 700 }
-                          height={ 300 }
-                          data={ series }
-                          margin={ { top: 20, right: 30, left: 120, bottom: 5 } }>
+                <ComposedChart
+                               layout="vertical"
+                               width={ 700 }
+                               height={ 300 }
+                               data={ series }
+                               margin={ { top: 20, right: 30, left: 120, bottom: 5 } }>
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip/>
+                  <Tooltip
+                           content={ <ErrorBar /> }
+                           cursor={ { stroke: 'red', strokeWidth: 2 } }
+                           viewBox={ { x: 0, y: 0, width: 400, height: 400 } }
+                           wrapperStyle={ { width: 189, backgroundColor: '#efefef' } } />
                   <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: '#337ab7', type: 'rect' }] } height={ 30 } />
                   <Bar
                        dataKey="data"
@@ -64,7 +70,8 @@ export default class BenchmarkReport extends Component {
                        unit={ ` ${scoreUnit}` }
                        label
                        isAnimationActive={ false } />
-                </BarChart>
+                  <Line dataKey='error' stroke='#d84b55' isAnimationActive={ false } />
+                </ComposedChart>
               </div>
               <Button bsSize="small" onClick={ ::this.flipShowJson }>
                 Show JSON

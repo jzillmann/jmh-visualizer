@@ -9,13 +9,13 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 
 class MainNavi extends React.Component {
 
-    onDropdownSelect(eventKey) {
-        alert(`Alert from menu item.\neventKey: ${eventKey}`);
+    onSelectUploadNewFiles() {
+        window.location = window.location.href.split('#')[0]
     }
 
     render() {
 
-        const popoverClickRootClose = (
+        const aboutPopover = (
         <Popover id="popover-trigger-click-root-close" title="About JMH Visualizer">
           <p>
             <i>JMH Visualizer</i> will render charts out of your <a href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">JMH Benchmarks</a>. All you have
@@ -37,17 +37,17 @@ class MainNavi extends React.Component {
                   <Dropdown id="logo-dropdown">
                     <AppLogo bsRole="toggle" />
                     <Dropdown.Menu>
-                      <MenuItem eventKey="1" href="javascript:window.location.href=window.location.href"> Upload new files
+                      <MenuItem onSelect={ this.onSelectUploadNewFiles }> Upload new files
                       </MenuItem>
                       <MenuItem divider />
-                      <MenuItem eventKey="2" href="http://github.com/jzillmann/jmh-visualizer" target="_blank"> Github
+                      <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank"> Github
                       </MenuItem>
                       <OverlayTrigger
                                       trigger="click"
                                       rootClose
                                       placement="bottom"
-                                      overlay={ popoverClickRootClose }>
-                        <MenuItem eventKey="3" href="#someHref"> About
+                                      overlay={ aboutPopover }>
+                        <MenuItem eventKey="3"> About
                         </MenuItem>
                       </OverlayTrigger>
                     </Dropdown.Menu>

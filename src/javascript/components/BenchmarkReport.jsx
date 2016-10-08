@@ -56,20 +56,20 @@ export default class BenchmarkReport extends Component {
                           data={ dataset }
                           margin={ { top: 20, right: 30, left: 120, bottom: 5 } }>
                   <Bar
-                       dataKey="scoreErrorPart"
-                       stackId="a"
-                       stroke="#d84b55"
-                       fill="#d84b55"
-                       unit={ ` ${scoreUnit}` }
-                       isAnimationActive={ false } />
-                  <Bar
                        dataKey="scorePart"
                        stackId="a"
                        stroke="#337ab7"
                        fill="#337ab7"
                        unit={ ` ${scoreUnit}` }
-                       label
                        isAnimationActive={ false } />
+                  <Bar
+                       dataKey="scoreErrorPart"
+                       stackId="a"
+                       stroke="#d84b55"
+                       fill="#d84b55"
+                       unit={ ` ${scoreUnit}` }
+                       isAnimationActive={ false }
+                       label={ { stroke: '#337ab7', fontSize: 12 } } />
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />

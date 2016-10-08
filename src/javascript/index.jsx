@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../css/sidenavi.css';
 
 function render(appState) {
-    console.debug('!!!!1:' + appState.dataUploaded)
     ReactDOM.render(<App appState={ appState } />, document.getElementById('main'));
 }
 

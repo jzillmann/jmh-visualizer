@@ -3,7 +3,7 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import BenchmarkTooltip from './BenchmarkTooltip.jsx';
 
-import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, Line } from 'recharts';
+import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar } from 'recharts';
 
 // Gathered report for one benchmark class
 export default class BenchmarkReport extends Component {

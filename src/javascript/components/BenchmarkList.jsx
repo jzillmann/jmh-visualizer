@@ -72,8 +72,7 @@ export default class BenchmarkList extends Component {
     }
 
 
-    setCurrentBenchmark(benchmarkClassName, type) {
-        console.debug("setCurrentBenchmark:" + benchmarkClassName + ' - ' + type);
+    setCurrentBenchmark(benchmarkClassName) {
         const newActive = document.getElementById('a_' + benchmarkClassName).parentElement;
         const oldActive = document.getElementById('a_' + this.state.currentBenchmarkClassName).parentElement;
 
@@ -87,11 +86,9 @@ export default class BenchmarkList extends Component {
         }
     }
 
-    changeWaypoint(benchmarkClassName, type) {
-        if (this.state.scrollTrackingDisabled) {
-            console.debug('Ignore scroll ' + benchmarkClassName + " - " + type);
-        } else {
-            this.setCurrentBenchmark(benchmarkClassName, type)
+    changeWaypoint(benchmarkClassName) {
+        if (!this.state.scrollTrackingDisabled) {
+            this.setCurrentBenchmark(benchmarkClassName)
         }
     }
 

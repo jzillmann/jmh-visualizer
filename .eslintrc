@@ -22,7 +22,7 @@
   ],
   "rules": {
     // Disable `no-console` rule
-    "no-console": 0,
+    "no-console": 1,
     // Give a warning if identifiers contain underscores
     "no-underscore-dangle": 1
   }

@@ -4,7 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var SOURCE_DIR = path.resolve(__dirname, 'src');
 var JAVASCRIPT_DIR = SOURCE_DIR + '/javascript';
-var BUILD_DIR = path.resolve(__dirname, 'build/public');
+var BUILD_DIR = path.resolve(__dirname, 'build');
 
 var config = {
     module: {

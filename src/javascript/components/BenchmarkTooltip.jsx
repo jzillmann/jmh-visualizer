@@ -4,12 +4,6 @@ import { BarChart, Bar } from 'recharts';
 export default class BenchmarkTooltip extends Component {
 
     static propTypes = {
-        separator: PropTypes.string,
-        formatter: PropTypes.func,
-        wrapperStyle: PropTypes.object,
-        itemStyle: PropTypes.object,
-        labelStyle: PropTypes.object,
-        labelFormatter: PropTypes.func,
         label: PropTypes.any,
         payload: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.any,
@@ -17,36 +11,29 @@ export default class BenchmarkTooltip extends Component {
             value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
             unit: PropTypes.any,
         })),
-        itemSorter: PropTypes.func,
     };
 
     render() {
-
         const {label, payload} = this.props;
-        console.debug(`label=${label} payloadName=${payload.name} payloadName=${payload.value} `);
-        console.debug(payload.name);
-        // console.debug(this.state.scores);
-        //console.debug(this.state.scores[label]);
-
-        console.debug(this.props);
-        console.debug(this.props.payload[0].payload.error);
-        console.debug(this.props.payload[0].payload.subScores);
-        const score = this.props.payload[0].payload.data;
-        const error = this.props.payload[0].payload.error;
-
-        const series = this.props.payload[0].payload.subScores.map((element) => {
+        const score = payload[0].payload.data;
+        const error = payload[0].payload.error;
+        const series = payload[0].payload.subScores.map((element) => {
             return {
                 data: Math.round(element),
             }
         })
+        const tooltipWidth = series.length * 30
 
         return (
             <div>
               <div style={ { textAlign: 'center' } }>
-                { ` ${label}: score=${score}, error=${error}` }
+                <b>{ label }</b>
+              </div>
+              <div style={ { textAlign: 'center' } }>
+                { `score=${score}, error=${error}` }
               </div>
               <BarChart
-                        width={ 180 }
+                        width={ tooltipWidth }
                         height={ 36 }
                         data={ series }
                         margin={ { top: 18 } }>

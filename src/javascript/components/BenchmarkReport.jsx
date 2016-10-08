@@ -3,7 +3,7 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import BenchmarkTooltip from './BenchmarkTooltip.jsx';
 
-import { ComposedChart, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, Line, ReferenceLine, ReferenceDot } from 'recharts';
+import { ComposedChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, Line } from 'recharts';
 
 // Gathered report for one benchmark class
 export default class BenchmarkReport extends Component {
@@ -34,20 +34,10 @@ export default class BenchmarkReport extends Component {
                 subScores: element.primaryMetric.rawData.reduce((previous, current) => previous.concat(current)),
             }
         })
-        const maxScore = series.map(elem => elem.data).reduce((previous, current) => Math.max(previous, current)
-        );
         const benchmarkMode = this.props.methodBenchmarks[0].mode
         const scoreUnit = this.props.methodBenchmarks[0].primaryMetric.scoreUnit
-        console.debug(maxScore)
-        console.debug(series);
-        // series.pop()
-
         //TODO left pedding should depend on max label
         //TODO make error count a stacked red bar in %
-        //TODO width of tooltip should depend on number of iterations
-        const numberOfIterations = series[0].subScores.length * 10
-        console.debug(numberOfIterations);
-
         return (
             <div>
               <h3 id={ this.props.name }>{ this.props.name }</h3>
@@ -69,7 +59,7 @@ export default class BenchmarkReport extends Component {
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip content={ <BenchmarkTooltip /> } cursor={ { stroke: 'red', strokeWidth: 2 } } wrapperStyle={ { width: { numberOfIterations }, backgroundColor: '#efefef' } } />
+                  <Tooltip content={ <BenchmarkTooltip /> } cursor={ { stroke: 'red', strokeWidth: 2 } } wrapperStyle={ { backgroundColor: '#efefef' } } />
                   <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: '#337ab7', type: 'rect' }] } height={ 30 } />
                 </ComposedChart>
               </div>

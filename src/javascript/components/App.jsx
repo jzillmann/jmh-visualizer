@@ -6,16 +6,15 @@ import BenchmarkList from './BenchmarkList.jsx';
 export default class App extends React.Component {
 
     static propTypes = {
-        appControl: React.PropTypes.object.isRequired,
+        appState: React.PropTypes.object.isRequired,
     };
 
     render() {
-        console.debug('!!!!3:' + this.props.appControl.dataUploaded + '/' + this.props.appControl.benchmarks)
         var mainView;
-        if (this.props.appControl.dataUploaded) {
-            mainView = <BenchmarkList benchmarks={ this.props.appControl.benchmarks } />
+        if (this.props.appState.dataUploaded) {
+            mainView = <BenchmarkList benchmarks={ this.props.appState.benchmarks } />
         } else {
-            mainView = <FileDrop uploadBenchmarks={ this.props.appControl.uploadBenchmarks } />
+            mainView = <FileDrop uploadBenchmarksFunction={ this.props.appState.uploadBenchmarks } loadExamplesFunction={ this.props.appState.loadExamples } />
         }
 
 

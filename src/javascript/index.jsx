@@ -8,12 +8,12 @@ import '../css/sidenavi.css';
 
 function render(appState) {
     console.debug('!!!!1:' + appState.dataUploaded)
-    ReactDOM.render(<App appControl={ appState } />, document.getElementById('main'));
+    ReactDOM.render(<App appState={ appState } />, document.getElementById('main'));
 }
 
 const appState = new AppState({
+    exampleBenchmarks: providedBenchmarks,
     renderFunction: render
 })
-console.debug(providedBenchmarks.length)
-appState.uploadBenchmarks(providedBenchmarks)
-//appState.uploadBenchmarks([])
+appState.uploadBenchmarks([])
+// appState.loadExamples()

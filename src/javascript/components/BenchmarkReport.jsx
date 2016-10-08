@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
-import ErrorBar from './ErrorBar.jsx';
+import BenchmarkTooltip from './BenchmarkTooltip.jsx';
 
 import { ComposedChart, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, Line, ReferenceLine, ReferenceDot } from 'recharts';
 
@@ -43,6 +43,10 @@ export default class BenchmarkReport extends Component {
         // series.pop()
 
         //TODO left pedding should depend on max label
+        //TODO make error count a stacked red bar in %
+        //TODO width of tooltip should depend on number of iterations
+        const numberOfIterations = series[0].subScores.length * 10
+        console.debug(numberOfIterations);
 
         return (
             <div>
@@ -54,15 +58,6 @@ export default class BenchmarkReport extends Component {
                                height={ 300 }
                                data={ series }
                                margin={ { top: 20, right: 30, left: 120, bottom: 5 } }>
-                  <XAxis type="number" />
-                  <YAxis dataKey="name" type="category" />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip
-                           content={ <ErrorBar /> }
-                           cursor={ { stroke: 'red', strokeWidth: 2 } }
-                           viewBox={ { x: 0, y: 0, width: 400, height: 400 } }
-                           wrapperStyle={ { width: 189, backgroundColor: '#efefef' } } />
-                  <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: '#337ab7', type: 'rect' }] } height={ 30 } />
                   <Bar
                        dataKey="data"
                        stroke="#337ab7"
@@ -71,6 +66,11 @@ export default class BenchmarkReport extends Component {
                        label
                        isAnimationActive={ false } />
                   <Line dataKey='error' stroke='#d84b55' isAnimationActive={ false } />
+                  <XAxis type="number" />
+                  <YAxis dataKey="name" type="category" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Tooltip content={ <BenchmarkTooltip /> } cursor={ { stroke: 'red', strokeWidth: 2 } } wrapperStyle={ { width: { numberOfIterations }, backgroundColor: '#efefef' } } />
+                  <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: '#337ab7', type: 'rect' }] } height={ 30 } />
                 </ComposedChart>
               </div>
               <Button bsSize="small" onClick={ ::this.flipShowJson }>

@@ -4,7 +4,6 @@ import FaAlignLeft from 'react-icons/lib/fa/align-left'
 export default class MyLogo extends Component {
 
     static propTypes = {
-        bsRole: React.PropTypes.string,
         onClick: React.PropTypes.func,
     };
 

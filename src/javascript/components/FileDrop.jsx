@@ -1,17 +1,23 @@
 import React from 'react';
 import Dropzone from 'react-dropzone'
 import FaCloudUpload from 'react-icons/lib/fa/cloud-upload'
+import FaHandORight from 'react-icons/lib/fa/hand-o-right'
+import FaFileText from 'react-icons/lib/fa/file-text'
+import Loader from './Loader.jsx';
 
-class FileDrop extends React.Component {
+export default class FileDrop extends React.Component {
 
     static propTypes = {
-        uploadBenchmarks: React.PropTypes.func.isRequired,
+        uploadBenchmarksFunction: React.PropTypes.func.isRequired,
+        loadExamplesFunction: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            uploadBenchmarks: props.uploadBenchmarks,
+            uploadBenchmarksFunction: props.uploadBenchmarksFunction,
+            loadExamplesFunction: props.loadExamplesFunction,
+            loading: false
         };
     }
 
@@ -20,11 +26,13 @@ class FileDrop extends React.Component {
             alert(`Only 1 file allowed to upload, not ${files.length}!`)
             return
         }
+        this.setState({
+            loading: true
+        });
         const file = files[0]
-        console.log('Received file: ', file);
         const reader = new FileReader();
 
-        const uploadFunction = this.state.uploadBenchmarks;
+        const uploadFunction = this.state.uploadBenchmarksFunction;
         reader.onload = function(evt) {
             try {
                 var parsedBenchmarks = JSON.parse(evt.target.result);
@@ -36,22 +44,37 @@ class FileDrop extends React.Component {
         reader.readAsText(file);
     }
 
+    onLoadExample() {
+        this.setState({
+            loading: true
+        });
+        setTimeout(function() {
+            this.state.loadExamplesFunction();
+        }.bind(this), 450);
+    }
+
     render() {
+        var uploadIcon;
+        if (this.state.loading) {
+            uploadIcon = <Loader/>
+        } else {
+            uploadIcon = <FaCloudUpload width={ 100 } height={ 100 } /> ;
+        }
+
         return (
             <div>
-              <Dropzone onDrop={ this.onDrop.bind(this) } multiple={ true } style={ { width: 400, height: 200, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed', borderRadius: 5, display: 'table-cell', textAlign: 'center', verticalAlign: 'middle' } }>
+              <Dropzone onDrop={ this.onDrop.bind(this) } multiple={ true } style={ { width: 400, height: 500, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed', borderRadius: 5, display: 'table-cell', textAlign: 'center', verticalAlign: 'middle' } }>
                 <div className="container">
-                  Drop your JMH JSON files here!
+                  <h3>Drop your JMH JSON file here!</h3>
                 </div>
-                <h3><FaCloudUpload/></h3>
+                <h1>{ uploadIcon }</h1>
               </Dropzone>
+              <div className="container" style={ { width: 400 } }>
+                <br/>
+                <br/>
+                <h3>Or load a Sample: <FaHandORight/> <FaFileText onMouseOver={ this.onLoadExample.bind(this) } width={ 70 } height={ 70 }/></h3>
+              </div>
             </div>
             );
     }
 }
-
-FileDrop.propTypes = {
-    route: React.PropTypes.object,
-};
-
-export default FileDrop;

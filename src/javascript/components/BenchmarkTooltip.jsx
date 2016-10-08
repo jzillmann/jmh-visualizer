@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { BarChart, Bar } from 'recharts';
 
-export default class ErrorBar extends Component {
+export default class BenchmarkTooltip extends Component {
 
     static propTypes = {
         separator: PropTypes.string,

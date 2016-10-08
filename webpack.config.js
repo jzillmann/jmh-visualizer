@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var SOURCE_DIR = path.resolve(__dirname, 'src');
@@ -57,7 +58,12 @@ var config = {
     plugins: [
         new HtmlWebpackPlugin({
             template: SOURCE_DIR + '/index.html'
-        })
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'version': JSON.stringify(process.env.npm_package_version),
+            }
+        }),
     ]
 };
 

@@ -16,17 +16,19 @@ class MainNavi extends React.Component {
     render() {
 
         const aboutPopover = (
-        <Popover id="popover-trigger-click-root-close" title="About JMH Visualizer">
+        <Popover id="popover-trigger-click-root-close" title={ `About JMH Visualizer - ${ process.env.version }` }>
           <p>
             <i>JMH Visualizer</i> will render charts out of your <a href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">JMH Benchmarks</a>. All you have
             to do, is to upload your benchmark results in JSON format.
           </p>
-          <p>
-            For tips and tricks see XXX.
-          </p>
-          <p>
-            There is also an Gradle integration available: XXX
-          </p>
+          { /*
+                            <p>
+                              For tips and tricks see XXX.
+                            </p>
+                            <p>
+                              There is also an Gradle integration available: XXX
+                            </p>
+                          */ }
         </Popover>
         );
 

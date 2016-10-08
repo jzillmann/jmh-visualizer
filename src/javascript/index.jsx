@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import AppState from './AppState.jsx';
 import App from './components/App.jsx';
-import { providedBenchmarks } from './providedBenchmarks.jsx';
+import { exampleBenchmarks } from './exampleBenchmarks.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/sidenavi.css';
 
@@ -11,7 +11,7 @@ function render(appState) {
 }
 
 const appState = new AppState({
-    exampleBenchmarks: providedBenchmarks,
+    exampleBenchmarks: exampleBenchmarks,
     renderFunction: render
 })
 appState.uploadBenchmarks([])

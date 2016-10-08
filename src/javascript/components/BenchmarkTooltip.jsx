@@ -15,8 +15,8 @@ export default class BenchmarkTooltip extends Component {
 
     render() {
         const {label, payload} = this.props;
-        const score = payload[0].payload.data;
-        const error = payload[0].payload.error;
+        const score = payload[0].payload.score;
+        const error = payload[0].payload.scoreError;
         const series = payload[0].payload.subScores.map((element) => {
             return {
                 data: Math.round(element),

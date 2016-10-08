@@ -3,7 +3,7 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import BenchmarkTooltip from './BenchmarkTooltip.jsx';
 
-import { ComposedChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, Line } from 'recharts';
+import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, Line } from 'recharts';
 
 // Gathered report for one benchmark class
 export default class BenchmarkReport extends Component {
@@ -23,45 +23,59 @@ export default class BenchmarkReport extends Component {
     }
 
     render() {
-        const series = this.props.methodBenchmarks.map((element, i) => {
+        const dataset = this.props.methodBenchmarks.map((element, i) => {
             const splitted = element.benchmark.split('.');
             const methodName = splitted[splitted.length - 1];
+            const score = Math.round(element.primaryMetric.score);
+            const scoreError = Math.round(element.primaryMetric.scoreError);
+            const scoreErrorPart = Math.min(score, scoreError);
+            const scorePart = score - scoreErrorPart;
+
+            // console.debug(element.primaryMetric.score + " | " + element.primaryMetric.scoreError + ": " + errorScore + " | " + score);
             return {
                 index: i,
                 name: methodName,
-                data: Math.round(element.primaryMetric.score),
-                error: Math.round(element.primaryMetric.scoreError),
+                score: score,
+                scoreError: scoreError,
+                scorePart: scorePart,
+                scoreErrorPart: scoreErrorPart,
                 subScores: element.primaryMetric.rawData.reduce((previous, current) => previous.concat(current)),
             }
         })
         const benchmarkMode = this.props.methodBenchmarks[0].mode
         const scoreUnit = this.props.methodBenchmarks[0].primaryMetric.scoreUnit
         //TODO left pedding should depend on max label
-        //TODO make error count a stacked red bar in %
         return (
             <div>
               <h3 id={ this.props.name }>{ this.props.name }</h3>
               <div style={ { fontFamily: 'sans-serif', fontSize: '0.75em' } }>
-                <ComposedChart
-                               layout="vertical"
-                               width={ 700 }
-                               height={ 300 }
-                               data={ series }
-                               margin={ { top: 20, right: 30, left: 120, bottom: 5 } }>
+                <BarChart
+                          layout="vertical"
+                          width={ 700 }
+                          height={ 300 }
+                          data={ dataset }
+                          margin={ { top: 20, right: 30, left: 120, bottom: 5 } }>
                   <Bar
-                       dataKey="data"
+                       dataKey="scoreErrorPart"
+                       stackId="a"
+                       stroke="#d84b55"
+                       fill="#d84b55"
+                       unit={ ` ${scoreUnit}` }
+                       isAnimationActive={ false } />
+                  <Bar
+                       dataKey="scorePart"
+                       stackId="a"
                        stroke="#337ab7"
                        fill="#337ab7"
                        unit={ ` ${scoreUnit}` }
                        label
                        isAnimationActive={ false } />
-                  <Line dataKey='error' stroke='#d84b55' isAnimationActive={ false } />
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Tooltip content={ <BenchmarkTooltip /> } cursor={ { stroke: 'red', strokeWidth: 2 } } wrapperStyle={ { backgroundColor: '#efefef' } } />
                   <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: '#337ab7', type: 'rect' }] } height={ 30 } />
-                </ComposedChart>
+                </BarChart>
               </div>
               <Button bsSize="small" onClick={ ::this.flipShowJson }>
                 Show JSON

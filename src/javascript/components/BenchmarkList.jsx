@@ -22,9 +22,9 @@ function groupBy(xs, key) {
     }, []);
 }
 
-function benchmarkToPackage(item) {
-    return item.benchmark.split('.').reverse()[2];
-}
+// function benchmarkToPackage(item) {
+//     return item.benchmark.split('.').reverse()[2];
+// }
 
 function benchmarkToClassName(item) {
     return item.benchmark.split('.').reverse()[1];
@@ -104,8 +104,8 @@ export default class BenchmarkList extends Component {
                       onLeave={ ({currentPosition}) => (
                                 currentPosition === Waypoint.above && this.changeWaypoint(benchmarkClassName, 'leave')
                                 ) }
-                      topOffset={ 90 }
-                      bottomOffset={ -90 } />
+                      topOffset={ '36%' }
+                      bottomOffset={ '0%' } />
             );
     }
 

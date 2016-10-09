@@ -45,12 +45,14 @@ export default class FileDrop extends React.Component {
     }
 
     onLoadExample() {
-        this.setState({
-            loading: true
-        });
-        setTimeout(function() {
-            this.state.loadExamplesFunction();
-        }.bind(this), 450);
+        if (!this.state.loading) {
+            this.setState({
+                loading: true
+            });
+            setTimeout(function() {
+                this.state.loadExamplesFunction();
+            }.bind(this), 450);
+        }
     }
 
     render() {
@@ -72,7 +74,11 @@ export default class FileDrop extends React.Component {
               <div className="container" style={ { width: 400 } }>
                 <br/>
                 <br/>
-                <h3>Or load a Sample: <FaHandORight/> <FaFileText onMouseOver={ this.onLoadExample.bind(this) } width={ 70 } height={ 70 }/></h3>
+                <h3>Or load a Sample: <FaHandORight/> <FaFileText
+                                                                  onMouseOver={ this.onLoadExample.bind(this) }
+                                                                  onClick={ this.onLoadExample.bind(this) }
+                                                                  width={ 70 }
+                                                                  height={ 70 }/></h3>
               </div>
             </div>
             );

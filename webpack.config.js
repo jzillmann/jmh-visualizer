@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var SOURCE_DIR = path.resolve(__dirname, 'src');
 var JAVASCRIPT_DIR = SOURCE_DIR + '/javascript';
@@ -64,6 +65,12 @@ var config = {
                 'version': JSON.stringify(process.env.npm_package_version),
             }
         }),
+        new CopyWebpackPlugin([
+            {
+                from: SOURCE_DIR + '/favicons',
+                to: 'favicons'
+            },
+        ])
     ]
 };
 

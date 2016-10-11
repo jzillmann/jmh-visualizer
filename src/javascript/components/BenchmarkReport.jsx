@@ -28,7 +28,7 @@ export default class BenchmarkReport extends Component {
             const methodName = splitted[splitted.length - 1];
             const score = Math.round(element.primaryMetric.score);
             const scoreError = Math.round(element.primaryMetric.scoreError);
-            const scoreErrorPart = Math.min(score, scoreError);
+            const scoreErrorPart = Math.min(score, scoreError) / 2;
             const scorePart = score - scoreErrorPart;
 
             // console.debug(element.primaryMetric.score + " | " + element.primaryMetric.scoreError + ": " + errorScore + " | " + score);
@@ -44,6 +44,8 @@ export default class BenchmarkReport extends Component {
         })
         const benchmarkMode = this.props.methodBenchmarks[0].mode
         const scoreUnit = this.props.methodBenchmarks[0].primaryMetric.scoreUnit
+        const chartHeight = 100 + dataset.length * 36
+        const maxMethodNameLength = dataset.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current))
         //TODO left pedding should depend on max label
         return (
             <div>
@@ -51,10 +53,10 @@ export default class BenchmarkReport extends Component {
               <div style={ { fontFamily: 'sans-serif', fontSize: '0.75em' } }>
                 <BarChart
                           layout="vertical"
-                          width={ 700 }
-                          height={ 300 }
+                          width={ 900 }
+                          height={ chartHeight }
                           data={ dataset }
-                          margin={ { top: 20, right: 30, left: 120, bottom: 5 } }>
+                          margin={ { top: 20, right: 30, left: maxMethodNameLength * 5, bottom: 5 } }>
                   <Bar
                        dataKey="scorePart"
                        stackId="a"

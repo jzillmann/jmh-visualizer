@@ -6,7 +6,8 @@
   "scripts": {
     "watch": "webpack -d --watch",
     "build": "webpack",
-    "release": "npm run lint && rm -r build/* && NODE_ENV=production webpack -p",
+    "release": "npm run lint && rm -rf build/* && NODE_ENV=production webpack -p",
+    "deploy": "npm run releae && cp -r build/* docs/",
     "lint": "eslint . --ext .js --ext .jsx --cache"
   },
   "keywords": [

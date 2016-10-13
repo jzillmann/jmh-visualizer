@@ -28,7 +28,7 @@ export default class BenchmarkReport extends Component {
             const methodName = splitted[splitted.length - 1];
             const score = Math.round(element.primaryMetric.score);
             const scoreError = Math.round(element.primaryMetric.scoreError);
-            const scoreErrorPart = Math.min(score, scoreError) / 2;
+            const scoreErrorPart = isNaN(scoreError) ? 0 : Math.min(score, scoreError) / 2;
             const scorePart = score - scoreErrorPart;
 
             // console.debug(element.primaryMetric.score + " | " + element.primaryMetric.scoreError + ": " + errorScore + " | " + score);

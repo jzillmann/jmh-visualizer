@@ -34,6 +34,10 @@ Use the [issue tracker](https://github.com/jzillmann/jmh-visualizer/issues) and/
 - ```npm run watch``` Continuously build the project
 - ```open build/index.html``` Open the build project in your default browser
 
+#### Realease
+- ```npm run release```
+- ```cp -r build/* docs/```
+- commit & push
 
 ## Credits
 

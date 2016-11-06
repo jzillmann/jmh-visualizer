@@ -75,7 +75,7 @@ export default class BenchmarkReport extends Component {
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip content={ <BenchmarkTooltip /> } cursor={ { stroke: 'red', strokeWidth: 2 } } wrapperStyle={ { backgroundColor: '#efefef' } } />
+                  <Tooltip content={ <BenchmarkTooltip /> } cursor={ { stroke: 'green', strokeWidth: 2 } } wrapperStyle={ { backgroundColor: '#efefef', opacity: 0.95 } } />
                   <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: '#337ab7', type: 'rect' }] } height={ 30 } />
                 </BarChart>
               </div>

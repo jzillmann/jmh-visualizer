@@ -40,19 +40,7 @@ export default class BenchmarkList extends Component {
         super(props);
 
         const benchmarks = this.props.benchmarks;
-        // console.debug(benchmarks.length);
-
-        // const groupByPackage = groupBy(benchmarks, benchmarkToPackage);
-        // console.debug(groupByPackage.length);
-        // groupByPackage.forEach(function(element) {
-        //     console.debug(element)
-        // });
-
         const groupByClassName = groupBy(benchmarks, benchmarkToClassName);
-        // console.debug(groupByClassName.length);
-        // groupByClassName.forEach(function(element) {
-        //     console.debug(element)
-        // });
 
         var selectedBenchmarkClassName;
         const {hash} = window.location;

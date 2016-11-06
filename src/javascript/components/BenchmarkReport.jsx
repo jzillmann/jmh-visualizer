@@ -39,7 +39,7 @@ export default class BenchmarkReport extends Component {
                 scoreError: scoreError,
                 scorePart: scorePart,
                 scoreErrorPart: scoreErrorPart,
-                subScores: element.primaryMetric.rawData.reduce((previous, current) => previous.concat(current)),
+                subScores: element.primaryMetric.rawData
             }
         })
         const benchmarkMode = this.props.methodBenchmarks[0].mode

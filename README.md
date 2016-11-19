@@ -8,9 +8,14 @@ Visualize [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Benchmarks! On
   - Vertical bar-chart with score and score error 
   - Link to the original JSON
   - Show individual runs as tooltip
+- Compare the benchmarks of 2 runs (two JSON files) grouped by benchmark class
+  - Vertical bar-chart from -100% to 100%
+  - Link to the original JSON
+  - Show score and error in tooltip
 
 ## Major Changes
 
+- **Nov 2016** - Add 2 run compare view
 - **Okt 2016** - Initial Release
 
 ## Tips & Tricks

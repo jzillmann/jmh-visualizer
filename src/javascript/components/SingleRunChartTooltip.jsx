@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { BarChart, Bar } from 'recharts';
 
-export default class BenchmarkTooltip extends Component {
+import { blue } from '../functions/colors.jsx'
+
+export default class SingleRunChartTooltip extends Component {
 
     static propTypes = {
         label: PropTypes.any,
@@ -32,11 +34,9 @@ export default class BenchmarkTooltip extends Component {
         return (
             <div>
               <div style={ { textAlign: 'center' } }>
-                <h5>{ label }</h5>
+                <u><h4>{ label }</h4></u>
               </div>
-              <div style={ { textAlign: 'center' } }>
-                <b>{ `score=${score}, error=${error}` }</b>
-              </div>
+              <b><div style={ { textAlign: 'center' } }> { `score = ${score.toLocaleString()}` } </div> <div style={ { textAlign: 'center' } }> { `error = ${error.toLocaleString()}` } </div></b>
               { forkScoreDatas.map((data, index) => <div key={ 'fork' + index }>
                                                       <BarChart
                                                                 width={ tooltipWidth }
@@ -45,7 +45,8 @@ export default class BenchmarkTooltip extends Component {
                                                                 margin={ { top: 18 } }>
                                                         <Bar
                                                              dataKey='data'
-                                                             fill='#337ab7'
+                                                             fill={ blue }
+                                                             strike={ blue }
                                                              isAnimationActive={ false }
                                                              label/>
                                                       </BarChart>

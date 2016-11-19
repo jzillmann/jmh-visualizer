@@ -20,7 +20,7 @@
 }
 
 /* all links */
-.bs-docs-sidebar .nav>li>a {
+.bs-docs-sidebar .nav>a>li {
     color: #999;
     border-left: 2px solid transparent;
     padding: 4px 20px;
@@ -29,17 +29,18 @@
 }
 
 /* nested links */
-.bs-docs-sidebar .nav .nav>li>a {
+.bs-docs-sidebar .nav .nav>a>li {
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 30px;
     font-size: 12px;
 }
 
+
 /* active & hover links */
-.bs-docs-sidebar .nav>.active>a, 
-.bs-docs-sidebar .nav>li>a:hover, 
-.bs-docs-sidebar .nav>li>a:focus {
+.bs-docs-sidebar .nav>a.active>li, 
+.bs-docs-sidebar .nav>a>li:hover, 
+.bs-docs-sidebar .nav>a>li:focus {
     color: #563d7c;                 
     text-decoration: none;          
     background-color: transparent;  

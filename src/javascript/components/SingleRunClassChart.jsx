@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
-import BenchmarkTooltip from './BenchmarkTooltip.jsx';
-
 import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar } from 'recharts';
 
+import SingleRunChartTooltip from './SingleRunChartTooltip.jsx';
+import { parseMethodName } from '../functions/parse.jsx'
+import { blue, red, green, tooltipBackground } from '../functions/colors.jsx'
+
 // Gathered report for one benchmark class
-export default class BenchmarkReport extends Component {
+export default class SingleRunClassChart extends Component {
     static propTypes = {
         name: React.PropTypes.string.isRequired,
         methodBenchmarks: React.PropTypes.array.isRequired,
@@ -24,8 +26,7 @@ export default class BenchmarkReport extends Component {
 
     render() {
         const dataset = this.props.methodBenchmarks.map((element, i) => {
-            const splitted = element.benchmark.split('.');
-            const methodName = splitted[splitted.length - 1];
+            const methodName = parseMethodName(element);
             const score = Math.round(element.primaryMetric.score);
             const scoreError = Math.round(element.primaryMetric.scoreError);
             const scoreErrorPart = isNaN(scoreError) ? 0 : Math.min(score, scoreError) / 2;
@@ -46,7 +47,6 @@ export default class BenchmarkReport extends Component {
         const scoreUnit = this.props.methodBenchmarks[0].primaryMetric.scoreUnit
         const chartHeight = 100 + dataset.length * 36
         const maxMethodNameLength = dataset.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current))
-        //TODO left pedding should depend on max label
         return (
             <div>
               <h3 id={ this.props.name }>{ this.props.name }</h3>
@@ -60,23 +60,23 @@ export default class BenchmarkReport extends Component {
                   <Bar
                        dataKey="scorePart"
                        stackId="a"
-                       stroke="#337ab7"
-                       fill="#337ab7"
+                       stroke={ blue }
+                       fill={ blue }
                        unit={ ` ${scoreUnit}` }
                        isAnimationActive={ false } />
                   <Bar
                        dataKey="scoreErrorPart"
                        stackId="a"
-                       stroke="#d84b55"
-                       fill="#d84b55"
+                       stroke={ red }
+                       fill={ red }
                        unit={ ` ${scoreUnit}` }
                        isAnimationActive={ false }
-                       label={ { stroke: '#337ab7', fontSize: 12 } } />
+                       label={ { stroke: blue, fontSize: 12 } } />
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip content={ <BenchmarkTooltip /> } cursor={ { stroke: 'green', strokeWidth: 2 } } wrapperStyle={ { backgroundColor: '#efefef', opacity: 0.95 } } />
-                  <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: '#337ab7', type: 'rect' }] } height={ 30 } />
+                  <Tooltip content={ <SingleRunChartTooltip /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
+                  <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: blue, type: 'rect' }] } height={ 30 } />
                 </BarChart>
               </div>
               <Button bsSize="small" onClick={ ::this.flipShowJson }>

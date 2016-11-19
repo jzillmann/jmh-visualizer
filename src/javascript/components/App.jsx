@@ -1,7 +1,8 @@
 import React from 'react';
 import Container from './Container.jsx';
 import FileDrop from './FileDrop.jsx';
-import BenchmarkList from './BenchmarkList.jsx';
+import SingleRunView from './SingleRunView.jsx';
+import TwoRunsView from './TwoRunsView.jsx';
 
 export default class App extends React.Component {
 
@@ -11,10 +12,14 @@ export default class App extends React.Component {
 
     render() {
         var mainView;
-        if (this.props.appState.dataUploaded) {
-            mainView = <BenchmarkList benchmarks={ this.props.appState.benchmarks } />
+        if (this.props.appState.benchmarkRuns.length == 0) {
+            mainView = <FileDrop uploadBenchmarkRunsFunction={ this.props.appState.uploadBenchmarkRuns } examples={ this.props.appState.examples } />
+        } else if (this.props.appState.benchmarkRuns.length == 1) {
+            mainView = <SingleRunView benchmarkRun={ this.props.appState.benchmarkRuns[0] } />
+        } else if (this.props.appState.benchmarkRuns.length == 2) {
+            mainView = <TwoRunsView benchmarkRuns={ this.props.appState.benchmarkRuns } />
         } else {
-            mainView = <FileDrop uploadBenchmarksFunction={ this.props.appState.uploadBenchmarks } loadExamplesFunction={ this.props.appState.loadExamples } />
+            alert("More then 2 runs not supported!");
         }
 
 

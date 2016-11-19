@@ -10,11 +10,15 @@
   // as described in a section below.
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+        "jsx": true
+    }
   },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "es6": true
   },
   // Enable custom plugin known as eslint-plugin-react
   "plugins": [

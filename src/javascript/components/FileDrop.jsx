@@ -13,8 +13,8 @@ import Col from 'react-bootstrap/lib/Col'
 export default class FileDrop extends React.Component {
 
     static propTypes = {
-        uploadBenchmarkRunsFunction: React.PropTypes.func.isRequired,
         examples: React.PropTypes.object.isRequired,
+        uploadBenchmarkRunsFunction: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {

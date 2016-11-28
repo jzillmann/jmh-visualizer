@@ -15,16 +15,24 @@ export default class TwoRunsView extends Component {
 
     static propTypes = {
         benchmarkRuns: React.PropTypes.array.isRequired,
+        reorderFunction: React.PropTypes.func.isRequired,
     };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            reorderFunction: props.reorderFunction,
+        };
+    }
 
     componentDidMount() {
         scrollSpy.update();
     }
 
-    shouldComponentUpdate() {
-        //TODO check for changed benchmarks (in case we can have changed benchmarks)
-        return false;
+    flipRuns() {
+        this.state.reorderFunction((benchmarkRuns) => benchmarkRuns.reverse());
     }
+
 
     render() {
         const multiRunBenchmarkMap = parseMultiRunBenchmarkMap(this.props.benchmarkRuns);
@@ -38,7 +46,7 @@ export default class TwoRunsView extends Component {
                     { ' ' }
                     <Badge>
                       { multiRunBenchmarkMap.size }
-                    </Badge> different Benchmark classes for 2 runs: [<i>{ this.props.benchmarkRuns.map((element) => element.name).join(', ') }</i>]
+                    </Badge> different Benchmark classes for 2 runs: [<i>{ this.props.benchmarkRuns.map((element) => element.name).join(', ') }</i>] (<a onClick={ this.flipRuns.bind(this) }>Flip Runs</a>)
                     { [...multiRunBenchmarkMap.entries()].map(([className, methodMap]) => <Element name={ className } key={ className }>
                                                                                             <TwoRunsClassChart name={ className } runNames={ runNames } methodMap={ methodMap } />
                                                                                           </Element>

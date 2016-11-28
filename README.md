@@ -15,8 +15,8 @@ Visualize [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Benchmarks! On
 
 ## Major Changes
 
-- **Nov 2016** - Add 2 run compare view
-- **Okt 2016** - Initial Release
+- **Nov 2016** - 0.2: Add 2 run compare view
+- **Okt 2016** - 0.1: Initial Release
 
 ## Tips & Tricks
 
@@ -40,6 +40,7 @@ Use the [issue tracker](https://github.com/jzillmann/jmh-visualizer/issues) and/
 - ```open build/index.html``` Open the build project in your default browser
 
 #### Realease
+- Increase version in package.json
 - ```npm run release```
 - ```cp -r build/* docs/```
 - commit & push

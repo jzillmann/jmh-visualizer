@@ -13,11 +13,11 @@ export default class App extends React.Component {
     render() {
         var mainView;
         if (this.props.appState.benchmarkRuns.length == 0) {
-            mainView = <FileDrop uploadBenchmarkRunsFunction={ this.props.appState.uploadBenchmarkRuns } examples={ this.props.appState.examples } />
+            mainView = <FileDrop examples={ this.props.appState.examples } uploadBenchmarkRunsFunction={ this.props.appState.uploadBenchmarkRuns } />
         } else if (this.props.appState.benchmarkRuns.length == 1) {
             mainView = <SingleRunView benchmarkRun={ this.props.appState.benchmarkRuns[0] } />
         } else if (this.props.appState.benchmarkRuns.length == 2) {
-            mainView = <TwoRunsView benchmarkRuns={ this.props.appState.benchmarkRuns } />
+            mainView = <TwoRunsView benchmarkRuns={ this.props.appState.benchmarkRuns } reorderFunction={ this.props.appState.reorderBenchmarks } />
         } else {
             alert("More then 2 runs not supported!");
         }

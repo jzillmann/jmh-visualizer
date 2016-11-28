@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/lib/Button'
 import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ReferenceLine, Cell } from 'recharts';
 
 import TwoRunsChartTooltip from './TwoRunsChartTooltip.jsx';
-import { blue, red, green, yellow, tooltipBackground } from '../functions/colors.jsx'
+import { red, green, yellow, tooltipBackground } from '../functions/colors.jsx'
 
 // Chart showing increase in % for the benchmarks of a class from 2 runs.
 export default class TwoRunsClassChart extends Component {

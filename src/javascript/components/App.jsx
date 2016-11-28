@@ -11,13 +11,16 @@ export default class App extends React.Component {
     };
 
     render() {
+        const benchmarkRuns = this.props.appState.selectedBenchmarks();
+        const filteredBenchmarks = benchmarkRuns.length < this.props.appState.benchmarkRuns.length;
+
         var mainView;
-        if (this.props.appState.benchmarkRuns.length == 0) {
+        if (benchmarkRuns.length == 0) {
             mainView = <FileDrop examples={ this.props.appState.examples } uploadBenchmarkRunsFunction={ this.props.appState.uploadBenchmarkRuns } />
-        } else if (this.props.appState.benchmarkRuns.length == 1) {
-            mainView = <SingleRunView benchmarkRun={ this.props.appState.benchmarkRuns[0] } />
-        } else if (this.props.appState.benchmarkRuns.length == 2) {
-            mainView = <TwoRunsView benchmarkRuns={ this.props.appState.benchmarkRuns } reorderFunction={ this.props.appState.reorderBenchmarks } />
+        } else if (benchmarkRuns.length == 1) {
+            mainView = <SingleRunView benchmarkRun={ benchmarkRuns[0] } filteredBenchmarks={ filteredBenchmarks } unselectBenchmarkFunction={ this.props.appState.unselectBenchmark } />
+        } else if (benchmarkRuns.length == 2) {
+            mainView = <TwoRunsView benchmarkRuns={ benchmarkRuns } reorderFunction={ this.props.appState.reorderBenchmarks } selectFunction={ this.props.appState.selectBenchmark } />
         } else {
             alert("More then 2 runs not supported!");
         }

@@ -16,12 +16,14 @@ export default class TwoRunsView extends Component {
     static propTypes = {
         benchmarkRuns: React.PropTypes.array.isRequired,
         reorderFunction: React.PropTypes.func.isRequired,
+        selectFunction: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
             reorderFunction: props.reorderFunction,
+            selectFunction: props.selectFunction,
         };
     }
 
@@ -32,6 +34,12 @@ export default class TwoRunsView extends Component {
     flipRuns() {
         this.state.reorderFunction((benchmarkRuns) => benchmarkRuns.reverse());
     }
+
+    showRun(name) {
+        this.state.selectFunction(name);
+    }
+
+    showSecond() {}
 
 
     render() {
@@ -46,7 +54,9 @@ export default class TwoRunsView extends Component {
                     { ' ' }
                     <Badge>
                       { multiRunBenchmarkMap.size }
-                    </Badge> different Benchmark classes for 2 runs: [<i>{ this.props.benchmarkRuns.map((element) => element.name).join(', ') }</i>] (<a onClick={ this.flipRuns.bind(this) }>Flip Runs</a>)
+                    </Badge> different Benchmark classes for 2 runs: [<i><a onClick={ () => this.showRun(this.props.benchmarkRuns[0].name) }>{ this.props.benchmarkRuns[0].name }</a>, <a onClick={ () => this.showRun(this.props.benchmarkRuns[1].name) }>{ this.props.benchmarkRuns[1].name }</a></i>]
+                    (
+                    <a onClick={ this.flipRuns.bind(this) }>Flip Runs</a>)
                     { [...multiRunBenchmarkMap.entries()].map(([className, methodMap]) => <Element name={ className } key={ className }>
                                                                                             <TwoRunsClassChart name={ className } runNames={ runNames } methodMap={ methodMap } />
                                                                                           </Element>

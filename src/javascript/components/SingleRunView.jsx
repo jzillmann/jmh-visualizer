@@ -37,6 +37,8 @@ export default class SingleRunView extends Component {
 
     static propTypes = {
         benchmarkRun: React.PropTypes.object.isRequired,
+        filteredBenchmarks: React.PropTypes.bool.isRequired,
+        unselectBenchmarkFunction: React.PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -47,7 +49,12 @@ export default class SingleRunView extends Component {
 
         this.state = {
             benchmarksGroupedByClassName: groupByClassName,
+            unselectBenchmarkFunction: this.props.unselectBenchmarkFunction,
         };
+    }
+
+    unselectRun() {
+        this.state.unselectBenchmarkFunction();
     }
 
     componentDidMount() {
@@ -69,6 +76,8 @@ export default class SingleRunView extends Component {
                       { this.state.benchmarksGroupedByClassName.length }
                     </Badge> different benchmark classes for single run '
                     { this.props.benchmarkRun.name }' detected!
+                    { " " }
+                    { this.props.filteredBenchmarks ? <a onClick={ this.unselectRun.bind(this) }>(Unselect)</a> : "" }
                     { this.state.benchmarksGroupedByClassName.map((element) => <Element name={ element.key } key={ element.key }>
                                                                                  <SingleRunClassChart name={ element.key } methodBenchmarks={ element.values } />
                                                                                </Element>

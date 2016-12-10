@@ -7,6 +7,7 @@ export default class SingleRunChartTooltip extends Component {
 
     static propTypes = {
         label: PropTypes.any,
+        scoreUnit: PropTypes.string.required,
         payload: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.any,
             payload: PropTypes.any,
@@ -20,6 +21,7 @@ export default class SingleRunChartTooltip extends Component {
         const score = payload[0].payload.score;
         const error = payload[0].payload.scoreError;
         const forkScores = payload[0].payload.subScores;
+        const scoreUnit = this.props.scoreUnit;
 
         const forkScoreDatas = forkScores.map((iterationScoreArray) => {
             return iterationScoreArray.map((element) => {
@@ -36,7 +38,7 @@ export default class SingleRunChartTooltip extends Component {
               <div style={ { textAlign: 'center' } }>
                 <u><h4>{ label }</h4></u>
               </div>
-              <b><div style={ { textAlign: 'center' } }> { `score = ${score.toLocaleString()}` } </div> <div style={ { textAlign: 'center' } }> { `error = ${error.toLocaleString()}` } </div></b>
+              <b><div style={ { textAlign: 'center' } }> { `score = ${score.toLocaleString()} ${scoreUnit}` } </div> <div style={ { textAlign: 'center' } }> { `error = ${error.toLocaleString()} ${scoreUnit}` } </div></b>
               { forkScoreDatas.map((data, index) => <div key={ 'fork' + index }>
                                                       <BarChart
                                                                 width={ tooltipWidth }

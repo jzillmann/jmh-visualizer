@@ -75,7 +75,7 @@ export default class SingleRunClassChart extends Component {
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip content={ <SingleRunChartTooltip /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
+                  <Tooltip content={ <SingleRunChartTooltip scoreUnit={ scoreUnit } /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
                   <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: blue, type: 'rect' }] } height={ 30 } />
                 </BarChart>
               </div>

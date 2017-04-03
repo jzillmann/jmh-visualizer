@@ -6,16 +6,21 @@
   "scripts": {
     "watch": "webpack -d --watch",
     "build": "webpack",
+    "lint": "eslint . --ext .js --ext .jsx --cache",
     "release": "npm run lint && rm -rf build/* && NODE_ENV=production webpack -p",
-    "deploy": "npm run releae && cp -r build/* docs/",
-    "lint": "eslint . --ext .js --ext .jsx --cache"
+    "deploy": "npm run release && cp -r build/* docs/"
   },
   "keywords": [
     "JMH",
-    "visualize"
+    "visualize",
+    "benchmark"
   ],
   "author": "Johannes Zillmann",
-  "license": "Apache-2.0",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jzillmann/jmh-visualizer"
+  },
   "dependencies": {
     "bootstrap": "^3.3.7",
     "react": "^15.3.2",

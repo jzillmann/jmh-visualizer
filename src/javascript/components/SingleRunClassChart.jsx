@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/lib/Button'
 import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar } from 'recharts';
 
 import SingleRunChartTooltip from './SingleRunChartTooltip.jsx';
-import { parseMethodName } from '../functions/parse.jsx'
+import { parseBenchmarkName } from '../functions/parse.jsx'
 import { blue, red, green, tooltipBackground } from '../functions/colors.jsx'
 
 // Gathered report for one benchmark class
@@ -26,7 +26,7 @@ export default class SingleRunClassChart extends Component {
 
     render() {
         const dataset = this.props.methodBenchmarks.map((element, i) => {
-            const methodName = parseMethodName(element);
+            const methodName = parseBenchmarkName(element);
             const score = Math.round(element.primaryMetric.score);
             const scoreError = Math.round(element.primaryMetric.scoreError);
             const scoreErrorPart = isNaN(scoreError) ? 0 : Math.min(score, scoreError) / 2;

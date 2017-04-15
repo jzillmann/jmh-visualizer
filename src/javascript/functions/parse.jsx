@@ -11,6 +11,18 @@ export function parseMethodName(benchmark:Object) {
     return splitted[splitted.length - 1];
 }
 
+// Extracts the benchmarks method name
+export function parseBenchmarkName(benchmark:Object) {
+    var benchmarkName = parseMethodName(benchmark);
+    if (benchmark.params) {
+        const keys = Object.keys(benchmark.params);
+        keys.forEach(key => {
+            benchmarkName += ' ' + key + '=' + benchmark.params[key];
+        });
+    }
+    return benchmarkName;
+}
+
 /*
 * Deconstructs the given benchmark runs into following structure:
 *     Map<className, Map<methodName, benchmarks[]>>
@@ -26,7 +38,7 @@ export function parseMultiRunBenchmarkMap(benchmarkRuns:BenchmarkRun[]) {
                 methodMap = new Map();
                 classToBenchmarksMap.set(className, methodMap)
             }
-            const methodName = parseMethodName(benchmark);
+            const methodName = parseBenchmarkName(benchmark);
             let runArray = methodMap.get(methodName)
             if (runArray === undefined) {
                 runArray = [];

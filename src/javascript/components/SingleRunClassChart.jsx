@@ -43,10 +43,27 @@ export default class SingleRunClassChart extends Component {
                 subScores: element.primaryMetric.rawData
             }
         })
-        const benchmarkMode = this.props.methodBenchmarks[0].mode
-        const scoreUnit = this.props.methodBenchmarks[0].primaryMetric.scoreUnit
-        const chartHeight = 100 + dataset.length * 36
-        const maxMethodNameLength = dataset.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current))
+        const benchmarkMode = this.props.methodBenchmarks[0].mode;
+        const scoreUnit = this.props.methodBenchmarks[0].primaryMetric.scoreUnit;
+        const chartHeight = 100 + dataset.length * 36;
+        const maxMethodNameLength = dataset.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current));
+
+        const BarLabel = (props) => {
+            return (
+                <text
+                      stroke={ blue }
+                      fontSize={ 11 }
+                      textAnchor={ props.textAnchor }
+                      fill="hsla(0, 100%, 100%, 0.8)"
+                      x={ props.x }
+                      y={ props.y }
+                      width={ props.width }
+                      height={ props.height }
+                      className="recharts-bar-label">
+                  { props.score.toLocaleString() + ' ' + scoreUnit }
+                </text>
+            );
+        };
         return (
             <div>
               <h3 id={ this.props.name }>{ this.props.name }</h3>
@@ -71,7 +88,7 @@ export default class SingleRunClassChart extends Component {
                        fill={ red }
                        unit={ ` ${scoreUnit}` }
                        isAnimationActive={ false }
-                       label={ { stroke: blue, fontSize: 12 } } />
+                       label={ <BarLabel/> } />
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />
@@ -91,6 +108,6 @@ export default class SingleRunClassChart extends Component {
                 </div>
               </Collapse>
             </div>
-            );
+        );
     }
 }

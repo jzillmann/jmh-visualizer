@@ -7,7 +7,7 @@ export default class SingleRunChartTooltip extends Component {
 
     static propTypes = {
         label: PropTypes.any,
-        scoreUnit: PropTypes.string.required,
+        scoreUnit: PropTypes.string,
         payload: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.any,
             payload: PropTypes.any,
@@ -55,6 +55,6 @@ export default class SingleRunChartTooltip extends Component {
                                                     </div>
                 ) }
             </div>
-            );
+        );
     }
 }

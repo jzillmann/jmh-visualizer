@@ -100,29 +100,16 @@ export default class FileDrop extends React.Component {
                   <Row className="show-grid">
                     <Col xs={ 6 } md={ 6 } style={ { textAlign: 'center' } }>
                     <FaHandORight/>
-                    <FaFileText
-                                onMouseOver={ this.onLoadSingleRunExample.bind(this) }
-                                onClick={ this.onLoadSingleRunExample.bind(this) }
-                                width={ 70 }
-                                height={ 70 } /> Single Run
+                    <span style={ { cursor: 'pointer' } } onClick={ this.onLoadTwoRunsExample.bind(this) }><FaFileText width={ 70 } height={ 70 } /> Single Run</span>
                     </Col>
                     <Col xs={ 6 } md={ 6 } style={ { textAlign: 'center' } }>
                     <FaHandORight/>
-                    <FaFileText
-                                onMouseOver={ this.onLoadTwoRunsExample.bind(this) }
-                                onClick={ this.onLoadTwoRunsExample.bind(this) }
-                                width={ 70 }
-                                height={ 70 } />
-                    <FaFileText
-                                onMouseOver={ this.onLoadTwoRunsExample.bind(this) }
-                                onClick={ this.onLoadTwoRunsExample.bind(this) }
-                                width={ 70 }
-                                height={ 70 } /> Two Runs
+                    <span style={ { cursor: 'pointer' } } onClick={ this.onLoadTwoRunsExample.bind(this) }><FaFileText width={ 70 } height={ 70 } /> <FaFileText width={ 70 } height={ 70 } /> Two Runs</span>
                     </Col>
                   </Row>
                 </Grid>
               </div>
             </div>
-            );
+        );
     }
 }

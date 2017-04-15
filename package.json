@@ -8,7 +8,8 @@
     "build": "webpack",
     "lint": "eslint . --ext .js --ext .jsx --cache",
     "test": "mocha --compilers js:babel-core/register test --recursive",
-    "release": "npm run lint && rm -rf build/* && NODE_ENV=production webpack -p",
+    "check": "npm run lint && npm run test",
+    "release": "npm run check && rm -rf build/* && NODE_ENV=production webpack -p",
     "deploy": "npm run release && cp -r build/* docs/"
   },
   "keywords": [

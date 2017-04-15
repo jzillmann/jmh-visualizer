@@ -36,14 +36,20 @@ Use the [issue tracker](https://github.com/jzillmann/jmh-visualizer/issues) and/
 
 - ```npm install``` Download all necessary npm packages
 - ```npm run lint``` Lint the javascript files
+- ```npm run test``` Run tests
+- ```npm run check``` Run Lint & Test
 - ```npm run watch``` Continuously build the project
 - ```open build/index.html``` Open the build project in your default browser
+- ```npm run release``` Build production version
+- ```npm run deploy``` Build production version & move it to the github pages fodler
 
 #### Realease
 - Increase version in package.json
-- ```npm run release```
-- ```cp -r build/* docs/```
+- ```npm run deploy```
 - commit & push
+- tag with
+  - _git tag -a $releaseVersion -m "$releaseVersion release"_
+  - _git push --tags_
 
 ## Credits
 

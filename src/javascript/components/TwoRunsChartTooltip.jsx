@@ -31,6 +31,7 @@ export default class TwoRunsChartTooltip extends Component {
         const scoreError2 = payload[0].payload.scoreError2ndRun;
         const scoreChange = score2 - score1;
         const scoreErrorChange = scoreError2 - scoreError1;
+        const scoreUnit = payload[0].payload.scoreUnit;
 
         return (
             <div style={ { width: Math.max(230, label.length * 9) } }>
@@ -63,10 +64,10 @@ export default class TwoRunsChartTooltip extends Component {
                         { this.props.runNames[0] }
                       </td>
                       <td style={ { color: blue } }>
-                        { formatScore(score1, payload.scoreUnit) }
+                        { formatScore(score1, scoreUnit) }
                       </td>
                       <td style={ { color: red } }>
-                        { formatScore(scoreError1, payload.scoreUnit) }
+                        { formatScore(scoreError1, scoreUnit) }
                       </td>
                     </tr>
                     <tr>
@@ -74,10 +75,10 @@ export default class TwoRunsChartTooltip extends Component {
                         { this.props.runNames[1] }
                       </td>
                       <td style={ { color: blue } }>
-                        { formatScore(score2, payload.scoreUnit) }
+                        { formatScore(score2, scoreUnit) }
                       </td>
                       <td style={ { color: red } }>
-                        { formatScore(scoreError2, payload.scoreUnit) }
+                        { formatScore(scoreError2, scoreUnit) }
                       </td>
                     </tr>
                     <tr>
@@ -85,10 +86,10 @@ export default class TwoRunsChartTooltip extends Component {
                         Change
                       </td>
                       <td>
-                        { (scoreChange > 0 ? '+' : '') + formatScore(scoreChange, payload.scoreUnit) }
+                        { (scoreChange > 0 ? '+' : '') + formatScore(scoreChange, scoreUnit) }
                       </td>
                       <td>
-                        { (scoreErrorChange > 0 ? '+' : '') + formatScore(scoreErrorChange, payload.scoreUnit) }
+                        { (scoreErrorChange > 0 ? '+' : '') + formatScore(scoreErrorChange, scoreUnit) }
                       </td>
                     </tr>
                   </tbody>

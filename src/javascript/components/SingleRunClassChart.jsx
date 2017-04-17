@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
-import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar } from 'recharts';
+import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ErrorBar } from 'recharts';
 
 import SingleRunChartTooltip from './SingleRunChartTooltip.jsx';
 import { parseBenchmarkName } from '../functions/parse.jsx'
-import { blue, red, green, tooltipBackground } from '../functions/colors.jsx'
+import { blue, green, yellow, lightBlack, tooltipBackground } from '../functions/colors.jsx'
 
 // Gathered report for one benchmark class
 export default class SingleRunClassChart extends Component {
@@ -25,21 +25,27 @@ export default class SingleRunClassChart extends Component {
     }
 
     render() {
+        var dataMax = 0;
         const dataset = this.props.methodBenchmarks.map((element, i) => {
             const methodName = parseBenchmarkName(element);
             const score = Math.round(element.primaryMetric.score);
+            const scoreConfidence = [Math.round(element.primaryMetric.scoreConfidence[0]), Math.round(element.primaryMetric.scoreConfidence[1])];
             const scoreError = Math.round(element.primaryMetric.scoreError);
-            const scoreErrorPart = isNaN(scoreError) ? 0 : Math.min(score, scoreError) / 2;
-            const scorePart = score - scoreErrorPart;
+            let errorBarInterval = 0
+            if (!isNaN(scoreError)) {
+                errorBarInterval = [score - scoreConfidence[0], scoreConfidence[1] - score];
+            }
+            dataMax = Math.max(dataMax, score);
+            dataMax = Math.max(dataMax, scoreConfidence[1]);
 
             // console.debug(element.primaryMetric.score + " | " + element.primaryMetric.scoreError + ": " + errorScore + " | " + score);
             return {
                 index: i,
                 name: methodName,
                 score: score,
+                scoreConfidence: scoreConfidence,
                 scoreError: scoreError,
-                scorePart: scorePart,
-                scoreErrorPart: scoreErrorPart,
+                errorBarInterval: errorBarInterval,
                 subScores: element.primaryMetric.rawData
             }
         })
@@ -56,7 +62,7 @@ export default class SingleRunClassChart extends Component {
                       textAnchor={ props.textAnchor }
                       fill="hsla(0, 100%, 100%, 0.8)"
                       x={ props.x }
-                      y={ props.y }
+                      y={ props.y - 7 }
                       width={ props.width }
                       height={ props.height }
                       className="recharts-bar-label">
@@ -75,21 +81,19 @@ export default class SingleRunClassChart extends Component {
                           data={ dataset }
                           margin={ { top: 20, right: 30, left: maxMethodNameLength * 5, bottom: 5 } }>
                   <Bar
-                       dataKey="scorePart"
-                       stackId="a"
+                       dataKey="score"
                        stroke={ blue }
                        fill={ blue }
                        unit={ ` ${scoreUnit}` }
-                       isAnimationActive={ false } />
-                  <Bar
-                       dataKey="scoreErrorPart"
-                       stackId="a"
-                       stroke={ red }
-                       fill={ red }
-                       unit={ ` ${scoreUnit}` }
                        isAnimationActive={ false }
-                       label={ <BarLabel/> } />
-                  <XAxis type="number" />
+                       label={ <BarLabel/> }>
+                    <ErrorBar
+                              dataKey="errorBarInterval"
+                              width={ 4 }
+                              strokeWidth={ 2 }
+                              stroke={ yellow } />
+                  </Bar>
+                  <XAxis type="number" domain={ [0, dataMax] } />
                   <YAxis dataKey="name" type="category" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Tooltip content={ <SingleRunChartTooltip scoreUnit={ scoreUnit } /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />

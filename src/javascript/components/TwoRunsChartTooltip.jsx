@@ -21,12 +21,14 @@ export default class TwoRunsChartTooltip extends Component {
     };
 
     render() {
-        const label = this.props.label;
-        const payload = this.props.payload[0].payload;
-        const score1 = payload.score1stRun;
-        const score2 = payload.score2ndRun;
-        const scoreError1 = payload.scoreError1stRun;
-        const scoreError2 = payload.scoreError2ndRun;
+        const {label, payload} = this.props;
+        if (payload.length == 0) {
+            return null;
+        }
+        const score1 = payload[0].payload.score1stRun;
+        const score2 = payload[0].payload.score2ndRun;
+        const scoreError1 = payload[0].payload.scoreError1stRun;
+        const scoreError2 = payload[0].payload.scoreError2ndRun;
         const scoreChange = score2 - score1;
         const scoreErrorChange = scoreError2 - scoreError1;
 
@@ -93,6 +95,6 @@ export default class TwoRunsChartTooltip extends Component {
                 </Table>
               </div>
             </div>
-            );
+        );
     }
 }

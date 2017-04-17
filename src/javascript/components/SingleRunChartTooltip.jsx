@@ -18,8 +18,12 @@ export default class SingleRunChartTooltip extends Component {
 
     render() {
         const {label, payload} = this.props;
+        if (payload.length == 0) {
+            return null;
+        }
         const score = payload[0].payload.score;
         const error = payload[0].payload.scoreError;
+        const scoreConfidence = payload[0].payload.scoreConfidence;
         const forkScores = payload[0].payload.subScores;
         const scoreUnit = this.props.scoreUnit;
 
@@ -38,7 +42,7 @@ export default class SingleRunChartTooltip extends Component {
               <div style={ { textAlign: 'center' } }>
                 <u><h4>{ label }</h4></u>
               </div>
-              <b><div style={ { textAlign: 'center' } }> { `score = ${score.toLocaleString()} ${scoreUnit}` } </div> <div style={ { textAlign: 'center' } }> { `error = ${error.toLocaleString()} ${scoreUnit}` } </div></b>
+              <b><div style={ { textAlign: 'center' } }> { `score = ${score.toLocaleString()} ${scoreUnit}` } </div> <div style={ { textAlign: 'center' } }> { `confidence = ${scoreConfidence[0].toLocaleString()} - ${scoreConfidence[1].toLocaleString()} ${scoreUnit}` } </div> <div style={ { textAlign: 'center' } }> { `error = ${error.toLocaleString()} ${scoreUnit}` } </div></b>
               { forkScoreDatas.map((data, index) => <div key={ 'fork' + index }>
                                                       <BarChart
                                                                 width={ tooltipWidth }

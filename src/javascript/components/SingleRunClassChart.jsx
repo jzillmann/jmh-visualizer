@@ -27,7 +27,7 @@ export default class SingleRunClassChart extends Component {
     render() {
         var dataMax = 0;
         const dataset = this.props.methodBenchmarks.map((element, i) => {
-            const methodName = parseBenchmarkName(element);
+            const benchmarkName = parseBenchmarkName(element);
             const score = Math.round(element.primaryMetric.score);
             const scoreConfidence = [Math.round(element.primaryMetric.scoreConfidence[0]), Math.round(element.primaryMetric.scoreConfidence[1])];
             const scoreError = Math.round(element.primaryMetric.scoreError);
@@ -41,7 +41,7 @@ export default class SingleRunClassChart extends Component {
             // console.debug(element.primaryMetric.score + " | " + element.primaryMetric.scoreError + ": " + errorScore + " | " + score);
             return {
                 index: i,
-                name: methodName,
+                name: benchmarkName,
                 score: score,
                 scoreConfidence: scoreConfidence,
                 scoreError: scoreError,
@@ -80,6 +80,11 @@ export default class SingleRunClassChart extends Component {
                           height={ chartHeight }
                           data={ dataset }
                           margin={ { top: 20, right: 30, left: maxMethodNameLength * 5, bottom: 5 } }>
+                  <XAxis type="number" domain={ [0, dataMax] } />
+                  <YAxis dataKey="name" type="category" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Tooltip content={ <SingleRunChartTooltip scoreUnit={ scoreUnit } /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
+                  <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: blue, type: 'rect' }] } height={ 30 } />
                   <Bar
                        dataKey="score"
                        stroke={ blue }
@@ -93,11 +98,6 @@ export default class SingleRunClassChart extends Component {
                               strokeWidth={ 2 }
                               stroke={ yellow } />
                   </Bar>
-                  <XAxis type="number" domain={ [0, dataMax] } />
-                  <YAxis dataKey="name" type="category" />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip content={ <SingleRunChartTooltip scoreUnit={ scoreUnit } /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
-                  <Legend verticalAlign='top' payload={ [{ value: `${benchmarkMode} ${scoreUnit}`, color: blue, type: 'rect' }] } height={ 30 } />
                 </BarChart>
               </div>
               <Button bsSize="small" onClick={ ::this.flipShowJson }>

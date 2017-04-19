@@ -1,6 +1,5 @@
-import BenchmarkRun from '../models/BenchmarkRun.jsx';
-
 import React from 'react';
+
 import Dropzone from 'react-dropzone'
 import FaCloudUpload from 'react-icons/lib/fa/cloud-upload'
 import FaHandORight from 'react-icons/lib/fa/hand-o-right'
@@ -9,6 +8,9 @@ import Loader from './Loader.jsx';
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
+import Alert from 'react-bootstrap/lib/Alert'
+
+import BenchmarkRun from '../models/BenchmarkRun.jsx';
 
 export default class FileDrop extends React.Component {
 
@@ -92,6 +94,10 @@ export default class FileDrop extends React.Component {
                   <h2>Drop one or two of your JMH JSON file(s) here!</h2>
                 </div>
                 <h1>{ uploadIcon }</h1>
+                <br/>
+                <Alert bsStyle="warning">
+                  <i>This tool visualizes <a href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">JMH</a> benchmark results (in JSON format)! <br/>"JMH is a Java harness for building, running, and analysing nano/micro/milli/macro benchmarks written in Java and other languages targetting the JVM."</i>
+                </Alert>
               </Dropzone>
               <div>
                 <h2 style={ { textAlign: 'center' } }>Or load an Example:</h2>

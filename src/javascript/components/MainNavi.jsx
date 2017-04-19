@@ -22,13 +22,13 @@ class MainNavi extends React.Component {
             to do, is to upload your benchmark results in JSON format.
           </p>
           { /*
-                            <p>
-                              For tips and tricks see XXX.
-                            </p>
-                            <p>
-                              There is also an Gradle integration available: XXX
-                            </p>
-                          */ }
+                                      <p>
+                                        For tips and tricks see XXX.
+                                      </p>
+                                      <p>
+                                        There is also an Gradle integration available: XXX
+                                      </p>
+                                    */ }
         </Popover>
         );
 
@@ -42,8 +42,11 @@ class MainNavi extends React.Component {
                       <MenuItem onSelect={ this.onSelectUploadNewFiles }> Upload new files
                       </MenuItem>
                       <MenuItem divider />
-                      <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank"> Github
+                      <MenuItem href="https://github.com/jzillmann/jmh-visualizer/issues" target="_blank"> Feedback & Bug Reports
                       </MenuItem>
+                      <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank"> Code @Github
+                      </MenuItem>
+                      <MenuItem divider />
                       <OverlayTrigger
                                       trigger="click"
                                       rootClose
@@ -57,7 +60,7 @@ class MainNavi extends React.Component {
                 </Navbar.Brand>
               </Navbar.Header>
             </Navbar>
-            );
+        );
     }
 }
 

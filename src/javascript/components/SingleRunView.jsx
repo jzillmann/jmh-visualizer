@@ -3,27 +3,14 @@ import Badge from 'react-bootstrap/lib/Badge'
 import AutoAffix from 'react-overlays/lib/AutoAffix';
 
 import SingleRunClassChart from './SingleRunClassChart.jsx';
+import { groupBy } from '../functions/util.js'
 
 var Scroll = require('react-scroll');
 var Link = Scroll.Link;
 var Element = Scroll.Element;
 var scrollSpy = Scroll.scrollSpy;
 
-function groupBy(xs, key) {
-    return xs.reduce(function(rv, x) {
-        let v = key instanceof Function ? key(x) : x[key];
-        let el = rv.find((r) => r && r.key === v);
-        if (el) {
-            el.values.push(x);
-        } else {
-            rv.push({
-                key: v,
-                values: [x]
-            });
-        }
-        return rv;
-    }, []);
-}
+
 
 // function benchmarkToPackage(item) {
 //     return item.benchmark.split('.').reverse()[2];
@@ -105,7 +92,7 @@ export default class SingleRunView extends Component {
                 </div>
               </div>
             </div>
-            );
+        );
     }
 }
 

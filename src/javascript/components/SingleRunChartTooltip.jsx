@@ -1,7 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { BarChart, Bar } from 'recharts';
+import Table from 'react-bootstrap/lib/Table'
 
-import { blue } from '../functions/colors.jsx'
+import { blue, red } from '../functions/colors.jsx'
+
+function formatNumber(number) {
+    if (number) {
+        return number.toLocaleString();
+    } else {
+        return "n/a";
+    }
+}
 
 export default class SingleRunChartTooltip extends Component {
 
@@ -17,47 +26,111 @@ export default class SingleRunChartTooltip extends Component {
     };
 
     render() {
-        const {label, payload} = this.props;
-        if (payload.length == 0) {
+        const {label, payload, scoreUnit} = this.props;
+        if (!payload || payload.length == 0) {
             return null;
         }
-        const score = payload[0].payload.score;
-        const error = payload[0].payload.scoreError;
-        const scoreConfidence = payload[0].payload.scoreConfidence;
-        const forkScores = payload[0].payload.subScores;
-        const scoreUnit = this.props.scoreUnit;
 
-        const forkScoreDatas = forkScores.map((iterationScoreArray) => {
-            return iterationScoreArray.map((element) => {
-                return {
-                    data: Math.round(element),
-                }
-            })
-        })
+        // Assemble table headers showing score, error, etc...
+        const tableHeaders = [];
+        if (payload.length > 1) {
+            tableHeaders.push(<th key='1'>
+                                Run
+                              </th>);
+        }
+        tableHeaders.push(<th key='2'>
+                            Score
+                          </th>);
+        tableHeaders.push(<th key='3'>
+                            Error
+                          </th>);
+        tableHeaders.push(<th key='4'>
+                            Confidence
+                          </th>);
+        tableHeaders.push(<th key='5'>
+                            Unit
+                          </th>);
 
-        const tooltipWidth = forkScores[0].length * 54
+        // Assemble table rows showing score, error, etc... per bar
+        const tableRows = payload.map(barPayload => {
+            const confidenceInterval = barPayload.payload[barPayload.dataKey + 'Confidence'];
+            const columnValues = [];
+            if (payload.length > 1) {
+                columnValues.push(<td key='run'>
+                                    { barPayload.dataKey }
+                                  </td>);
+            }
+            columnValues.push(<td key='score' style={ { color: blue } }>
+                                { formatNumber(barPayload.payload[barPayload.dataKey]) }
+                              </td>);
+            columnValues.push(<td key='error' style={ { color: red } }>
+                                { formatNumber(barPayload.payload[barPayload.dataKey + 'Error']) }
+                              </td>);
+            columnValues.push(<td key='confidence'>
+                                { barPayload.payload[barPayload.dataKey] ? confidenceInterval[0].toLocaleString() + ' - ' + confidenceInterval[1].toLocaleString() : "n/a" }
+                              </td>);
+            columnValues.push(<td key='unit'>
+                                { scoreUnit }
+                              </td>);
+            return <tr key={ barPayload.name }>
+                     { columnValues }
+                   </tr>
+        });
+
+        //Assemble iteration charts showing the raw iteration data per run 
+        const iterationCharts = payload.map(barPayload => {
+            const forkScores = barPayload.payload[barPayload.dataKey + 'SubScores'];
+            if (!forkScores) {
+                return <div key={ 'emptyIterations' + barPayload.name } />
+            }
+            const forkScoreDatas = forkScores.map((iterationScoreArray) => {
+                return iterationScoreArray.map((element) => {
+                    return {
+                        data: Math.round(element),
+                    }
+                })
+            });
+            const tooltipWidth = forkScores[0].length * 54
+            return forkScoreDatas.map((data, index) => <div key={ 'iterations' + index }>
+                                                         <BarChart
+                                                                   width={ tooltipWidth }
+                                                                   height={ 36 }
+                                                                   data={ data }
+                                                                   margin={ { top: 18 } }>
+                                                           <Bar
+                                                                dataKey='data'
+                                                                fill={ barPayload.fill }
+                                                                isAnimationActive={ false }
+                                                                label/>
+                                                         </BarChart>
+                                                       </div>
+            )
+        });
 
         return (
             <div>
               <div style={ { textAlign: 'center' } }>
                 <u><h4>{ label }</h4></u>
               </div>
-              <b><div style={ { textAlign: 'center' } }> { `score = ${score.toLocaleString()} ${scoreUnit}` } </div> <div style={ { textAlign: 'center' } }> { `confidence = ${scoreConfidence[0].toLocaleString()} - ${scoreConfidence[1].toLocaleString()} ${scoreUnit}` } </div> <div style={ { textAlign: 'center' } }> { `error = ${error.toLocaleString()} ${scoreUnit}` } </div></b>
-              { forkScoreDatas.map((data, index) => <div key={ 'fork' + index }>
-                                                      <BarChart
-                                                                width={ tooltipWidth }
-                                                                height={ 36 }
-                                                                data={ data }
-                                                                margin={ { top: 18 } }>
-                                                        <Bar
-                                                             dataKey='data'
-                                                             fill={ blue }
-                                                             strike={ blue }
-                                                             isAnimationActive={ false }
-                                                             label/>
-                                                      </BarChart>
-                                                    </div>
-                ) }
+              <Table
+                     striped
+                     bordered
+                     condensed
+                     hover>
+                <thead>
+                  <tr>
+                    { tableHeaders }
+                  </tr>
+                </thead>
+                <tbody>
+                  { tableRows }
+                </tbody>
+              </Table>
+              <div style={ { textAlign: 'center' } }>
+                <u><h5>Iterations</h5></u>
+              </div>
+              { iterationCharts }
+              <br/>
             </div>
         );
     }

@@ -23,6 +23,14 @@ export function parseBenchmarkName(benchmark:Object) {
     return benchmarkName;
 }
 
+export function getUniqueParamValues(benchmarks, paramName) {
+    const paramValues = new Set();
+    benchmarks.forEach(benchmark => {
+        paramValues.add(benchmark.params[paramName]);
+    });
+    return Array.from(paramValues);
+}
+
 /*
 * Deconstructs the given benchmark runs into following structure:
 *     Map<className, Map<methodName, benchmarks[]>>

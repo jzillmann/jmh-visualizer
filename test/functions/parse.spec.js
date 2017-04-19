@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { parseMethodName, parseBenchmarkName } from '../../src/javascript/functions/parse.jsx'
+import { parseMethodName, parseBenchmarkName, getUniqueParamValues } from '../../src/javascript/functions/parse.jsx'
 
 
 describe('functions: parseMethodName', () => {
@@ -58,6 +58,35 @@ describe('functions: parseBenchmarkName', () => {
                 gender: "male"
             }
         })).to.equal("bench arg=1 certainty=32 gender=male");
+
+    });
+
+});
+
+describe('functions: getUniqueParamValues', () => {
+
+    it('default', () => {
+        const benchmarks = [
+            {
+                params: {
+                    arg: 1,
+                    certainty: 0
+                }
+            },
+            {
+                params: {
+                    arg: 1,
+                    certainty: 32
+                }
+            },
+            {
+                params: {
+                    arg: 2,
+                    certainty: 0
+                }
+            }];
+        expect(getUniqueParamValues(benchmarks, 'arg')).to.deep.equal([1, 2]);
+        expect(getUniqueParamValues(benchmarks, 'certainty')).to.deep.equal([0, 32]);
 
     });
 

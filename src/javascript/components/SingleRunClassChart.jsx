@@ -3,8 +3,9 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ErrorBar } from 'recharts';
 
+import { createBadge } from './BenchmarkModeBadge.jsx';
 import SingleRunChartTooltip from './SingleRunChartTooltip.jsx';
-import { parseMethodName, parseBenchmarkName, getUniqueParamValues } from '../functions/parse.jsx'
+import { parseMethodName, parseBenchmarkName, getUniqueBenchmarkModes, getUniqueParamValues } from '../functions/parse.jsx'
 import { groupBy, cartesianProduct } from '../functions/util.js'
 import { blue, red, green, lightBlack, tooltipBackground, barColors } from '../functions/colors.jsx'
 
@@ -79,9 +80,14 @@ export default class SingleRunClassChart extends Component {
                    </Bar>
         });
 
+        const benchmarkModes = getUniqueBenchmarkModes(this.props.methodBenchmarks);
+        const benchmarkModeBadges = benchmarkModes.map(mode => createBadge(mode));
+
         return (
             <div>
-              <h3 id={ this.props.name }>{ this.props.name }</h3>
+              <div>
+                <h3 id={ this.props.name }>{ this.props.name } <sup>{ benchmarkModeBadges }</sup></h3>
+              </div>
               <div style={ { fontFamily: 'sans-serif', fontSize: '0.75em' } }>
                 <BarChart
                           layout="vertical"

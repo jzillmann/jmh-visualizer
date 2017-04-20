@@ -31,6 +31,15 @@ export function getUniqueParamValues(benchmarks, paramName) {
     return Array.from(paramValues);
 }
 
+export function getUniqueBenchmarkModes(benchmarks) {
+    const modes = new Set();
+    benchmarks.forEach(benchmark => {
+        modes.add(benchmark.mode);
+    });
+    return Array.from(modes);
+}
+
+
 /*
 * Deconstructs the given benchmark runs into following structure:
 *     Map<className, Map<methodName, benchmarks[]>>

@@ -3,6 +3,7 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ReferenceLine, Cell } from 'recharts';
 
+import { createBadge } from './BenchmarkModeBadge.jsx';
 import TwoRunsChartTooltip from './TwoRunsChartTooltip.jsx';
 import { red, green, yellow, tooltipBackground } from '../functions/colors.jsx'
 
@@ -41,7 +42,7 @@ export default class TwoRunsClassChart extends Component {
         let removedBenchmarks = [];
         let maxMethodNameLength = 0;
         let benchmarkMode;
-        const dataset = [...this.props.methodMap].map(([methodName, runArray] , i) => {
+        const dataset = [...this.props.methodMap].map(([methodName, runArray], i) => {
             maxMethodNameLength = Math.max(maxMethodNameLength, methodName.length);
             const firstRunBenchmark = runArray[0];
             const secondRunBenchmark = runArray[1];
@@ -79,13 +80,12 @@ export default class TwoRunsClassChart extends Component {
         }).filter((element) => element !== undefined);
 
         const chartHeight = 100 + dataset.length * 36;
+        const benchmarkModeBadge = createBadge(benchmarkMode);
+
         return (
             <div>
-              <h3 id={ this.props.name }>{ this.props.name }</h3>
+              <h3 id={ this.props.name }>{ this.props.name } <sup>{ benchmarkModeBadge }</sup></h3>
               <div style={ { fontFamily: 'sans-serif', fontSize: '0.75em' } }>
-                <div style={ { textAlign: 'center' } }>
-                  <b>{ benchmarkMode }</b>
-                </div>
                 <BarChart
                           layout="vertical"
                           width={ 900 }
@@ -147,6 +147,6 @@ export default class TwoRunsClassChart extends Component {
                 </div>
               </Collapse>
             </div>
-            );
+        );
     }
 }

@@ -59,10 +59,12 @@ export default class TwoRunsClassChart extends Component {
                 const scoreError1stRun = Math.round(firstRunBenchmark.primaryMetric.scoreError);
                 const scoreError2ndRun = Math.round(secondRunBenchmark.primaryMetric.scoreError);
 
-                let scoreDiff = Math.round((score2ndRun - score1stRun) / score1stRun * 100);
+                let scoreDiff;
                 if (benchmarkMode !== "thrpt") {
                     // except for throughput decrease is an increase
-                    scoreDiff = scoreDiff * -1;
+                    scoreDiff = Math.round((score1stRun - score2ndRun) / score2ndRun * 100);
+                } else {
+                    scoreDiff = Math.round((score2ndRun - score1stRun) / score1stRun * 100);
                 }
 
                 return {

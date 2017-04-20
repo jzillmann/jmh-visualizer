@@ -15,6 +15,7 @@ Visualize [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Benchmarks! On
 
 ## Major Changes
 
+- **Apr 2017** - 0.3 Error Bars & Params support
 - **Nov 2016** - 0.2: Add 2 run compare view
 - **Okt 2016** - 0.1: Initial Release
 

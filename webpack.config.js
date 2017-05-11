@@ -1,13 +1,13 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-var SOURCE_DIR = path.resolve(__dirname, 'src');
-var JAVASCRIPT_DIR = SOURCE_DIR + '/javascript';
-var BUILD_DIR = path.resolve(__dirname, 'build');
+const SOURCE_DIR = path.resolve(__dirname, 'src');
+const JAVASCRIPT_DIR = SOURCE_DIR + '/javascript';
+const BUILD_DIR = path.resolve(__dirname, 'build');
 
-var config = {
+const config = {
     module: {
         loaders: [
             {
@@ -63,6 +63,7 @@ var config = {
         new webpack.DefinePlugin({
             'process.env': {
                 'version': JSON.stringify(process.env.npm_package_version),
+                'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
             }
         }),
         new CopyWebpackPlugin([

@@ -30,17 +30,20 @@ export default class BenchmarkModeBadge extends Component {
 }
 
 export function createBadge(benchmarkMode) {
+    if (!benchmarkMode) {
+        return null;
+    }
     switch (benchmarkMode) {
     case 'thrpt':
-        return <BenchmarkModeBadge name="Throughput" tooltip="The higher the bars, the better." />
+        return <BenchmarkModeBadge key={ benchmarkMode } name="Throughput" tooltip="The higher the bars, the better." />
     case 'avgt':
-        return <BenchmarkModeBadge name="AverageTime" tooltip="The lower the bars, the better." />
+        return <BenchmarkModeBadge key={ benchmarkMode } name="AverageTime" tooltip="The lower the bars, the better." />
     case 'sample':
-        return <BenchmarkModeBadge name="SamplingTime" tooltip="The lower the bars, the better." />
+        return <BenchmarkModeBadge key={ benchmarkMode } name="SamplingTime" tooltip="The lower the bars, the better." />
     case 'ss':
-        return <BenchmarkModeBadge name="SingleShot" tooltip="The lower the bars, the better." />
+        return <BenchmarkModeBadge key={ benchmarkMode } name="SingleShot" tooltip="The lower the bars, the better." />
     default:
-        return <BenchmarkModeBadge name={ benchmarkMode } tooltip="Nothing to say..." />
+        return <BenchmarkModeBadge key={ benchmarkMode } name={ benchmarkMode } tooltip="Nothing to say..." />
     }
 
 }

@@ -18,19 +18,23 @@ class MainNavi extends React.Component {
         const aboutPopover = (
         <Popover id="popover-trigger-click-root-close" title={ `About JMH Visualizer - ${ process.env.version }` }>
           <p>
-            <i>JMH Visualizer</i> will render charts out of your <a href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">JMH Benchmarks</a>. All you have
-            to do, is to upload your benchmark results in JSON format.
+            <i>JMH Visualizer</i> will render charts out of your <a href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">JMH Benchmarks</a>. All it needs
+            are your benchmark results in JSON format.
           </p>
           { /*
-                                      <p>
-                                        For tips and tricks see XXX.
-                                      </p>
-                                      <p>
-                                        There is also an Gradle integration available: XXX
-                                      </p>
-                                    */ }
+                                        <p>
+                                          For tips and tricks see XXX.
+                                        </p>
+                                        <p>
+                                          There is also an Gradle integration available: XXX
+                                        </p>
+                                                                                                                                                */ }
         </Popover>
         );
+
+        const uploadNewFileItem = providedBenchmarks.length > 0 // eslint-disable-line no-undef
+            ? null : <MenuItem onSelect={ this.onSelectUploadNewFiles }> Upload new files
+                     </MenuItem>;
 
         return (
             <Navbar inverse>
@@ -39,8 +43,7 @@ class MainNavi extends React.Component {
                   <Dropdown id="logo-dropdown">
                     <AppLogo bsRole="toggle" />
                     <Dropdown.Menu>
-                      <MenuItem onSelect={ this.onSelectUploadNewFiles }> Upload new files
-                      </MenuItem>
+                      { uploadNewFileItem }
                       <MenuItem divider />
                       <MenuItem href="https://github.com/jzillmann/jmh-visualizer/issues" target="_blank"> Feedback & Bug Reports
                       </MenuItem>

@@ -71,7 +71,12 @@ const config = {
                 from: SOURCE_DIR + '/favicons',
                 to: 'favicons'
             },
-        ])
+        ]),
+        new CopyWebpackPlugin([
+            {
+                from: SOURCE_DIR + '/provided.js',
+            },
+        ]),
     ]
 };
 

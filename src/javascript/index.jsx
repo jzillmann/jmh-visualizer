@@ -29,5 +29,13 @@ const appState = new AppState({
     examples: examples,
 });
 
-appState.uploadBenchmarkRuns([])
+if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
+    appState.uploadBenchmarkRuns(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef
+        name: runName,
+        benchmarks: providedBenchmarkStore[runName] // eslint-disable-line no-undef
+    })));
+} else {
+    appState.uploadBenchmarkRuns([]);
+}
+
 // appState.uploadBenchmarkRuns(examples.singleRunExample)

@@ -27,6 +27,7 @@ While this app will visualize any valid JMH JSON you throw at it, you can write 
 - On the other hand, don't put to much stuff in a single class/chart (since readability will suffer) - deconstruct
 - Sensibly design your package structure, your class name and you methods names, those are reflected in the auto-generated charts
 - Keep method names short but meaningful
+- The method names reflect initial sort, so if you have benchmarks called 'with1Threads, with10Threads' naming them 'with01Thread, with10Thread' will display nicer
 
 
 ## Contribute

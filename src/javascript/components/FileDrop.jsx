@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Alert from 'react-bootstrap/lib/Alert'
 
-import BenchmarkRun from '../models/BenchmarkRun.jsx';
+import BenchmarkRun from '../models/BenchmarkRun.js';
 
 export default class FileDrop extends React.Component {
 

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { BarChart, Bar } from 'recharts';
 import Table from 'react-bootstrap/lib/Table'
 
-import { blue, red } from '../functions/colors.jsx'
+import { blue, red } from '../../functions/colors.js'
 
 function formatNumber(number) {
     if (number) {

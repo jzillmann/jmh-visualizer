@@ -24,6 +24,7 @@ Visualize [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Benchmarks! On
 While this app will visualize any valid JMH JSON you throw at it, you can write your benchmarks in a way that make the visualization much more enjoyable...
 
 - Put those benchmarks in a single class which you most likely wanne compare to each other
+- Don't mix incompatible benchmark styles into one class (like mixing average and single shot is ok, but mixing avarage and throughput will screw up the chart)
 - On the other hand, don't put to much stuff in a single class/chart (since readability will suffer) - deconstruct
 - Sensibly design your package structure, your class name and you methods names, those are reflected in the auto-generated charts
 - Keep method names short but meaningful

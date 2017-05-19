@@ -18,3 +18,22 @@ export function cartesianProduct(arrayOfArrays) {
     return arrayOfArrays.reduce((a, b) => a.map(x => b.map(y => x.concat(y)))
         .reduce((a, b) => a.concat(b), []), [[]]);
 }
+
+export function flatten(arr, result = []) {
+    for (let i = 0, length = arr.length; i < length; i++) {
+        const value = arr[i]
+        if (Array.isArray(value)) {
+            for (let i = 0, length = value.length; i < length; i++) {
+                const value2 = value[i]
+                if (Array.isArray(value2)) {
+                    flatten(value2, result)
+                } else {
+                    result.push(value2)
+                }
+            }
+        } else {
+            result.push(value)
+        }
+    }
+    return result
+}

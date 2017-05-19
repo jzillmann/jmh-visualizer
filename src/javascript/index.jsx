@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Examples from './models/Examples.jsx';
-import BenchmarkRun from './models/BenchmarkRun.jsx';
-import AppState from './models/AppState.jsx';
+
+import AppState from './models/AppState.js';
+import BenchmarkRun from './models/BenchmarkRun.js';
+import Examples from './models/Examples.js';
+import { exampleRun1 } from './exampleBenchmark1.js';
+import { exampleRun2 } from './exampleBenchmark2.js';
+
 import App from './components/App.jsx';
-import { exampleRun1 } from './exampleBenchmark1.jsx';
-import { exampleRun2 } from './exampleBenchmark2.jsx';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/sidenavi.css';
 

@@ -1,6 +1,9 @@
 import { expect } from 'chai';
 
-import { parseMethodName, parseBenchmarkName, getUniqueParamValues } from '../../src/javascript/functions/parse.jsx'
+import { parseMethodName, parseBenchmarkName, getUniqueParamValues, parseBenchmarkCollections } from '../../src/javascript/functions/parse.js'
+import BenchmarkRun from '../../src/javascript/models/BenchmarkRun.js'
+import BenchmarkCollection from '../../src/javascript/models/BenchmarkCollection.js'
+import BenchmarkResults from '../../src/javascript/models/BenchmarkResults.js'
 
 
 describe('functions: parseMethodName', () => {
@@ -88,6 +91,83 @@ describe('functions: getUniqueParamValues', () => {
         expect(getUniqueParamValues(benchmarks, 'arg')).to.deep.equal([1, 2]);
         expect(getUniqueParamValues(benchmarks, 'certainty')).to.deep.equal([0, 32]);
 
+    });
+
+});
+
+describe('functions: parseBenchmarkCollections', () => {
+
+    it('default', () => {
+        const run1 = new BenchmarkRun({
+            name: "1",
+            benchmarks: [
+                {
+                    "benchmark": "com.A.bench",
+                },
+                {
+                    "benchmark": "com.B.bench",
+                    "primaryMetric": {
+                        "score": 1
+                    }
+                }
+            ]
+
+        });
+        const run2 = new BenchmarkRun({
+            name: "2",
+            benchmarks: [
+                {
+                    "benchmark": "com.B.bench",
+                    "primaryMetric": {
+                        "score": 2
+                    }
+                },
+                {
+                    "benchmark": "com.B.bench2",
+                },
+                {
+                    "benchmark": "com.C.bench",
+                }
+            ]
+        });
+        const benchmarkCollections = parseBenchmarkCollections([run1, run2]);
+        const expectedCollections = [
+            new BenchmarkCollection({
+                key: 'com.A',
+                name: 'A',
+                benchmarkResults: [new BenchmarkResults({
+                    name: 'bench',
+                    benchmarks: [run1.benchmarks[0], null]
+                })]
+            }),
+            new BenchmarkCollection({
+                key: 'com.B',
+                name: 'B',
+                benchmarkResults: [
+                    new BenchmarkResults({
+                        name: 'bench',
+                        benchmarks: [run1.benchmarks[1], run2.benchmarks[0]]
+                    }),
+                    new BenchmarkResults({
+                        name: 'bench2',
+                        benchmarks: [null, run2.benchmarks[1]]
+                    })
+                ]
+            }),
+            new BenchmarkCollection({
+                key: 'com.C',
+                name: 'C',
+                benchmarkResults: [
+                    new BenchmarkResults({
+                        name: 'bench',
+                        benchmarks: [null, run2.benchmarks[2]]
+                    })
+                ]
+            })
+        ];
+
+        expect(benchmarkCollections).to.have.lengthOf(3);
+        expect(benchmarkCollections).to.deep.equal(expectedCollections);
     });
 
 });

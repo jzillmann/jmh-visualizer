@@ -1,4 +1,4 @@
-import BenchmarkRun from './BenchmarkRun.jsx';
+import BenchmarkRun from './BenchmarkRun.js';
 
 // Holds the state of the Application
 export default class AppState {

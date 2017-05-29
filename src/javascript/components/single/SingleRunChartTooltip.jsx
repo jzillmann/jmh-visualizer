@@ -91,6 +91,24 @@ export default class SingleRunChartTooltip extends Component {
                 })
             });
             const tooltipWidth = forkScores[0].length * 54
+
+            const BarLabel = (props) => {
+                return (
+                    <text
+                          stroke={ blue }
+                          fontSize={ 9 }
+                          fontWeight='normal'
+                          textAnchor={ props.textAnchor }
+                          x={ props.x }
+                          y={ props.y - 1 }
+                          width={ props.width }
+                          height={ props.height }>
+                      { props['data'].toLocaleString() }
+                    </text>
+                );
+            };
+
+
             return forkScoreDatas.map((data, index) => <div key={ 'iterations' + index }>
                                                          <BarChart
                                                                    width={ tooltipWidth }
@@ -101,7 +119,7 @@ export default class SingleRunChartTooltip extends Component {
                                                                 dataKey='data'
                                                                 fill={ barPayload.fill }
                                                                 isAnimationActive={ false }
-                                                                label/>
+                                                                label={ <BarLabel/> } />
                                                          </BarChart>
                                                        </div>
             )
@@ -129,7 +147,9 @@ export default class SingleRunChartTooltip extends Component {
               <div style={ { textAlign: 'center' } }>
                 <u><h5>Iterations</h5></u>
               </div>
-              { iterationCharts }
+              <div style={ { fontSize: '0.72em' } }>
+                { iterationCharts }
+              </div>
               <br/>
             </div>
         );

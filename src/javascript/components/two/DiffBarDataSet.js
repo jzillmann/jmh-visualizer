@@ -13,7 +13,7 @@ export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:Ru
         const firstRunBenchmark = benchmarkResults.benchmarks[0];
         const secondRunBenchmark = benchmarkResults.benchmarks[1];
 
-        if (firstRunBenchmark && secondRunBenchmark) {
+        if (firstRunBenchmark && secondRunBenchmark && metricExtractor.hasMetric(firstRunBenchmark) && metricExtractor.hasMetric(secondRunBenchmark)) {
             const scoreUnit = metricExtractor.extractScoreUnit(firstRunBenchmark);
             const metricType = getMetricType(metricExtractor.extractType(firstRunBenchmark));
             const score1stRun = Math.round(metricExtractor.extractScore(firstRunBenchmark));

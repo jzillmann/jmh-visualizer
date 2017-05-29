@@ -56,9 +56,9 @@ export default class TwoRunCollectionView extends React.Component {
         let removedBenchmarks = [];
         const secondaryMetrics = new Set();
         benchmarkCollection.benchmarkResults.forEach(benchmarkResult => {
-            if (benchmarkResult.benchmarks[0] === null) {
+            if (benchmarkResult.benchmarks[0] === null || !metricExtractor.hasMetric(benchmarkResult.benchmarks[0])) {
                 newBenchmarks.push(benchmarkResult.name);
-            } else if (benchmarkResult.benchmarks[1] === null) {
+            } else if (benchmarkResult.benchmarks[1] === null || !metricExtractor.hasMetric(benchmarkResult.benchmarks[1])) {
                 removedBenchmarks.push(benchmarkResult.name);
             } else {
                 Object.keys(benchmarkResult.benchmarks[0].secondaryMetrics).forEach(secondayMetric => secondaryMetrics.add(secondayMetric));

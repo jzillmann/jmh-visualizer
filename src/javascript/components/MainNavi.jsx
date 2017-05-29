@@ -10,7 +10,8 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 class MainNavi extends React.Component {
 
     onSelectUploadNewFiles() {
-        window.location = window.location.href.split('#')[0]
+        window.onbeforeunload = null;
+        window.location = window.location.href.split('#')[0];
     }
 
     render() {

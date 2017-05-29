@@ -31,6 +31,10 @@ export default class App extends React.Component {
         } else if (selectedBenchmarkRuns.length > 2) {
             alert("More then 2 runs not supported!");
         } else {
+            window.onbeforeunload = function() {
+                return "You will loose the current benchmarks.";
+            };
+
             if (appState.selectedBenchmarkCollection) {
                 if (selectedBenchmarkRuns.length == 1) {
                     const benchmarkRun = selectedBenchmarkRuns[0];

@@ -135,21 +135,26 @@ describe('functions: parseBenchmarkCollections', () => {
             new BenchmarkCollection({
                 key: 'com.A',
                 name: 'A',
+                methodNames: ['bench'],
                 benchmarkResults: [new BenchmarkResults({
                     name: 'bench',
+                    params: null,
                     benchmarks: [run1.benchmarks[0], null]
                 })]
             }),
             new BenchmarkCollection({
                 key: 'com.B',
                 name: 'B',
+                methodNames: ['bench', 'bench2'],
                 benchmarkResults: [
                     new BenchmarkResults({
                         name: 'bench',
+                        params: null,
                         benchmarks: [run1.benchmarks[1], run2.benchmarks[0]]
                     }),
                     new BenchmarkResults({
                         name: 'bench2',
+                        params: null,
                         benchmarks: [null, run2.benchmarks[1]]
                     })
                 ]
@@ -157,9 +162,11 @@ describe('functions: parseBenchmarkCollections', () => {
             new BenchmarkCollection({
                 key: 'com.C',
                 name: 'C',
+                methodNames: ['bench'],
                 benchmarkResults: [
                     new BenchmarkResults({
                         name: 'bench',
+                        params: null,
                         benchmarks: [null, run2.benchmarks[2]]
                     })
                 ]

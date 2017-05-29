@@ -1,14 +1,10 @@
 import React from 'react';
 
-import Form from 'react-bootstrap/lib/Form'
 import FormGroup from 'react-bootstrap/lib/FormGroup'
 import InputGroup from 'react-bootstrap/lib/InputGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
-import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 import Tooltip from 'react-bootstrap/lib/Tooltip'
-
-import QuestionIcon from 'react-icons/lib/fa/question';
 
 import AutoAffix from 'react-overlays/lib/AutoAffix';
 

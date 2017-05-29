@@ -13,7 +13,10 @@ export default class BarChartView extends Component {
     };
 
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
-        return false;
+        const dataSet1 = this.props.dataSet;
+        const dataSet2 = nextProps.dataSet;
+        const equal = dataSet1.barGroups.length == dataSet2.barGroups.length && dataSet1.barGroups.every((v, i) => v === dataSet2.barGroups[i]);
+        return !equal;
     }
 
     render() {
@@ -60,7 +63,8 @@ export default class BarChartView extends Component {
                         stroke={ barColors[i] }
                         fill={ barColors[i] }
                         unit={ ` ${dataSet.scoreUnit}` }
-                        isAnimationActive={ false }
+                        isAnimationActive={ true }
+                        animationDuration={ 540 }
                         label={ <BarLabel/> }>
                      <ErrorBar
                                dataKey={ barGroup + "ErrorBarInterval" }
@@ -77,7 +81,7 @@ export default class BarChartView extends Component {
                         width={ 900 }
                         height={ chartHeight }
                         data={ dataSet.data }
-                        margin={ { top: 20, right: 30, left: maxMethodNameLength * 5, bottom: 5 } }>
+                        margin={ { top: 20, right: 45, left: maxMethodNameLength * 4, bottom: 5 } }>
                 <XAxis type="number" domain={ [0, dataSet.dataMax] } />
                 <YAxis dataKey="name" type="category" />
                 <CartesianGrid strokeDasharray="3 3" />

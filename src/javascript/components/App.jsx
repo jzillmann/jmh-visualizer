@@ -3,9 +3,15 @@ import React from 'react';
 import RunSelection from '../models/RunSelection.js'
 import Container from './Container.jsx';
 import FileDrop from './FileDrop.jsx';
+
 import RunView from './RunView.jsx'
+import DetailView from './DetailView.jsx'
+
 import SingleRunViewFactory from './single/SingleRunViewFactory.jsx'
+import SingleDetailViewFactory from './single/SingleDetailViewFactory.jsx'
+
 import TwoRunViewFactory from './two/TwoRunViewFactory.jsx'
+import TwoDetailViewFactory from './two/TwoDetailViewFactory.jsx'
 
 import { parseBenchmarkCollections } from '../functions/parse.js'
 
@@ -16,32 +22,59 @@ export default class App extends React.Component {
     };
 
     render() {
-        const selectedBenchmarkRuns = this.props.appState.selectedBenchmarks();
+        const {appState} = this.props;
+        const selectedBenchmarkRuns = appState.selectedBenchmarks();
 
         var mainView;
         if (selectedBenchmarkRuns.length == 0) {
             mainView = <FileDrop examples={ this.props.appState.examples } uploadBenchmarkRunsFunction={ this.props.appState.uploadBenchmarkRuns } />
-        } else if (selectedBenchmarkRuns.length == 1) {
-            const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
-            const benchmarkRun = selectedBenchmarkRuns[0];
-            const moreThenOneBenchmarkRun = this.props.appState.benchmarkRuns.length > 1;
-            const collectionViewFactory = new SingleRunViewFactory({
-                moreThenOneBenchmarkRun: moreThenOneBenchmarkRun,
-                unselectBenchmarkFunction: this.props.appState.unselectBenchmark
-            });
-            const runSelection = new RunSelection([benchmarkRun.name], [0]);
-            mainView = <RunView benchmarkCollections={ benchmarkCollections } runSelection={ runSelection } collectionViewFactory={ collectionViewFactory } />
-        } else if (selectedBenchmarkRuns.length == 2) {
-            const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
-            const collectionViewFactory = new TwoRunViewFactory({
-                benchmarkRuns: selectedBenchmarkRuns,
-                reorderFunction: this.props.appState.reorderBenchmarks,
-                selectFunction: this.props.appState.selectBenchmark
-            });
-            const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
-            mainView = <RunView benchmarkCollections={ benchmarkCollections } runSelection={ runSelection } collectionViewFactory={ collectionViewFactory } />
-        } else {
+        } else if (selectedBenchmarkRuns.length > 2) {
             alert("More then 2 runs not supported!");
+        } else {
+            if (appState.selectedBenchmarkCollection) {
+                if (selectedBenchmarkRuns.length == 1) {
+                    const benchmarkRun = selectedBenchmarkRuns[0];
+                    const runSelection = new RunSelection([benchmarkRun.name], [0]);
+                    const metricViewFactory = new SingleDetailViewFactory();
+                    mainView = <DetailView
+                                           benchmarkCollection={ appState.selectedBenchmarkCollection }
+                                           runSelection={ runSelection }
+                                           unselectBenchmarkCollectionFunction={ appState.unselectBenchmarkCollection }
+                                           metricViewFactory={ metricViewFactory } />
+                } else if (selectedBenchmarkRuns.length == 2) {
+                    const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
+                    const metricViewFactory = new TwoDetailViewFactory();
+                    mainView = <DetailView
+                                           benchmarkCollection={ appState.selectedBenchmarkCollection }
+                                           runSelection={ runSelection }
+                                           unselectBenchmarkCollectionFunction={ appState.unselectBenchmarkCollection }
+                                           metricViewFactory={ metricViewFactory } />
+                }
+
+            } else {
+                if (selectedBenchmarkRuns.length == 1) {
+                    const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
+                    const benchmarkRun = selectedBenchmarkRuns[0];
+                    const moreThenOneBenchmarkRun = appState.benchmarkRuns.length > 1;
+                    const collectionViewFactory = new SingleRunViewFactory({
+                        moreThenOneBenchmarkRun: moreThenOneBenchmarkRun,
+                        unselectBenchmarkFunction: appState.unselectBenchmark,
+                        selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
+                    });
+                    const runSelection = new RunSelection([benchmarkRun.name], [0]);
+                    mainView = <RunView benchmarkCollections={ benchmarkCollections } runSelection={ runSelection } collectionViewFactory={ collectionViewFactory } />
+                } else if (selectedBenchmarkRuns.length == 2) {
+                    const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
+                    const collectionViewFactory = new TwoRunViewFactory({
+                        benchmarkRuns: selectedBenchmarkRuns,
+                        reorderFunction: appState.reorderBenchmarks,
+                        selectFunction: appState.selectBenchmark,
+                        selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
+                    });
+                    const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
+                    mainView = <RunView benchmarkCollections={ benchmarkCollections } runSelection={ runSelection } collectionViewFactory={ collectionViewFactory } />
+                }
+            }
         }
 
 

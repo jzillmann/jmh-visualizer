@@ -2,16 +2,14 @@ import React from 'react';
 
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
+import DeatailsIcon from 'react-icons/lib/fa/search-plus'
 
 import BadgeWithTooltip from '../lib/BadgeWithTooltip.jsx'
 import DiffBarChartView from './DiffBarChartView.jsx'
 
-import ScoreExtractor from '../../models/extractor/ScoreExtractor.js'
-import GcAllocationRateExtractor from '../../models/extractor/GcAllocationRateExtractor.js'
-
+import { createMetricBadge } from '../commons.jsx';
 import { createDataSetFromBenchmarks } from './DiffBarDataSet.js'
 import { getUniqueBenchmarkModes } from '../../functions/parse.js'
-import { createBadge } from '../BenchmarkModeBadge.jsx';
 
 // The view for a bunch of benchmarks, usually all of a benchmark class
 export default class TwoRunCollectionView extends React.Component {
@@ -19,8 +17,8 @@ export default class TwoRunCollectionView extends React.Component {
     static propTypes = {
         benchmarkCollection: React.PropTypes.object.isRequired,
         runSelection: React.PropTypes.object.isRequired,
-        showScores: React.PropTypes.bool.isRequired,
-        showGc: React.PropTypes.bool.isRequired,
+        metricExtractor: React.PropTypes.object.isRequired,
+        selectBenchmarkCollectionFunction: React.PropTypes.func.isRequired
     };
 
     state = {
@@ -42,50 +40,42 @@ export default class TwoRunCollectionView extends React.Component {
         });
     }
 
+    showDetails() {
+        this.props.selectBenchmarkCollectionFunction(this.props.benchmarkCollection);
+    }
+
 
     render() {
-        const {benchmarkCollection, runSelection, showScores, showGc} = this.props;
+        const {benchmarkCollection, runSelection, metricExtractor} = this.props;
 
         const benchmarks1 = benchmarkCollection.benchmarks(runSelection.subSelection(0));
         const benchmarks2 = benchmarkCollection.benchmarks(runSelection.subSelection(1));
-        const benchmarkModes = getUniqueBenchmarkModes(benchmarkCollection, runSelection);
-        const benchmarkModeBadges = benchmarkModes.map(mode => createBadge(mode));
+        const benchmarkModes = getUniqueBenchmarkModes(benchmarkCollection, runSelection, metricExtractor);
+        const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
         let newBenchmarks = [];
         let removedBenchmarks = [];
+        const secondaryMetrics = new Set();
         benchmarkCollection.benchmarkResults.forEach(benchmarkResult => {
             if (benchmarkResult.benchmarks[0] === null) {
                 newBenchmarks.push(benchmarkResult.name);
             } else if (benchmarkResult.benchmarks[1] === null) {
                 removedBenchmarks.push(benchmarkResult.name);
+            } else {
+                Object.keys(benchmarkResult.benchmarks[0].secondaryMetrics).forEach(secondayMetric => secondaryMetrics.add(secondayMetric));
+                Object.keys(benchmarkResult.benchmarks[1].secondaryMetrics).forEach(secondayMetric => secondaryMetrics.add(secondayMetric));
             }
         });
 
-        var scoresChart;
-        var gcChart;
-        if (showScores) {
-            scoresChart = <DiffBarChartView runNames={ runSelection.names } dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, new ScoreExtractor()) } />
-        }
-        if (showGc && benchmarks1[0] && benchmarks1[1]) {
-            let allocaRate;
-            if (benchmarks1[0].secondaryMetrics['·gc.alloc.rate']) {
-                allocaRate = <div>
-                               <h5>GC Profiler Results <sup><BadgeWithTooltip name="Allocation Rate" tooltip="The lower the bars, the better."/></sup></h5>
-                               <DiffBarChartView runNames={ runSelection.names } dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, new GcAllocationRateExtractor()) } />
-                             </div>
-            }
-            gcChart = <div>
-                        { allocaRate }
-                      </div>
-        }
+        const detailsIcon = secondaryMetrics.size > 0 ? <sup><BadgeWithTooltip tooltip={ secondaryMetrics.size + ' secondary metrics results' }> <DeatailsIcon/> { ' ' + secondaryMetrics.size } </BadgeWithTooltip> { ' | ' }</sup> : undefined;
+        var scoresChart = <DiffBarChartView runNames={ runSelection.names } dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, metricExtractor) } metricExtractor={ metricExtractor } />;
 
         return (
             <div>
               <div>
-                <h3 id={ benchmarkCollection.key }>{ benchmarkCollection.name } <sup>{ benchmarkModeBadges }</sup></h3>
+                <h3 id={ benchmarkCollection.key }><span><span style={ { cursor: 'pointer' } } onClick={ this.showDetails.bind(this) }>{ benchmarkCollection.name + ' ' } { detailsIcon }</span><sup>{ benchmarkModeBadges }</sup></span></h3>
               </div>
               <div style={ { fontSize: '0.90em' } }>
                 { scoresChart }
-                { gcChart }
               </div>
               { removedBenchmarks.length > 0 &&
                 <div>

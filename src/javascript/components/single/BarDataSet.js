@@ -10,7 +10,7 @@ export default class BarDataSet {
 }
 
 import RunSelection from '../../models/RunSelection.js'
-import DataExtractor from '../../models/DataExtractor.js'
+import MetricExtractor from '../../models/MetricExtractor.js'
 import { groupBy } from '../../functions/util.js'
 
 // The datasets will differ in case the benchmark-class uses params or not:
@@ -20,37 +20,37 @@ import { groupBy } from '../../functions/util.js'
 // 3 - 2 params, single methods => convert to (2)
 // 4 - 2+ params, multi methods => combine params & convert to (2)
 // 5 - 3+ params, single methods => combine params & convert to (0)
-export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:RunSelection, dataExtractor:DataExtractor) {
+export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:RunSelection, metricExtractor:MetricExtractor) {
     const benchmarkResults = benchmarkCollection.benchmarkResults;
     const methodCount = benchmarkCollection.methodNames.length;
     const params = benchmarkResults[0].params; //TODO get from collection as well ?
-    const benchmarkMode = dataExtractor.extractMode(benchmarkResults[0].benchmarks[0]);
-    const scoreUnit = dataExtractor.extractScoreUnit(benchmarkResults[0].benchmarks[0]);
+    const metricType = metricExtractor.extractType(benchmarkResults[0].benchmarks[0]);
+    const scoreUnit = metricExtractor.extractScoreUnit(benchmarkResults[0].benchmarks[0]);
 
     if (!params) {
         //case 0
-        return createMultiBarDataSet(benchmarkResults, runSelection, dataExtractor, (result) => result.name, () => `${benchmarkMode} ${scoreUnit}`);
+        return createMultiBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.name, () => `${metricType} ${scoreUnit}`);
     } else { // all other cases
         const paramNames = params.map(param => param[0]);
         if (paramNames.length == 1) {
             if (methodCount == 1) {
                 // case 1
-                return createMultiBarDataSet(benchmarkResults, runSelection, dataExtractor, (result) => result.params[0][0] + '=' + result.params[0][1], () => `${benchmarkMode} ${scoreUnit}`);
+                return createMultiBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.params[0][0] + '=' + result.params[0][1], () => `${metricType} ${scoreUnit}`);
             } else {
                 // case 2
-                return createMultiBarDataSet(benchmarkResults, runSelection, dataExtractor, (result) => result.name, (result) => result.params[0][1]);
+                return createMultiBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.name, (result) => result.params[0][1]);
             }
         } else if (paramNames.length == 2 && methodCount == 1) {
             // case 3
-            return createMultiBarDataSet(benchmarkResults, runSelection, dataExtractor, (result) => result.params[0][1], (result) => result.params[1][1]);
+            return createMultiBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.params[0][1], (result) => result.params[1][1]);
         } else {
             if (methodCount > 1) {
                 // case 4
-                return createMultiBarDataSet(benchmarkResults, runSelection, dataExtractor, (result) => result.name, (result) => result.params.map(param => param[1]).join(':'));
+                return createMultiBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.name, (result) => result.params.map(param => param[1]).join(':'));
             } else {
                 // case 5
                 const barName = paramNames.join(':');
-                return createMultiBarDataSet(benchmarkResults, runSelection, dataExtractor, (result) => result.params.map(param => param[1]).join(':'), () => barName);
+                return createMultiBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.params.map(param => param[1]).join(':'), () => barName);
             }
         }
     }

@@ -1,12 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
-import Button from 'react-bootstrap/lib/Button'
+import Form from 'react-bootstrap/lib/Form'
+import FormGroup from 'react-bootstrap/lib/FormGroup'
+import InputGroup from 'react-bootstrap/lib/InputGroup'
+import FormControl from 'react-bootstrap/lib/FormControl'
+import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 import Tooltip from 'react-bootstrap/lib/Tooltip'
 
+import QuestionIcon from 'react-icons/lib/fa/question';
+
 import AutoAffix from 'react-overlays/lib/AutoAffix';
+
+import PrimaryMetricExtractor from '../models/extractor/PrimaryMetricExtractor.js'
+import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtractor.js'
 
 var Scroll = require('react-scroll');
 var scrollSpy = Scroll.scrollSpy;
@@ -24,8 +31,8 @@ export default class RunView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showScores: true,
-            showGc: false,
+            metricType: 'Score',
+            metricTypeExtractor: new PrimaryMetricExtractor()
         };
     }
 
@@ -33,42 +40,29 @@ export default class RunView extends React.Component {
         scrollSpy.update();
     }
 
-    toogleScores() {
-        if (this.state.showScores && !this.state.showGc) {
-            this.setState({
-                showScores: false,
-                showGc: true
-            });
-        } else {
-            this.setState({
-                showScores: !this.state.showScores
-            });
-        }
-        ReactDOM.findDOMNode(this.refs.defaultButton).blur(); // eslint-disable-line react/no-find-dom-node
-    }
-
-    toogleGc() {
-        if (this.state.showGc && !this.state.showScores) {
-            this.setState({
-                showGc: false,
-                showScores: true
-            });
-        } else {
-            this.setState({
-                showGc: !this.state.showGc
-            });
-        }
-        ReactDOM.findDOMNode(this.refs.defaultButton).blur(); // eslint-disable-line react/no-find-dom-node
-        ReactDOM.findDOMNode(this.refs.gcButton).blur(); // eslint-disable-line react/no-find-dom-node
+    selectMetricType(event) {
+        const metricType = event.target.value;
+        this.setState({
+            metricType: metricType,
+            metricTypeExtractor: metricType === 'Score' ? new PrimaryMetricExtractor() : new SecondaryMetricExtractor(metricType)
+        });
     }
 
     render() {
-        const collectionViewFactory = this.props.collectionViewFactory;
-        const {benchmarkCollections, runSelection} = this.props;
-        const doesContainGcProfilerResults = benchmarkCollections.some(collection => collection.benchmarks(runSelection).some(benchmark => benchmark.secondaryMetrics['·gc.alloc.rate']));
-        const benchmarkCollectionViews = benchmarkCollections.map(benchmarkCollection => <Element name={ benchmarkCollection.key } key={ benchmarkCollection.key }>
-                                                                                           { collectionViewFactory.createCollectionView(benchmarkCollection, runSelection, this.state.showScores, this.state.showGc) }
-                                                                                         </Element>);
+        const {benchmarkCollections, runSelection, collectionViewFactory} = this.props;
+
+        const filteredBenchmarkCollections = this.state.metricType === 'Score' ? benchmarkCollections : benchmarkCollections.filter(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).find(benchmark => this.state.metricTypeExtractor.hasMetric(benchmark)));
+        const benchmarkCollectionViews = filteredBenchmarkCollections.map(benchmarkCollection => <Element name={ benchmarkCollection.key } key={ benchmarkCollection.key }>
+                                                                                                   { collectionViewFactory.createCollectionView(benchmarkCollection, runSelection, this.state.metricTypeExtractor) }
+                                                                                                 </Element>);
+
+        const metrics = new Set(['Score']);
+        benchmarkCollections.forEach(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).forEach(benchmark => {
+            Object.keys(benchmark.secondaryMetrics).forEach(metricKey => metrics.add(metricKey));
+        }));
+        const metricsOptions = Array.from(metrics).map(metric => <option key={ metric } value={ metric }>
+                                                                   { metric }
+                                                                 </option>);
 
         return (
             <div style={ { paddingBottom: 250 + 'px' } }>
@@ -76,42 +70,47 @@ export default class RunView extends React.Component {
                 <div className="row">
                   <div className="col-md-10" role="main">
                     { /*in order for the children to be properly linked, they should contain scroll-spy elements*/ }
-                    { collectionViewFactory.createTopSection(benchmarkCollections, runSelection) }
+                    { collectionViewFactory.createTopSection(filteredBenchmarkCollections, runSelection, this.state.metricType) }
                     { benchmarkCollectionViews }
                   </div>
                   <div className="col-md-2 bs-docs-sidebar">
                     <AutoAffix viewportOffsetTop={ 15 } container={ this }>
                       <div>
-                        <ButtonGroup bsSize="xsmall">
-                          <Button ref="defaultButton" active={ this.state.showScores } onClick={ doesContainGcProfilerResults ? this.toogleScores.bind(this) : undefined }>
-                            Scores
-                          </Button>
-                          { doesContainGcProfilerResults &&
-                            <Button ref="gcButton" active={ this.state.showGc } onClick={ this.toogleGc.bind(this) }>
-                              GC
-                            </Button> }
-                          { !doesContainGcProfilerResults &&
-                            <OverlayTrigger placement="bottom" overlay={ <Tooltip id="tooltip">
-                                                                           No GC profiler result found!
-                                                                         </Tooltip> }>
-                              <span style={ { cursor: 'not-allowed' } }><Button style={ { pointerEvents: 'none' } } bsSize="xsmall" disabled={ true }> GC </Button></span>
-                            </OverlayTrigger> }
-                        </ButtonGroup>
-                        <br/>
+                        <FormGroup controlId="formControlsSelectMultiple" bsSize="small">
+                          <InputGroup>
+                            <FormControl
+                                         componentClass="select"
+                                         onChange={ this.selectMetricType.bind(this) }
+                                         value={ this.state.metricType }
+                                         disabled={ metrics.size < 2 }>
+                              { metricsOptions }
+                            </FormControl>
+                            { metrics.size == 1 &&
+                              <InputGroup.Addon>
+                                <OverlayTrigger placement="bottom" overlay={ <Tooltip id="tooltip">
+                                                                               No secondary metrics found!
+                                                                             </Tooltip> }>
+                                  <div>
+                                    ?
+                                  </div>
+                                </OverlayTrigger>
+                              </InputGroup.Addon> }
+                          </InputGroup>
+                        </FormGroup>
                         <hr/>
                         <ul className="nav">
-                          { benchmarkCollections.map((benchmarkCollection) => <Link
-                                                                                    key={ benchmarkCollection.key }
-                                                                                    activeClass="active"
-                                                                                    to={ benchmarkCollection.key }
-                                                                                    spy={ true }
-                                                                                    smooth={ true }
-                                                                                    duration={ 500 }
-                                                                                    offset={ -200 }>
-                                                                              <li role="presentation">
-                                                                                { benchmarkCollection.name }
-                                                                              </li>
-                                                                              </Link>
+                          { filteredBenchmarkCollections.map((benchmarkCollection) => <Link
+                                                                                            key={ benchmarkCollection.key }
+                                                                                            activeClass="active"
+                                                                                            to={ benchmarkCollection.key }
+                                                                                            spy={ true }
+                                                                                            smooth={ true }
+                                                                                            duration={ 500 }
+                                                                                            offset={ -200 }>
+                                                                                      <li role="presentation">
+                                                                                        { benchmarkCollection.name }
+                                                                                      </li>
+                                                                                      </Link>
                             ) }
                         </ul>
                       </div>

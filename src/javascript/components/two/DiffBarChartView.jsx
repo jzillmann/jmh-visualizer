@@ -10,11 +10,12 @@ export default class DiffBarChartView extends Component {
     static propTypes = {
         dataSet: React.PropTypes.array.isRequired,
         runNames: React.PropTypes.array.isRequired,
+        metricExtractor: React.PropTypes.object.isRequired,
     };
 
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
         //only update if order of runs has changed
-        return this.props.runNames[0] !== nextProps.runNames[0];
+        return this.props.runNames[0] !== nextProps.runNames[0] || this.props.metricExtractor !== nextProps.metricExtractor;
     }
 
     render() {
@@ -34,6 +35,7 @@ export default class DiffBarChartView extends Component {
                      dataKey="scoreDiff"
                      unit=" %"
                      isAnimationActive={ true }
+                     animationDuration={ 900 }
                      label={ { stroke: yellow, fontSize: 12 } }>
                   { dataSet.map((entry, index) => {
                         const color = dataSet[index].scoreDiff > 0 ? green : red;

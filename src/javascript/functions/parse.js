@@ -46,10 +46,10 @@ export function getUniqueParamValues(benchmarks, paramName) {
 }
 
 
-export function getUniqueBenchmarkModes(benchmarkCollection:BenchmarkCollection, runSelection) {
+export function getUniqueBenchmarkModes(benchmarkCollection:BenchmarkCollection, runSelection, metricExtractor) {
     const modes = new Set();
     benchmarkCollection.benchmarks(runSelection).forEach(benchmark => {
-        modes.add(benchmark.mode);
+        modes.add(metricExtractor.extractType(benchmark));
     });
     return Array.from(modes);
 }

@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone'
 import FaCloudUpload from 'react-icons/lib/fa/cloud-upload'
 import FaHandORight from 'react-icons/lib/fa/hand-o-right'
 import FaFileText from 'react-icons/lib/fa/file-text'
-import Loader from './Loader.jsx';
+import Loader from './lib/Loader.jsx';
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'

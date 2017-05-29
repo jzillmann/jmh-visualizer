@@ -4,14 +4,16 @@ import BenchmarkCollection from './BenchmarkCollection.js';
 // Holds the state of the Application
 export default class AppState {
 
-    constructor(options) {
+    constructor(options, history) {
         this.renderFunction = options.renderFunction;
         this.examples = options.examples;
         this.benchmarkRuns = [];
         this.selectedBenchmarkRuns = [];
         this.selectedBenchmarkCollection = null;
+        this.history = history;
 
         //bind functions
+        this.goBack = this.goBack.bind(this);
         this.reorderBenchmarks = this.reorderBenchmarks.bind(this);
         this.selectBenchmarkCollection = this.selectBenchmarkCollection.bind(this);
         this.unselectBenchmarkCollection = this.unselectBenchmarkCollection.bind(this);
@@ -19,6 +21,16 @@ export default class AppState {
         this.unselectBenchmark = this.unselectBenchmark.bind(this);
         this.selectedBenchmarks = this.selectedBenchmarks.bind(this);
         this.uploadBenchmarkRuns = this.uploadBenchmarkRuns.bind(this);
+
+        this.history.listen((location, action) => {
+            if (action === 'POP') {
+                this.unselectBenchmarkCollection();
+            }
+        });
+    }
+
+    goBack() {
+        this.history.goBack();
     }
 
     reorderBenchmarks(reorderFunction) {
@@ -27,7 +39,8 @@ export default class AppState {
 
     selectBenchmarkCollection(benchmarkCollection:BenchmarkCollection) {
         this.selectedBenchmarkCollection = benchmarkCollection;
-        this.renderFunction(this)
+        this.renderFunction(this);
+        this.history.push('#details');
     }
 
     unselectBenchmarkCollection() {

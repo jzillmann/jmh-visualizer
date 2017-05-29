@@ -43,7 +43,7 @@ export default class App extends React.Component {
                     mainView = <DetailView
                                            benchmarkCollection={ appState.selectedBenchmarkCollection }
                                            runSelection={ runSelection }
-                                           unselectBenchmarkCollectionFunction={ appState.unselectBenchmarkCollection }
+                                           goBackFunction={ appState.goBack }
                                            metricViewFactory={ metricViewFactory } />
                 } else if (selectedBenchmarkRuns.length == 2) {
                     const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
@@ -51,7 +51,7 @@ export default class App extends React.Component {
                     mainView = <DetailView
                                            benchmarkCollection={ appState.selectedBenchmarkCollection }
                                            runSelection={ runSelection }
-                                           unselectBenchmarkCollectionFunction={ appState.unselectBenchmarkCollection }
+                                           goBackFunction={ appState.goBack }
                                            metricViewFactory={ metricViewFactory } />
                 }
 

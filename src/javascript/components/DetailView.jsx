@@ -19,7 +19,7 @@ export default class DetailView extends React.Component {
     static propTypes = {
         benchmarkCollection: React.PropTypes.object.isRequired,
         runSelection: React.PropTypes.object.isRequired,
-        unselectBenchmarkCollectionFunction: React.PropTypes.func.isRequired,
+        goBackFunction: React.PropTypes.func.isRequired,
         metricViewFactory: React.PropTypes.object.isRequired
     };
 
@@ -28,7 +28,7 @@ export default class DetailView extends React.Component {
     }
 
     goBack() {
-        this.props.unselectBenchmarkCollectionFunction();
+        this.props.goBackFunction();
     }
 
     render() {

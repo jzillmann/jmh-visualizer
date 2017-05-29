@@ -9,6 +9,7 @@ import { exampleRun2 } from './exampleBenchmark2.js';
 
 import App from './components/App.jsx';
 
+import createHistory from 'history/createBrowserHistory'
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/sidenavi.css';
 
@@ -27,10 +28,11 @@ const examples = new Examples({
     })
 });
 
+const history = createHistory();
 const appState = new AppState({
     renderFunction: render,
     examples: examples,
-});
+}, history);
 
 if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
     appState.uploadBenchmarkRuns(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef

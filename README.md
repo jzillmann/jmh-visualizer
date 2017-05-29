@@ -11,10 +11,12 @@ Visualize [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Benchmarks! On
 - Compare the benchmarks of 2 runs (two JSON files) grouped by benchmark class
   - Vertical bar-chart from -100% to 100%
   - Link to the original JSON
-  - Show score and error in tooltip
+  - Show score and error of both runs in tooltip
+- Visualize secondary metrics like '·gc.alloc.rate'
 
 ## Major Changes
 
+- **May 2017** - 0.4 Secondary Metrics support
 - **Apr 2017** - 0.3 Error Bars & Params support
 - **Nov 2016** - 0.2: Add 2 run compare view
 - **Okt 2016** - 0.1: Initial Release
@@ -56,6 +58,7 @@ Use the [issue tracker](https://github.com/jzillmann/jmh-visualizer/issues) and/
 
 ## Credits
 
+http://recharts.org/ - The chart ground work
 http://www.favicon.cc/ - Created the favicon with
 
-Babel, webpack, react, recharts,... and many more for an enjoyable webstack!
+Babel, webpack, react,... and many more for an enjoyable webstack!

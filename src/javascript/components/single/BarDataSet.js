@@ -25,7 +25,7 @@ export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:Ru
     const methodCount = benchmarkCollection.methodNames.length;
     const params = benchmarkResults[0].params; //TODO get from collection as well ?
     const metricType = metricExtractor.extractType(benchmarkResults[0].benchmarks[0]);
-    const scoreUnit = metricExtractor.extractScoreUnit(benchmarkResults[0].benchmarks[0]);
+    const scoreUnit = metricExtractor.hasMetric(benchmarkResults[0].benchmarks[0]) ? metricExtractor.extractScoreUnit(benchmarkResults[0].benchmarks[0]) : '';
 
     if (!params) {
         //case 0
@@ -58,7 +58,7 @@ export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:Ru
 
 
 //Each benchmark can have multiple bar's attached
-function createMultiBarDataSet(benchmarkResults, runSelection, dataExtractor, groupFunction, barGroupFunction) {
+function createMultiBarDataSet(benchmarkResults, runSelection, metricExtractor, groupFunction, barGroupFunction) {
     var dataMax = 0;
     var scoreUnit;
     const groupedBenchmarks = groupBy(benchmarkResults, groupFunction);
@@ -71,24 +71,26 @@ function createMultiBarDataSet(benchmarkResults, runSelection, dataExtractor, gr
         };
         benchmarkGroup.values.forEach(benchmarkResult => {
             const [benchmark] = benchmarkResult.selectBenchmarks(runSelection);
-            const score = Math.round(dataExtractor.extractScore(benchmark));
-            const scoreConfidence = dataExtractor.extractScoreConfidence(benchmark).map(scoreConf => Math.round(scoreConf));
-            const scoreError = Math.round(dataExtractor.extractScoreError(benchmark));
-            let errorBarInterval = 0
-            if (!isNaN(scoreError)) {
-                errorBarInterval = [score - scoreConfidence[0], scoreConfidence[1] - score];
-            }
-            scoreUnit = dataExtractor.extractScoreUnit(benchmark);
-            dataMax = Math.max(dataMax, score);
-            dataMax = Math.max(dataMax, scoreConfidence[1]);
+            if (metricExtractor.hasMetric(benchmark)) {
+                const score = Math.round(metricExtractor.extractScore(benchmark));
+                const scoreConfidence = metricExtractor.extractScoreConfidence(benchmark).map(scoreConf => Math.round(scoreConf));
+                const scoreError = Math.round(metricExtractor.extractScoreError(benchmark));
+                let errorBarInterval = 0
+                if (!isNaN(scoreError)) {
+                    errorBarInterval = [score - scoreConfidence[0], scoreConfidence[1] - score];
+                }
+                scoreUnit = metricExtractor.extractScoreUnit(benchmark);
+                dataMax = Math.max(dataMax, score);
+                dataMax = Math.max(dataMax, scoreConfidence[1]);
 
-            const barGroup = barGroupFunction(benchmarkResult);
-            barGroups.add(barGroup);
-            dataObject[barGroup] = score;
-            dataObject[barGroup + 'Confidence'] = scoreConfidence;
-            dataObject[barGroup + 'Error'] = scoreError;
-            dataObject[barGroup + 'ErrorBarInterval'] = errorBarInterval;
-            dataObject[barGroup + 'SubScores'] = dataExtractor.extractRawData(benchmark);
+                const barGroup = barGroupFunction(benchmarkResult);
+                barGroups.add(barGroup);
+                dataObject[barGroup] = score;
+                dataObject[barGroup + 'Confidence'] = scoreConfidence;
+                dataObject[barGroup + 'Error'] = scoreError;
+                dataObject[barGroup + 'ErrorBarInterval'] = errorBarInterval;
+                dataObject[barGroup + 'SubScores'] = metricExtractor.extractRawData(benchmark);
+            }
         });
         return dataObject;
     });

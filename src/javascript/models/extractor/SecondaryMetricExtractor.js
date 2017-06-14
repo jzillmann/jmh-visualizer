@@ -1,6 +1,6 @@
 import MetricExtractor from '../MetricExtractor.js'
 
-export default class GcExtractor extends MetricExtractor {
+export default class SecondaryMetricExtractor extends MetricExtractor {
 
     constructor(metricKey) {
         super();

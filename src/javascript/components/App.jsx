@@ -39,19 +39,25 @@ export default class App extends React.Component {
                 if (selectedBenchmarkRuns.length == 1) {
                     const benchmarkRun = selectedBenchmarkRuns[0];
                     const runSelection = new RunSelection([benchmarkRun.name], [0]);
+                    const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
                     const metricViewFactory = new SingleDetailViewFactory();
                     mainView = <DetailView
                                            benchmarkCollection={ appState.selectedBenchmarkCollection }
+                                           benchmarkCollections={ benchmarkCollections }
                                            runSelection={ runSelection }
                                            goBackFunction={ appState.goBack }
+                                           selectBenchmarkCollectionFunction={ appState.selectBenchmarkCollection }
                                            metricViewFactory={ metricViewFactory } />
                 } else if (selectedBenchmarkRuns.length == 2) {
                     const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
+                    const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
                     const metricViewFactory = new TwoDetailViewFactory();
                     mainView = <DetailView
                                            benchmarkCollection={ appState.selectedBenchmarkCollection }
+                                           benchmarkCollections={ benchmarkCollections }
                                            runSelection={ runSelection }
                                            goBackFunction={ appState.goBack }
+                                           selectBenchmarkCollectionFunction={ appState.selectBenchmarkCollection }
                                            metricViewFactory={ metricViewFactory } />
                 }
 

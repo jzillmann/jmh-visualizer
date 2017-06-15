@@ -3,6 +3,10 @@ import React from 'react';
 import BackIcon from 'react-icons/lib/md/keyboard-backspace'
 import AutoAffix from 'react-overlays/lib/AutoAffix';
 
+import FormGroup from 'react-bootstrap/lib/FormGroup'
+import InputGroup from 'react-bootstrap/lib/InputGroup'
+import FormControl from 'react-bootstrap/lib/FormControl'
+
 import PrimaryMetricExtractor from '../models/extractor/PrimaryMetricExtractor.js'
 import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtractor.js'
 
@@ -18,8 +22,10 @@ export default class DetailView extends React.Component {
 
     static propTypes = {
         benchmarkCollection: React.PropTypes.object.isRequired,
+        benchmarkCollections: React.PropTypes.array.isRequired,
         runSelection: React.PropTypes.object.isRequired,
         goBackFunction: React.PropTypes.func.isRequired,
+        selectBenchmarkCollectionFunction: React.PropTypes.func.isRequired,
         metricViewFactory: React.PropTypes.object.isRequired
     };
 
@@ -31,8 +37,14 @@ export default class DetailView extends React.Component {
         this.props.goBackFunction();
     }
 
+    selectBenchmarkCollection(event) {
+        const collectionIndex = event.target.value;
+        const benchmarkCollection = this.props.benchmarkCollections[collectionIndex];
+        this.props.selectBenchmarkCollectionFunction(benchmarkCollection);
+    }
+
     render() {
-        const {benchmarkCollection, runSelection, metricViewFactory} = this.props;
+        const {benchmarkCollection, benchmarkCollections, runSelection, metricViewFactory} = this.props;
         const primaryMetricExtractor = new PrimaryMetricExtractor();
 
         const metrics = Array.from(benchmarkCollection.benchmarks(runSelection).reduce((aggregate, benchmark) => {
@@ -53,6 +65,14 @@ export default class DetailView extends React.Component {
                               { metricViewFactory.createMetricView(benchmarkCollection, runSelection, primaryMetricExtractor) }
                             </Element>);
 
+        const benchmarkCollectionOptions = benchmarkCollections.map((collection, index) => <option key={ collection.key } value={ index }>
+                                                                                             { collection.name }
+                                                                                           </option>);
+        const selectedCollection = benchmarkCollections.findIndex(collection => collection.key === benchmarkCollection.key);
+
+        console.debug(benchmarkCollectionOptions);
+        console.debug(this.props.benchmarkCollection.name);
+
         return (
             <div style={ { paddingBottom: 250 + 'px' } }>
               <div className="container bs-docs-container">
@@ -70,6 +90,14 @@ export default class DetailView extends React.Component {
                         <a onClick={ this.goBack.bind(this) }>
                           <BackIcon/> Back..</a>
                         <br/>
+                        <br/>
+                        <FormGroup bsSize="small" controlId="theForm">
+                          <InputGroup>
+                            <FormControl componentClass="select" onChange={ this.selectBenchmarkCollection.bind(this) } defaultValue={ selectedCollection }>
+                              { benchmarkCollectionOptions }
+                            </FormControl>
+                          </InputGroup>
+                        </FormGroup>
                         <hr/>
                         <ul className="nav">
                           { metrics.map((secondaryMetric) => <Link

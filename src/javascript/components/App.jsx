@@ -66,7 +66,12 @@ export default class App extends React.Component {
                         selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
                     });
                     const runSelection = new RunSelection([benchmarkRun.name], [0]);
-                    mainView = <RunView benchmarkCollections={ benchmarkCollections } runSelection={ runSelection } collectionViewFactory={ collectionViewFactory } />
+                    mainView = <RunView
+                                        benchmarkCollections={ benchmarkCollections }
+                                        runSelection={ runSelection }
+                                        collectionViewFactory={ collectionViewFactory }
+                                        selectedMetric={ appState.selectedMetric }
+                                        selectMetricFunction={ appState.selectMetric } />
                 } else if (selectedBenchmarkRuns.length == 2) {
                     const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
                     const collectionViewFactory = new TwoRunViewFactory({
@@ -76,7 +81,12 @@ export default class App extends React.Component {
                         selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
                     });
                     const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
-                    mainView = <RunView benchmarkCollections={ benchmarkCollections } runSelection={ runSelection } collectionViewFactory={ collectionViewFactory } />
+                    mainView = <RunView
+                                        benchmarkCollections={ benchmarkCollections }
+                                        runSelection={ runSelection }
+                                        collectionViewFactory={ collectionViewFactory }
+                                        selectedMetric={ appState.selectedMetric }
+                                        selectMetricFunction={ appState.selectMetric } />
                 }
             }
         }

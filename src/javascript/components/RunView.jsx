@@ -16,19 +16,25 @@ var scrollSpy = Scroll.scrollSpy;
 var Link = Scroll.Link;
 var Element = Scroll.Element;
 
+function createMetricExtractor(metricType) {
+    return metricType === 'Score' ? new PrimaryMetricExtractor() : new SecondaryMetricExtractor(metricType);
+}
+
 export default class RunView extends React.Component {
 
     static propTypes = {
         collectionViewFactory: React.PropTypes.object.isRequired,
         benchmarkCollections: React.PropTypes.array.isRequired,
         runSelection: React.PropTypes.object.isRequired,
+        selectedMetric: React.PropTypes.string.isRequired,
+        selectMetricFunction: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            metricType: 'Score',
-            metricTypeExtractor: new PrimaryMetricExtractor()
+            metricType: props.selectedMetric,
+            metricTypeExtractor: createMetricExtractor(props.selectedMetric)
         };
     }
 
@@ -38,9 +44,10 @@ export default class RunView extends React.Component {
 
     selectMetricType(event) {
         const metricType = event.target.value;
+        this.props.selectMetricFunction(metricType);
         this.setState({
             metricType: metricType,
-            metricTypeExtractor: metricType === 'Score' ? new PrimaryMetricExtractor() : new SecondaryMetricExtractor(metricType)
+            metricTypeExtractor: createMetricExtractor(metricType)
         });
     }
 

@@ -10,17 +10,19 @@ export default class AppState {
         this.benchmarkRuns = [];
         this.selectedBenchmarkRuns = [];
         this.selectedBenchmarkCollection = null;
+        this.selectedMetric = 'Score';
         this.history = history;
 
         //bind functions
+        this.uploadBenchmarkRuns = this.uploadBenchmarkRuns.bind(this);
         this.goBack = this.goBack.bind(this);
         this.reorderBenchmarks = this.reorderBenchmarks.bind(this);
+        this.selectMetric = this.selectMetric.bind(this);
         this.selectBenchmarkCollection = this.selectBenchmarkCollection.bind(this);
         this.unselectBenchmarkCollection = this.unselectBenchmarkCollection.bind(this);
         this.selectBenchmark = this.selectBenchmark.bind(this);
         this.unselectBenchmark = this.unselectBenchmark.bind(this);
         this.selectedBenchmarks = this.selectedBenchmarks.bind(this);
-        this.uploadBenchmarkRuns = this.uploadBenchmarkRuns.bind(this);
 
         this.history.listen((location, action) => {
             if (action === 'POP') {
@@ -29,12 +31,21 @@ export default class AppState {
         });
     }
 
+    uploadBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
+        this.benchmarkRuns = benchmarkRuns;
+        this.renderFunction(this)
+    }
+
     goBack() {
         this.history.goBack();
     }
 
     reorderBenchmarks(reorderFunction) {
         this.uploadBenchmarkRuns(reorderFunction(this.benchmarkRuns));
+    }
+
+    selectMetric(metric) {
+        this.selectedMetric = metric;
     }
 
     selectBenchmarkCollection(benchmarkCollection:BenchmarkCollection) {
@@ -63,11 +74,6 @@ export default class AppState {
             return this.benchmarkRuns;
         }
         return this.benchmarkRuns.filter(run => this.selectedBenchmarkRuns.includes(run.name))
-    }
-
-    uploadBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
-        this.benchmarkRuns = benchmarkRuns;
-        this.renderFunction(this)
     }
 
 }

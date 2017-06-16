@@ -69,10 +69,6 @@ export default class DetailView extends React.Component {
                                                                                              { collection.name }
                                                                                            </option>);
         const selectedCollection = benchmarkCollections.findIndex(collection => collection.key === benchmarkCollection.key);
-
-        console.debug(benchmarkCollectionOptions);
-        console.debug(this.props.benchmarkCollection.name);
-
         return (
             <div style={ { paddingBottom: 250 + 'px' } }>
               <div className="container bs-docs-container">

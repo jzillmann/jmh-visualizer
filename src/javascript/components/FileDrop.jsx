@@ -96,7 +96,11 @@ export default class FileDrop extends React.Component {
                 <h1>{ uploadIcon }</h1>
                 <br/>
                 <Alert bsStyle="warning">
-                  <i>This tool visualizes <a href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">JMH</a> benchmark results (in JSON format)! <br/>"JMH is a Java harness for building, running, and analysing nano/micro/milli/macro benchmarks written in Java and other languages targetting the JVM."</i>
+                  <div>
+                    <i>"JMH is a Java harness for building, running, and analysing nano/micro/milli/macro benchmarks written in Java and other languages targetting the JVM."</i>
+                    <br/>
+                    <span>This tool helps you to visually explore your benchmark results! All your have to do, is to provide the result files in JSON format.</span>
+                  </div>
                 </Alert>
               </Dropzone>
               <div>

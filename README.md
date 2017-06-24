@@ -1,6 +1,6 @@
 # JMH Visualizer
 
-Visualize [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Benchmarks! Online version at http://jmh.morethan.io!
+Visually explore your [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Benchmarks! Online version at http://jmh.morethan.io!
 
 ## Features
 

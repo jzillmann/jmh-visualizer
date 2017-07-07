@@ -7,6 +7,8 @@ import MenuItem from 'react-bootstrap/lib/MenuItem'
 import Popover from 'react-bootstrap/lib/Popover'
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 
+import LinkIcon from 'react-icons/lib/fa/external-link'
+
 class MainNavi extends React.Component {
 
     onSelectUploadNewFiles() {
@@ -22,19 +24,11 @@ class MainNavi extends React.Component {
             <i>JMH Visualizer</i> will render charts out of your <a href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">JMH Benchmarks</a>. All it needs
             are your benchmark results in JSON format.
           </p>
-          { /*
-                                        <p>
-                                          For tips and tricks see XXX.
-                                        </p>
-                                        <p>
-                                          There is also an Gradle integration available: XXX
-                                        </p>
-                                                                                                                                                */ }
         </Popover>
         );
 
         const uploadNewFileItem = providedBenchmarks.length > 0 // eslint-disable-line no-undef
-            ? null : <MenuItem onSelect={ this.onSelectUploadNewFiles }> Upload new files
+            ? null : <MenuItem onSelect={ this.onSelectUploadNewFiles }> Reset & Upload New
                      </MenuItem>;
 
         return (
@@ -46,9 +40,18 @@ class MainNavi extends React.Component {
                     <Dropdown.Menu>
                       { uploadNewFileItem }
                       <MenuItem divider />
-                      <MenuItem href="https://github.com/jzillmann/jmh-visualizer/issues" target="_blank"> Feedback & Bug Reports
+                      <MenuItem href="https://github.com/jzillmann/jmh-visualizer/issues" target="_blank">
+                      <LinkIcon />
+                      { ' Feedback & Bug Reports ' }
                       </MenuItem>
-                      <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank"> Code @Github
+                      <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank">
+                      <LinkIcon />
+                      { ' Code @ Github ' }
+                      </MenuItem>
+                      <MenuItem divider />
+                      <MenuItem href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">
+                      <LinkIcon />
+                      { ' JMH ' }
                       </MenuItem>
                       <MenuItem divider />
                       <OverlayTrigger

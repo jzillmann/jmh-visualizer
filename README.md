@@ -4,6 +4,7 @@ Visually explore your [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Be
 
 ## Features
 
+- Serverless architecture - All happens in locally in your browser
 - Vizualize the benchmarks of a single JSON result grouped by benchmark class
   - Vertical bar-chart with score and score error 
   - Link to the original JSON

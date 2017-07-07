@@ -60,6 +60,7 @@ Use the [issue tracker](https://github.com/jzillmann/jmh-visualizer/issues) and/
 ## Credits
 
 http://recharts.org/ - The chart ground work
+
 http://www.favicon.cc/ - Created the favicon with
 
 Babel, webpack, react,... and many more for an enjoyable webstack!

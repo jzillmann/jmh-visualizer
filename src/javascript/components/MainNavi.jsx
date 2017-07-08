@@ -31,42 +31,45 @@ class MainNavi extends React.Component {
             ? null : <MenuItem onSelect={ this.onSelectUploadNewFiles }> Reset & Upload New
                      </MenuItem>;
 
-        return (
-            <Navbar inverse={ true }>
-              <Navbar.Header>
-                <Navbar.Brand>
-                  <Dropdown id="logo-dropdown">
-                    <AppLogo bsRole="toggle" />
-                    <Dropdown.Menu>
-                      { uploadNewFileItem }
-                      <MenuItem divider />
-                      <MenuItem href="https://github.com/jzillmann/jmh-visualizer/issues" target="_blank">
-                      <LinkIcon />
-                      { ' Feedback & Bug Reports ' }
-                      </MenuItem>
-                      <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank">
-                      <LinkIcon />
-                      { ' Code @ Github ' }
-                      </MenuItem>
-                      <MenuItem divider />
-                      <MenuItem href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">
-                      <LinkIcon />
-                      { ' JMH ' }
-                      </MenuItem>
-                      <MenuItem divider />
-                      <OverlayTrigger
-                                      trigger="click"
-                                      rootClose
-                                      placement="bottom"
-                                      overlay={ aboutPopover }>
-                        <MenuItem eventKey="3"> About
+        const navBar = settings.showHeader // eslint-disable-line no-undef
+            ? <Navbar inverse={ true }>
+                <Navbar.Header>
+                  <Navbar.Brand>
+                    <Dropdown id="logo-dropdown">
+                      <AppLogo bsRole="toggle" />
+                      <Dropdown.Menu>
+                        { uploadNewFileItem }
+                        <MenuItem divider />
+                        <MenuItem href="https://github.com/jzillmann/jmh-visualizer/issues" target="_blank">
+                        <LinkIcon />
+                        { ' Feedback & Bug Reports ' }
                         </MenuItem>
-                      </OverlayTrigger>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Navbar.Brand>
-              </Navbar.Header>
-            </Navbar>
+                        <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank">
+                        <LinkIcon />
+                        { ' Code @ Github ' }
+                        </MenuItem>
+                        <MenuItem divider />
+                        <MenuItem href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">
+                        <LinkIcon />
+                        { ' JMH ' }
+                        </MenuItem>
+                        <MenuItem divider />
+                        <OverlayTrigger
+                                        trigger="click"
+                                        rootClose
+                                        placement="bottom"
+                                        overlay={ aboutPopover }>
+                          <MenuItem eventKey="3"> About
+                          </MenuItem>
+                        </OverlayTrigger>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Navbar.Brand>
+                </Navbar.Header>
+              </Navbar> : null;
+
+        return (
+            navBar
         );
     }
 }

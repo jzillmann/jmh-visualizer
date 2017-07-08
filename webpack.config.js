@@ -77,6 +77,11 @@ const config = {
                 from: SOURCE_DIR + '/provided.js',
             },
         ]),
+        new CopyWebpackPlugin([
+            {
+                from: SOURCE_DIR + '/settings.js',
+            },
+        ]),
     ]
 };
 

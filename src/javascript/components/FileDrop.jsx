@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Dropzone from 'react-dropzone'
-import FaCloudUpload from 'react-icons/lib/fa/cloud-upload'
-import FaHandORight from 'react-icons/lib/fa/hand-o-right'
-import FaFileText from 'react-icons/lib/fa/file-text'
+import UploadIcon from 'react-icons/lib/fa/cloud-upload'
+import PontingHandIcon from 'react-icons/lib/fa/hand-o-right'
+import DocumentIcon from 'react-icons/lib/fa/file-text'
 import Loader from './lib/Loader.jsx';
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
@@ -84,7 +84,7 @@ export default class FileDrop extends React.Component {
         if (this.state.loading) {
             uploadIcon = <Loader/>
         } else {
-            uploadIcon = <FaCloudUpload width={ 100 } height={ 100 } /> ;
+            uploadIcon = <UploadIcon width={ 100 } height={ 100 } /> ;
         }
 
         return (
@@ -109,12 +109,12 @@ export default class FileDrop extends React.Component {
                 <Grid>
                   <Row className="show-grid">
                     <Col xs={ 6 } md={ 6 } style={ { textAlign: 'center' } }>
-                    <FaHandORight/>
-                    <span style={ { cursor: 'pointer' } } onClick={ this.onLoadSingleRunExample.bind(this) }><FaFileText width={ 70 } height={ 70 } /> Single Run</span>
+                    <PontingHandIcon />
+                    <span style={ { cursor: 'pointer' } } onClick={ this.onLoadSingleRunExample.bind(this) }><DocumentIcon width={ 70 } height={ 70 } /> Single Run</span>
                     </Col>
                     <Col xs={ 6 } md={ 6 } style={ { textAlign: 'center' } }>
-                    <FaHandORight/>
-                    <span style={ { cursor: 'pointer' } } onClick={ this.onLoadTwoRunsExample.bind(this) }><FaFileText width={ 70 } height={ 70 } /> <FaFileText width={ 70 } height={ 70 } /> Two Runs</span>
+                    <PontingHandIcon />
+                    <span style={ { cursor: 'pointer' } } onClick={ this.onLoadTwoRunsExample.bind(this) }><DocumentIcon width={ 70 } height={ 70 } /> <DocumentIcon width={ 70 } height={ 70 } /> Two Runs</span>
                     </Col>
                   </Row>
                 </Grid>

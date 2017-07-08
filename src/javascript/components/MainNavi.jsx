@@ -32,7 +32,7 @@ class MainNavi extends React.Component {
                      </MenuItem>;
 
         return (
-            <Navbar inverse>
+            <Navbar inverse={ true }>
               <Navbar.Header>
                 <Navbar.Brand>
                   <Dropdown id="logo-dropdown">

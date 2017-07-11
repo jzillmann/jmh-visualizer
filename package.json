@@ -1,7 +1,7 @@
 {
   "name": "jmh-visualizer",
-  "version": "0.4.1",
-  "description": "Visualize the benchmark results of a JMH execution",
+  "version": "0.4.2",
+  "description": "Visualize the  results of your JMH benchmarks execution",
   "main": "index.jsx",
   "scripts": {
     "watch": "webpack -d --watch",
@@ -16,7 +16,9 @@
   "keywords": [
     "JMH",
     "visualize",
-    "benchmark"
+    "visualization",
+    "benchmark",
+    "report"
   ],
   "author": "Johannes Zillmann",
   "license": "AGPL-3.0",

@@ -1,5 +1,6 @@
 import React from 'react';
 import AppLogo from './AppLogo.jsx';
+import TwoRunSelectionBar from './TwoRunSelectionBar.jsx'
 
 import Navbar from 'react-bootstrap/lib/Navbar'
 import Dropdown from 'react-bootstrap/lib/Dropdown'
@@ -9,7 +10,13 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 
 import LinkIcon from 'react-icons/lib/fa/external-link'
 
-class MainNavi extends React.Component {
+export default class MainNavi extends React.Component {
+
+    static propTypes = {
+        runs: React.PropTypes.array.isRequired,
+        runSelection: React.PropTypes.array.isRequired,
+        selectRunsFunction: React.PropTypes.func.isRequired
+    };
 
     onSelectUploadNewFiles() {
         window.onbeforeunload = null;
@@ -17,6 +24,9 @@ class MainNavi extends React.Component {
     }
 
     render() {
+        const {runs, runSelection, selectRunsFunction} = this.props;
+
+        const selectionBar = createRunSelectionBar(runs, runSelection, selectRunsFunction);
 
         const aboutPopover = (
         <Popover id="popover-trigger-click-root-close" title={ `About JMH Visualizer - ${ process.env.version }` }>
@@ -69,9 +79,21 @@ class MainNavi extends React.Component {
               </Navbar> : null;
 
         return (
-            navBar
+            <div>
+              { navBar }
+              { selectionBar }
+            </div>
         );
     }
 }
 
-export default MainNavi;
+function createRunSelectionBar(runs, runSelection, selectRunsFunction) {
+    if (runs.length <= 1) {
+        return null;
+    }
+    if (runs.length == 2) {
+        return <TwoRunSelectionBar runs={ runs } runSelection={ runSelection } selectRunsFunction={ selectRunsFunction } />;
+    }
+
+    throw "Not Yet Implemented!"
+}

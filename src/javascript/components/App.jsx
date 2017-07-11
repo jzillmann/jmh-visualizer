@@ -1,7 +1,8 @@
 import React from 'react';
 
 import RunSelection from '../models/RunSelection.js'
-import Container from './Container.jsx';
+import MainNavi from './MainNavi.jsx';
+
 import FileDrop from './FileDrop.jsx';
 
 import RunView from './RunView.jsx'
@@ -67,10 +68,7 @@ export default class App extends React.Component {
                 if (selectedBenchmarkRuns.length == 1) {
                     const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
                     const benchmarkRun = selectedBenchmarkRuns[0];
-                    const moreThenOneBenchmarkRun = appState.benchmarkRuns.length > 1;
                     const collectionViewFactory = new SingleRunViewFactory({
-                        moreThenOneBenchmarkRun: moreThenOneBenchmarkRun,
-                        unselectBenchmarkFunction: appState.unselectBenchmark,
                         selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
                     });
                     const runSelection = new RunSelection([benchmarkRun.name], [0]);
@@ -84,8 +82,6 @@ export default class App extends React.Component {
                     const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
                     const collectionViewFactory = new TwoRunViewFactory({
                         benchmarkRuns: selectedBenchmarkRuns,
-                        reorderFunction: appState.reorderBenchmarks,
-                        selectFunction: appState.selectBenchmark,
                         selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
                     });
                     const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
@@ -102,9 +98,10 @@ export default class App extends React.Component {
 
         return (
             <div>
-              <Container>
+              <MainNavi runs={ appState.benchmarkRuns } runSelection={ appState.benchmarkRunSelection } selectRunsFunction={ appState.selectBenchmarkRuns } />
+              <div className="container">
                 { mainView }
-              </Container>
+              </div>
             </div>
         );
     }

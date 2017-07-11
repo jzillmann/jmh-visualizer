@@ -49,6 +49,7 @@ export default class FileDrop extends React.Component {
                     });
                     benchmarkRuns.push(benchmarkRun);
                     if (i == files.length - 1) {
+                        benchmarkRuns.sort((a, b) => a.name.localeCompare(b.name));
                         uploadFunction(benchmarkRuns);
                     }
                 } catch ( e ) {

@@ -14,17 +14,7 @@ export default class TwoRunViewFactory extends RunViewFactory {
     constructor(options) {
         super();
         this.benchmarkRuns = options.benchmarkRuns;
-        this.reorderFunction = options.reorderFunction;
-        this.selectFunction = options.selectFunction;
         this.selectBenchmarkCollectionFunction = options.selectBenchmarkCollectionFunction;
-    }
-
-    flipRuns() {
-        this.reorderFunction((benchmarkRuns) => benchmarkRuns.reverse());
-    }
-
-    showRun(name) {
-        this.selectFunction(name);
     }
 
     createTopSection(benchmarkCollection:BenchmarkCollection, runSelection:RunSelection, metricType) {
@@ -34,8 +24,7 @@ export default class TwoRunViewFactory extends RunViewFactory {
                  <Badge>
                    { benchmarkCollection.length }
                  </Badge> different Benchmark classes for metric '
-                 { metricType }' on 2 runs: [<i><a onClick={ () => this.showRun(runSelection.names[0]) }>{ runSelection.names[0] }</a>, <a onClick={ () => this.showRun(runSelection.names[1]) }>{ runSelection.names[1] }</a></i>] (
-                 <a onClick={ this.flipRuns.bind(this) }>Flip Runs</a>)
+                 { metricType }' on 2 runs.
                </div>
     }
 

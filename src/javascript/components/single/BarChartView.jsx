@@ -15,7 +15,7 @@ export default class BarChartView extends Component {
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
         const dataSet1 = this.props.dataSet;
         const dataSet2 = nextProps.dataSet;
-        const equal = dataSet1.barGroups.length == dataSet2.barGroups.length && dataSet1.barGroups.every((v, i) => v === dataSet2.barGroups[i]);
+        const equal = dataSet1.runName === dataSet2.runName;
         return !equal;
     }
 

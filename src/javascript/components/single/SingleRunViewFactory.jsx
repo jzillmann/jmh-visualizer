@@ -13,13 +13,7 @@ export default class SingleRunViewFactory extends RunViewFactory {
 
     constructor(options) {
         super();
-        this.moreThenOneBenchmarkRun = options.moreThenOneBenchmarkRun;
-        this.unselectBenchmarkFunction = options.unselectBenchmarkFunction;
         this.selectBenchmarkCollectionFunction = options.selectBenchmarkCollectionFunction;
-    }
-
-    unselectRun() {
-        this.unselectBenchmarkFunction();
     }
 
     createTopSection(benchmarkCollection:BenchmarkCollection, runSelection:RunSelection, metricType) {
@@ -29,8 +23,6 @@ export default class SingleRunViewFactory extends RunViewFactory {
                  </Badge> different benchmark classes for single run '
                  { runSelection.names[0] }' and metric '
                  { metricType }' detected!
-                 { " " }
-                 { this.moreThenOneBenchmarkRun ? <a onClick={ this.unselectRun.bind(this) }>(Unselect)</a> : "" }
                </div>
     }
 

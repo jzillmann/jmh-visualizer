@@ -30,6 +30,30 @@ a {
     padding: 4px 20px;
     font-size: 13px;
     font-weight: 400;
+    white-space: nowrap;
+}
+
+/* Eye icon */
+.bs-docs-sidebar .nav>a>li>span {
+    display:none;
+}
+
+.bs-docs-sidebar .nav>a>li>span:hover {
+    color: green;
+}
+
+.bs-docs-sidebar .nav>a>li>span.focused:hover {
+    color: red;
+}
+
+.bs-docs-sidebar .nav>a>li:hover>span,
+.bs-docs-sidebar .nav>a.active>li:focus>span {
+    display:inline;
+}
+
+.bs-docs-sidebar .nav>a>li>span.focused {
+    display:inline;
+    color: green;
 }
 
 /* nested links */
@@ -56,6 +80,7 @@ a {
 .bs-docs-sidebar .nav>.active:focus>a {
     font-weight: 700;
 }
+
 /* nested active links */
 .bs-docs-sidebar .nav .nav>.active>a, 
 .bs-docs-sidebar .nav .nav>.active:hover>a,

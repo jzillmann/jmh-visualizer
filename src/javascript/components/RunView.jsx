@@ -6,6 +6,8 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 import Tooltip from 'react-bootstrap/lib/Tooltip'
 
+import EyeIcon from 'react-icons/lib/fa/eye'
+
 import AutoAffix from 'react-overlays/lib/AutoAffix';
 
 import PrimaryMetricExtractor from '../models/extractor/PrimaryMetricExtractor.js'
@@ -34,7 +36,8 @@ export default class RunView extends React.Component {
         super(props);
         this.state = {
             metricType: props.selectedMetric,
-            metricTypeExtractor: createMetricExtractor(props.selectedMetric)
+            metricTypeExtractor: createMetricExtractor(props.selectedMetric),
+            focusedCollections: new Set()
         };
     }
 
@@ -51,12 +54,30 @@ export default class RunView extends React.Component {
         });
     }
 
+    focusCollection(benchmarkCollectionName) {
+        const focusedBenchmarks = new Set(this.state.focusedCollections);
+        const alreadyFocused = focusedBenchmarks.has(benchmarkCollectionName);
+        if (alreadyFocused) {
+            focusedBenchmarks.delete(benchmarkCollectionName);
+        } else {
+            focusedBenchmarks.add(benchmarkCollectionName);
+        }
+        this.setState({
+            focusedCollections: focusedBenchmarks
+        });
+    }
+
     render() {
         const {benchmarkCollections, runSelection, collectionViewFactory} = this.props;
+        const {focusedCollections, metricType, metricTypeExtractor} = this.state;
 
-        const filteredBenchmarkCollections = this.state.metricType === 'Score' ? benchmarkCollections : benchmarkCollections.filter(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).find(benchmark => this.state.metricTypeExtractor.hasMetric(benchmark)));
+        let filteredBenchmarkCollections = metricType === 'Score' ? benchmarkCollections : benchmarkCollections.filter(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).find(benchmark => metricTypeExtractor.hasMetric(benchmark)));
+        const sideBarBenchmarks = filteredBenchmarkCollections;
+        if (focusedCollections.size > 0) {
+            filteredBenchmarkCollections = filteredBenchmarkCollections.filter(benchmarkCollection => focusedCollections.has(benchmarkCollection.name));
+        }
         const benchmarkCollectionViews = filteredBenchmarkCollections.map(benchmarkCollection => <Element name={ benchmarkCollection.key } key={ benchmarkCollection.key }>
-                                                                                                   { collectionViewFactory.createCollectionView(benchmarkCollection, runSelection, this.state.metricTypeExtractor) }
+                                                                                                   { collectionViewFactory.createCollectionView(benchmarkCollection, runSelection, metricTypeExtractor) }
                                                                                                  </Element>);
 
         const metrics = new Set(['Score']);
@@ -66,14 +87,13 @@ export default class RunView extends React.Component {
         const metricsOptions = Array.from(metrics).map(metric => <option key={ metric } value={ metric }>
                                                                    { metric }
                                                                  </option>);
-
         return (
             <div style={ { paddingBottom: 250 + 'px' } }>
               <div className="container bs-docs-container">
                 <div className="row">
                   <div className="col-md-10" role="main">
                     { /*in order for the children to be properly linked, they should contain scroll-spy elements*/ }
-                    { collectionViewFactory.createTopSection(filteredBenchmarkCollections, runSelection, this.state.metricType) }
+                    { collectionViewFactory.createTopSection(filteredBenchmarkCollections, runSelection, metricType) }
                     { benchmarkCollectionViews }
                   </div>
                   <div className="col-md-2 bs-docs-sidebar">
@@ -84,7 +104,7 @@ export default class RunView extends React.Component {
                             <FormControl
                                          componentClass="select"
                                          onChange={ this.selectMetricType.bind(this) }
-                                         value={ this.state.metricType }
+                                         value={ metricType }
                                          disabled={ metrics.size < 2 }>
                               { metricsOptions }
                             </FormControl>
@@ -102,18 +122,19 @@ export default class RunView extends React.Component {
                         </FormGroup>
                         <hr/>
                         <ul className="nav">
-                          { filteredBenchmarkCollections.map((benchmarkCollection) => <Link
-                                                                                            key={ benchmarkCollection.key }
-                                                                                            activeClass="active"
-                                                                                            to={ benchmarkCollection.key }
-                                                                                            spy={ true }
-                                                                                            smooth={ true }
-                                                                                            duration={ 500 }
-                                                                                            offset={ -200 }>
-                                                                                      <li role="presentation">
-                                                                                        { benchmarkCollection.name }
-                                                                                      </li>
-                                                                                      </Link>
+                          { sideBarBenchmarks.map((benchmarkCollection) => <Link
+                                                                                 key={ benchmarkCollection.key }
+                                                                                 activeClass={ focusedCollections.size > 0 ? '' : 'active' }
+                                                                                 to={ benchmarkCollection.key }
+                                                                                 spy={ true }
+                                                                                 smooth={ true }
+                                                                                 duration={ 500 }
+                                                                                 offset={ -200 }>
+                                                                           <li role="presentation">
+                                                                             <span onClick={ this.focusCollection.bind(this, benchmarkCollection.name) } className={ focusedCollections.has(benchmarkCollection.name) ? 'focused' : '' }><sup><EyeIcon /></sup></span>
+                                                                             { ' ' + benchmarkCollection.name }
+                                                                           </li>
+                                                                           </Link>
                             ) }
                         </ul>
                       </div>

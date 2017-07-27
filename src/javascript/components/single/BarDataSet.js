@@ -2,7 +2,9 @@
 // A dataset for a BarChart
 export default class BarDataSet {
     constructor(options) {
+        this.benchmarkCollectionKey = options.benchmarkCollectionKey;
         this.runName = options.runName;
+        this.metricKey = options.metricKey;
         this.scoreUnit = options.scoreUnit;
         this.barGroups = options.barGroups;
         this.data = options.data;
@@ -30,28 +32,28 @@ export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:Ru
 
     if (!params) {
         //case 0
-        return createBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.name, () => `${metricType} ${scoreUnit}`);
+        return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.name, () => `${metricType} ${scoreUnit}`);
     } else { // all other cases
         const paramNames = params.map(param => param[0]);
         if (paramNames.length == 1) {
             if (methodCount == 1) {
                 // case 1
-                return createBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.params[0][0] + '=' + result.params[0][1], () => `${metricType} ${scoreUnit}`);
+                return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.params[0][0] + '=' + result.params[0][1], () => `${metricType} ${scoreUnit}`);
             } else {
                 // case 2
-                return createBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.name, (result) => result.params[0][1]);
+                return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.name, (result) => result.params[0][1]);
             }
         } else if (paramNames.length == 2 && methodCount == 1) {
             // case 3
-            return createBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.params[0][1], (result) => result.params[1][1]);
+            return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.params[0][1], (result) => result.params[1][1]);
         } else {
             if (methodCount > 1) {
                 // case 4
-                return createBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.name, (result) => result.params.map(param => param[1]).join(':'));
+                return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.name, (result) => result.params.map(param => param[1]).join(':'));
             } else {
                 // case 5
                 const barName = paramNames.join(':');
-                return createBarDataSet(benchmarkResults, runSelection, metricExtractor, (result) => result.params.map(param => param[1]).join(':'), () => barName);
+                return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.params.map(param => param[1]).join(':'), () => barName);
             }
         }
     }
@@ -59,7 +61,7 @@ export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:Ru
 
 
 //Each benchmark can have multiple bar's attached
-function createBarDataSet(benchmarkResults, runSelection, metricExtractor, groupFunction, barGroupFunction) {
+function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection, metricExtractor, groupFunction, barGroupFunction) {
     var dataMax = 0;
     var scoreUnit;
     const groupedBenchmarks = groupBy(benchmarkResults, groupFunction);
@@ -95,8 +97,11 @@ function createBarDataSet(benchmarkResults, runSelection, metricExtractor, group
         });
         return dataObject;
     });
+
     return new BarDataSet({
+        benchmarkCollectionKey: benchmarkCollectionKey,
         runName: runSelection.names[0],
+        metricKey: metricExtractor.metricKey,
         scoreUnit: scoreUnit,
         barGroups: [...barGroups],
         data: data,

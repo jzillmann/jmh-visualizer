@@ -7,19 +7,22 @@ const SOURCE_DIR = path.resolve(__dirname, 'src');
 const JAVASCRIPT_DIR = SOURCE_DIR + '/javascript';
 const BUILD_DIR = path.resolve(__dirname, 'build');
 
-const config = {
+module.exports = {
+    context: SOURCE_DIR,
+    entry: {
+        app: './javascript/entry.jsx'
+    },
+    output: {
+        path: BUILD_DIR,
+        filename: 'bundle.js'
+    },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
                 // Skip any files outside of your project's `src` directory
                 include: [JAVASCRIPT_DIR],
-                // Options to configure babel with
-                query: {
-                    plugins: ['transform-runtime'],
-                    presets: ['es2015', 'stage-0', 'react'],
-                }
             },
             {
                 test: /\.css$/,
@@ -35,30 +38,25 @@ const config = {
             },
             {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=application/font-woff'
+                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
             },
             {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=application/octet-stream'
+                loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
             },
             {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file'
+                loader: 'file-loader'
             },
             {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=image/svg+xml'
+                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
             }
         ]
     },
-    entry: JAVASCRIPT_DIR + '/index.jsx',
-    output: {
-        path: BUILD_DIR,
-        filename: 'bundle.js'
-    },
     plugins: [
         new HtmlWebpackPlugin({
-            template: SOURCE_DIR + '/index.html'
+            template: 'index.html'
         }),
         new webpack.DefinePlugin({
             'process.env': {
@@ -68,21 +66,19 @@ const config = {
         }),
         new CopyWebpackPlugin([
             {
-                from: SOURCE_DIR + '/favicons',
+                from: 'favicons',
                 to: 'favicons'
             },
         ]),
         new CopyWebpackPlugin([
             {
-                from: SOURCE_DIR + '/provided.js',
+                from: 'provided.js',
             },
         ]),
         new CopyWebpackPlugin([
             {
-                from: SOURCE_DIR + '/settings.js',
+                from: 'settings.js',
             },
         ]),
     ]
 };
-
-module.exports = config;

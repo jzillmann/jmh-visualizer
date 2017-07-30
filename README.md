@@ -14,9 +14,11 @@ Visually explore your [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Be
   - Link to the original JSON
   - Show score and error of both runs in tooltip
 - Visualize secondary metrics like '·gc.alloc.rate'
+- Focus on individual charts with synced axis scales
 
 ## Major Changes
 
+- **Jul 2017** - 0.5 Focussing of benchmarks
 - **May 2017** - 0.4 Secondary Metrics support
 - **Apr 2017** - 0.3 Error Bars & Params support
 - **Nov 2016** - 0.2: Add 2 run compare view
@@ -51,6 +53,7 @@ Use the [issue tracker](https://github.com/jzillmann/jmh-visualizer/issues) and/
 
 #### Realease
 - Increase version in package.json
+- Update README.md in case of major releases
 - ```npm run deploy```
 - commit & push
 - tag with

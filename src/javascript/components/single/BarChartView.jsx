@@ -10,18 +10,20 @@ export default class BarChartView extends Component {
 
     static propTypes = {
         dataSet: React.PropTypes.object.isRequired,
+        dataMax: React.PropTypes.number
     };
 
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
         const dataSet1 = this.props.dataSet;
         const dataSet2 = nextProps.dataSet;
-        const equal = dataSet1.benchmarkCollectionKey === dataSet2.benchmarkCollectionKey && dataSet1.runName === dataSet2.runName && dataSet1.metricKey === dataSet2.metricKey;
+        const equal = dataSet1.benchmarkCollectionKey === dataSet2.benchmarkCollectionKey && dataSet1.runName === dataSet2.runName && dataSet1.metricKey === dataSet2.metricKey && this.props.dataMax == nextProps.dataMax;
         return !equal;
     }
 
     render() {
-        const {dataSet} = this.props;
+        const {dataSet, dataMax} = this.props;
 
+        const xMaximum = Math.round(dataMax && dataMax > 0 ? dataMax : dataSet.dataMax);
         const chartHeight = 100 + dataSet.data.length * dataSet.barGroups.length * 36;
         const maxMethodNameLength = dataSet.data.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current), 32);
 
@@ -82,7 +84,7 @@ export default class BarChartView extends Component {
                         height={ chartHeight }
                         data={ dataSet.data }
                         margin={ { top: 20, right: 45, left: maxMethodNameLength * 4, bottom: 5 } }>
-                <XAxis type="number" domain={ [0, dataSet.dataMax] } />
+                <XAxis type="number" domain={ [0, xMaximum] } />
                 <YAxis dataKey="name" type="category" />
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip content={ <SingleRunChartTooltip scoreUnit={ dataSet.scoreUnit } /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />

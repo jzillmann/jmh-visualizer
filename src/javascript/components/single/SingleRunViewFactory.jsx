@@ -16,6 +16,10 @@ export default class SingleRunViewFactory extends RunViewFactory {
         this.selectBenchmarkCollectionFunction = options.selectBenchmarkCollectionFunction;
     }
 
+    supportAxisScaleSync() {
+        return true;
+    }
+
     createTopSection(benchmarkCollection:BenchmarkCollection, runSelection:RunSelection, metricType) {
         return <div>
                  <Badge>
@@ -26,12 +30,13 @@ export default class SingleRunViewFactory extends RunViewFactory {
                </div>
     }
 
-    createCollectionView(benchmarkCollection:BenchmarkCollection, runSelection:RunSelection, metricExtractor:MetricExtractor) {
+    createCollectionView(benchmarkCollection:BenchmarkCollection, runSelection:RunSelection, metricExtractor:MetricExtractor, dataMax) {
         return <SingleRunCollectionView
                                         benchmarkCollection={ benchmarkCollection }
                                         runSelection={ runSelection }
                                         metricExtractor={ metricExtractor }
-                                        selectBenchmarkCollectionFunction={ this.selectBenchmarkCollectionFunction } />
+                                        selectBenchmarkCollectionFunction={ this.selectBenchmarkCollectionFunction }
+                                        dataMax={ dataMax } />
     }
 
 }

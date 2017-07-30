@@ -54,6 +54,14 @@ export function getUniqueBenchmarkModes(benchmarkCollection:BenchmarkCollection,
     return Array.from(modes);
 }
 
+export function getUniqueBenchmarkModesAccrossCollections(benchmarkCollections:BenchmarkCollection[], runSelection, metricExtractor) {
+    const modes = new Set();
+    benchmarkCollections.forEach(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).forEach(benchmark => {
+        modes.add(metricExtractor.extractType(benchmark));
+    }));
+    return Array.from(modes);
+}
+
 /*
  * 
  */

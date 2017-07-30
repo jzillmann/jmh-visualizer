@@ -18,7 +18,8 @@ export default class SingleRunCollectionView extends React.Component {
         benchmarkCollection: React.PropTypes.object.isRequired,
         runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectBenchmarkCollectionFunction: React.PropTypes.func.isRequired
+        selectBenchmarkCollectionFunction: React.PropTypes.func.isRequired,
+        dataMax: React.PropTypes.number
     };
 
     state = {
@@ -36,7 +37,7 @@ export default class SingleRunCollectionView extends React.Component {
     }
 
     render() {
-        const {benchmarkCollection, runSelection, metricExtractor} = this.props;
+        const {benchmarkCollection, runSelection, metricExtractor, dataMax} = this.props;
 
         const benchmarks = benchmarkCollection.benchmarks(runSelection);
         const benchmarkModes = getUniqueBenchmarkModes(benchmarkCollection, runSelection, metricExtractor);
@@ -44,7 +45,7 @@ export default class SingleRunCollectionView extends React.Component {
 
         const secondaryMetricsCount = Object.keys(benchmarks[0].secondaryMetrics).length;
         const detailsIcon = secondaryMetricsCount > 0 ? <sup><BadgeWithTooltip tooltip={ secondaryMetricsCount + ' secondary metrics results' }> <DeatailsIcon/> { ' ' + secondaryMetricsCount } </BadgeWithTooltip> { ' | ' }</sup> : undefined;
-        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, metricExtractor) } />;
+        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, metricExtractor) } dataMax={dataMax} />;
 
         return (
             <div>

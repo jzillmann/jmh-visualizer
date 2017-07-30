@@ -36,6 +36,7 @@
     "react-icons": "^2.2.1",
     "react-overlays": "^0.6.10",
     "react-scroll": "^1.4.4",
+    "react-toggle": "^4.0.1",
     "recharts": "^0.22.4"
   },
   "devDependencies": {

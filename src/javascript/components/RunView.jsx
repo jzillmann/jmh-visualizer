@@ -17,6 +17,7 @@ var Scroll = require('react-scroll');
 var scrollSpy = Scroll.scrollSpy;
 var scroller = Scroll.scroller;
 var Element = Scroll.Element;
+var Link = Scroll.Link;
 
 function createMetricExtractor(metricType) {
     return metricType === 'Score' ? new PrimaryMetricExtractor() : new SecondaryMetricExtractor(metricType);
@@ -134,12 +135,21 @@ export default class RunView extends React.Component {
                         </FormGroup>
                         <hr/>
                         <ul className="nav">
-                          { sideBarBenchmarks.map((benchmarkCollection) => <a key={ benchmarkCollection.key }>
-                                                                             <li role="presentation"> <span onClick={ this.focusCollection.bind(this, benchmarkCollection.name) } className={ focusedCollections.has(benchmarkCollection.name) ? 'focused' : '' }><sup><EyeIcon /></sup></span>
-                                                                               <div onClick={ this.scrollTo.bind(this, benchmarkCollection.key) } style={ { display: 'inline' } }>
-                                                                                 { ' ' + benchmarkCollection.name } </div>
-                                                                             </li>
-                                                                           </a>
+                          { sideBarBenchmarks.map((benchmarkCollection) => <Link
+                                                                                 key={ benchmarkCollection.key }
+                                                                                 activeClass={ focusedCollections.size > 0 ? '' : 'active' }
+                                                                                 to={ benchmarkCollection.key }
+                                                                                 spy={ true }
+                                                                                 smooth={ true }
+                                                                                 duration={ 500 }
+                                                                                 offset={ -200 }>
+                                                                           <li role="presentation">
+                                                                             <span onClick={ this.focusCollection.bind(this, benchmarkCollection.name) } className={ focusedCollections.has(benchmarkCollection.name) ? 'focused' : '' }><sup><EyeIcon /></sup></span>
+                                                                             <div onClick={ this.scrollTo.bind(this, benchmarkCollection.key) } style={ { display: 'inline' } }>
+                                                                               { ' ' + benchmarkCollection.name }
+                                                                             </div>
+                                                                           </li>
+                                                                           </Link>
                             ) }
                         </ul>
                       </div>

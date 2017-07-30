@@ -108,7 +108,7 @@ export default class RunView extends React.Component {
         if (focusedCollections.size > 0) {
             filteredBenchmarkCollections = filteredBenchmarkCollections.filter(benchmarkCollection => focusedCollections.has(benchmarkCollection.name));
             const benchmarkModes = getUniqueBenchmarkModesAccrossCollections(filteredBenchmarkCollections, runSelection, metricTypeExtractor);
-            if (collectionViewFactory.supportAxisScaleSync()) {
+            if (collectionViewFactory.supportAxisScaleSync() && focusedCollections.size > 1) {
                 const axisScalesSyncPossible = benchmarkModes.length == 1;
                 const switchTooltip = axisScalesSyncPossible ? ' Sync Axis Scales' : `No Axis Scale syncing possible because of multiple benchmark modes: ${benchmarkModes}!`;
                 synchronizeAxisScalesToggle = <div>

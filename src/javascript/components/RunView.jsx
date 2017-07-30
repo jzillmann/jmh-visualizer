@@ -16,7 +16,6 @@ import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtract
 var Scroll = require('react-scroll');
 var scrollSpy = Scroll.scrollSpy;
 var scroller = Scroll.scroller;
-var Link = Scroll.Link;
 var Element = Scroll.Element;
 
 function createMetricExtractor(metricType) {

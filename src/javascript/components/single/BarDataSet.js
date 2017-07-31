@@ -9,12 +9,13 @@ export default class BarDataSet {
         this.barGroups = options.barGroups;
         this.data = options.data;
         this.dataMax = options.dataMax;
+        this.roundScores = options.roundScores;
     }
 }
 
 import RunSelection from '../../models/RunSelection.js'
 import MetricExtractor from '../../models/MetricExtractor.js'
-import { groupBy } from '../../functions/util.js'
+import { groupBy, shouldRound, round } from '../../functions/util.js'
 
 // The datasets will differ in case the benchmark-class uses params or not:
 // 0 - no param => standard
@@ -64,6 +65,7 @@ export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:Ru
 function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection, metricExtractor, groupFunction, barGroupFunction) {
     var dataMax = 0;
     var scoreUnit;
+    const shouldRoundScores = shouldRound(benchmarkResults, metricExtractor);
     const groupedBenchmarks = groupBy(benchmarkResults, groupFunction);
     const barGroups = new Set();
     const data = groupedBenchmarks.map((benchmarkGroup, i) => {
@@ -75,9 +77,9 @@ function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection
         benchmarkGroup.values.forEach(benchmarkResult => {
             const [benchmark] = benchmarkResult.selectBenchmarks(runSelection);
             if (metricExtractor.hasMetric(benchmark)) {
-                const score = Math.round(metricExtractor.extractScore(benchmark));
-                const scoreConfidence = metricExtractor.extractScoreConfidence(benchmark).map(scoreConf => Math.round(scoreConf));
-                const scoreError = Math.round(metricExtractor.extractScoreError(benchmark));
+                const score = round(metricExtractor.extractScore(benchmark), shouldRoundScores);
+                const scoreConfidence = metricExtractor.extractScoreConfidence(benchmark).map(scoreConf => round(scoreConf, shouldRoundScores));
+                const scoreError = round(metricExtractor.extractScoreError(benchmark), shouldRoundScores);
                 let errorBarInterval = 0
                 if (!isNaN(scoreError)) {
                     errorBarInterval = [score - scoreConfidence[0], scoreConfidence[1] - score];
@@ -85,6 +87,7 @@ function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection
                 scoreUnit = metricExtractor.extractScoreUnit(benchmark);
                 dataMax = Math.max(dataMax, score);
                 dataMax = Math.max(dataMax, scoreConfidence[1]);
+                dataMax = Math.max(dataMax, 1);
 
                 const barGroup = barGroupFunction(benchmarkResult);
                 barGroups.add(barGroup);
@@ -105,6 +108,7 @@ function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection
         scoreUnit: scoreUnit,
         barGroups: [...barGroups],
         data: data,
-        dataMax: dataMax
+        dataMax: dataMax,
+        roundScores: shouldRoundScores
     });
 }

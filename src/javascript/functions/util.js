@@ -37,3 +37,36 @@ export function flatten(arr, result = []) {
     }
     return result
 }
+
+//If there is any score above 5, we do round
+export function shouldRound(benchmarkResults, metricExtractor) {
+    for ( let benchmarkResult of benchmarkResults ) {
+        for ( let benchmark of benchmarkResult.benchmarks ) {
+            if (benchmark && metricExtractor.hasMetric(benchmark) && metricExtractor.extractScore(benchmark) > 5) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+//Conditional round method
+export function round(number, shouldRound) {
+    if (!shouldRound) {
+        return number;
+    }
+    return Math.round(number);
+}
+
+//Conditional format number method
+export function formatNumber(number, roundScores) {
+    if (number) {
+        if (roundScores) {
+            return number.toLocaleString();
+        } else {
+            return number;
+        }
+    } else {
+        return "n/a";
+    }
+}

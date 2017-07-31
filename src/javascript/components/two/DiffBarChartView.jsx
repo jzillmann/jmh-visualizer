@@ -46,7 +46,11 @@ export default class DiffBarChartView extends Component {
                 <XAxis type="number" domain={ [-100, 100] } />
                 <YAxis dataKey="name" type="category" />
                 <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip content={ <TwoRunsChartTooltip runNames={ runNames } /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
+                <Tooltip
+                         content={ <TwoRunsChartTooltip runNames={ runNames } /> }
+                         roundScores={ dataSet.roundScores }
+                         cursor={ { stroke: green, strokeWidth: 2 } }
+                         wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
                 <Legend verticalAlign='top' payload={ [{ value: "Decrease in %", color: red, type: 'rect' }, { value: "Increase in %", color: green, type: 'rect' }] } height={ 30 } />
               </BarChart>
             </div>

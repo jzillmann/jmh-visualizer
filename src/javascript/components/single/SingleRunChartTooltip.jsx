@@ -2,21 +2,17 @@ import React, { Component, PropTypes } from 'react';
 import { BarChart, Bar } from 'recharts';
 import Table from 'react-bootstrap/lib/Table'
 
+import { round, formatNumber } from '../../functions/util.js'
 import { blue, red } from '../../functions/colors.js'
 
-function formatNumber(number) {
-    if (number) {
-        return number.toLocaleString();
-    } else {
-        return "n/a";
-    }
-}
+
 
 export default class SingleRunChartTooltip extends Component {
 
     static propTypes = {
         label: PropTypes.any,
         scoreUnit: PropTypes.string,
+        roundScores: PropTypes.bool,
         payload: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.any,
             payload: PropTypes.any,
@@ -26,7 +22,7 @@ export default class SingleRunChartTooltip extends Component {
     };
 
     render() {
-        const {label, payload, scoreUnit} = this.props;
+        const {label, payload, scoreUnit, roundScores} = this.props;
         if (!payload || payload.length == 0) {
             return null;
         }
@@ -61,13 +57,13 @@ export default class SingleRunChartTooltip extends Component {
                                   </td>);
             }
             columnValues.push(<td key='score' style={ { color: blue } }>
-                                { formatNumber(barPayload.payload[barPayload.dataKey]) }
+                                { formatNumber(barPayload.payload[barPayload.dataKey], roundScores) }
                               </td>);
             columnValues.push(<td key='error' style={ { color: red } }>
-                                { formatNumber(barPayload.payload[barPayload.dataKey + 'Error']) }
+                                { formatNumber(barPayload.payload[barPayload.dataKey + 'Error'], roundScores) }
                               </td>);
             columnValues.push(<td key='confidence'>
-                                { barPayload.payload[barPayload.dataKey] ? confidenceInterval[0].toLocaleString() + ' - ' + confidenceInterval[1].toLocaleString() : "n/a" }
+                                { barPayload.payload[barPayload.dataKey] ? formatNumber(confidenceInterval[0], roundScores) + ' - ' + formatNumber(confidenceInterval[1], roundScores) : "n/a" }
                               </td>);
             columnValues.push(<td key='unit'>
                                 { scoreUnit }
@@ -86,7 +82,7 @@ export default class SingleRunChartTooltip extends Component {
             const forkScoreDatas = forkScores.map((iterationScoreArray) => {
                 return iterationScoreArray.map((element) => {
                     return {
-                        data: Math.round(element),
+                        data: round(element, roundScores),
                     }
                 })
             });

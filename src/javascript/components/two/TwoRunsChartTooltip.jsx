@@ -1,17 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import Table from 'react-bootstrap/lib/Table'
 
+import { formatNumber } from '../../functions/util.js'
 import { blue, red, green } from '../../functions/colors.js'
-
-function formatScore(value, unit) {
-    return value.toLocaleString() + ' ' + unit;
-}
 
 export default class TwoRunsChartTooltip extends Component {
 
     static propTypes = {
         label: PropTypes.any,
         runNames: PropTypes.array,
+        roundScores: PropTypes.bool,
         payload: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.any,
             payload: PropTypes.any,
@@ -21,7 +19,7 @@ export default class TwoRunsChartTooltip extends Component {
     };
 
     render() {
-        const {label, payload} = this.props;
+        const {label, payload, runNames, roundScores} = this.props;
         if (payload.length == 0) {
             return null;
         }
@@ -56,29 +54,38 @@ export default class TwoRunsChartTooltip extends Component {
                       <th>
                         Score Error
                       </th>
+                      <th>
+                        Unit
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                        { this.props.runNames[0] }
+                        { runNames[0] }
                       </td>
                       <td style={ { color: blue } }>
-                        { formatScore(score1, scoreUnit) }
+                        { formatNumber(score1, roundScores) }
                       </td>
                       <td style={ { color: red } }>
-                        { formatScore(scoreError1, scoreUnit) }
+                        { formatNumber(scoreError1, roundScores) }
+                      </td>
+                      <td>
+                        { scoreUnit }
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        { this.props.runNames[1] }
+                        { runNames[1] }
                       </td>
                       <td style={ { color: blue } }>
-                        { formatScore(score2, scoreUnit) }
+                        { formatNumber(score2, roundScores) }
                       </td>
                       <td style={ { color: red } }>
-                        { formatScore(scoreError2, scoreUnit) }
+                        { formatNumber(scoreError2, roundScores) }
+                      </td>
+                      <td>
+                        { scoreUnit }
                       </td>
                     </tr>
                     <tr>
@@ -86,10 +93,13 @@ export default class TwoRunsChartTooltip extends Component {
                         Change
                       </td>
                       <td>
-                        { (scoreChange > 0 ? '+' : '') + formatScore(scoreChange, scoreUnit) }
+                        { (scoreChange > 0 ? '+' : '') + formatNumber(scoreChange, roundScores) }
                       </td>
                       <td>
-                        { (scoreErrorChange > 0 ? '+' : '') + formatScore(scoreErrorChange, scoreUnit) }
+                        { (scoreErrorChange > 0 ? '+' : '') + formatNumber(scoreErrorChange, roundScores) }
+                      </td>
+                      <td>
+                        { scoreUnit }
                       </td>
                     </tr>
                   </tbody>

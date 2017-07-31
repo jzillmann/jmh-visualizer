@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ErrorBar } from 'recharts';
 
 import SingleRunChartTooltip from './SingleRunChartTooltip.jsx';
+import { formatNumber } from '../../functions/util.js'
 import { blue, red, green, lightBlack, tooltipBackground, barColors } from '../../functions/colors.js'
 
 // Gathered report for one benchmark class
@@ -41,7 +42,7 @@ export default class BarChartView extends Component {
                                              width={ props.width }
                                              height={ props.height }
                                              className="recharts-bar-label">
-                                         { props[barGroup].toLocaleString() + ' ' + dataSet.scoreUnit }
+                                         { formatNumber(props[barGroup], dataSet.roundScores) + ' ' + dataSet.scoreUnit }
                                        </text> : <text
                                                        stroke={ red }
                                                        fontSize={ 11 }
@@ -87,7 +88,7 @@ export default class BarChartView extends Component {
                 <XAxis type="number" domain={ [0, xMaximum] } />
                 <YAxis dataKey="name" type="category" />
                 <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip content={ <SingleRunChartTooltip scoreUnit={ dataSet.scoreUnit } /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
+                <Tooltip content={ <SingleRunChartTooltip scoreUnit={ dataSet.scoreUnit } roundScores={ dataSet.roundScores } /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
                 <Legend verticalAlign='top' height={ 30 } />
                 { bars }
               </BarChart>

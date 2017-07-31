@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Table from 'react-bootstrap/lib/Table'
 
-import { blue, red } from '../../functions/colors.js'
+import { blue, red, green } from '../../functions/colors.js'
 
 function formatScore(value, unit) {
     return value.toLocaleString() + ' ' + unit;
@@ -37,7 +37,7 @@ export default class TwoRunsChartTooltip extends Component {
             <div style={ { width: Math.max(230, label.length * 9) } }>
               <div style={ { textAlign: 'center' } }>
                 <h4><u>{ label }</u></h4>
-                <b><div> { payload.benchmarkMode } </div> <div> { payload[0].payload.scoreDiff + ' %' } </div></b>
+                <b><div style={ { color: payload[0].payload.scoreDiff > 0 ? green : red } }> { payload[0].payload.scoreDiff + ' %' } </div></b>
               </div>
               <div style={ { textAlign: 'center' } }>
                 <Table

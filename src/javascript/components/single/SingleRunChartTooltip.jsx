@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { BarChart, Bar } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 import Table from 'react-bootstrap/lib/Table'
 
 import { round, formatNumber } from '../../functions/util.js'
@@ -76,49 +76,86 @@ export default class SingleRunChartTooltip extends Component {
         //Assemble iteration charts showing the raw iteration data per run 
         const iterationCharts = payload.map(barPayload => {
             const forkScores = barPayload.payload[barPayload.dataKey + 'SubScores'];
-            if (!forkScores) {
-                return <div key={ 'emptyIterations' + barPayload.name } />
+            const forkHistograms = barPayload.payload[barPayload.dataKey + 'SubScoresHistogram'];
+            if (forkHistograms) {
+                const tooltipWidth = forkHistograms[0].length * 54;
+                return forkHistograms.filter((elem, i) => i < 2).map((forkData, forkIndex) => {
+                    const histogramCharts = forkData.filter((elem, sampleRunIndex) => sampleRunIndex < 2).map((sampleRuns, runIndex) => {
+                        const sampleRunData = sampleRuns.map(pair => {
+                            return {
+                                score: pair[0],
+                                occurence: pair[1]
+                            }
+                        }
+                        );
+                        return <BarChart
+                                         key={ 'chart' + forkIndex + '-' + runIndex }
+                                         width={ tooltipWidth }
+                                         height={ 63 }
+                                         data={ sampleRunData }
+                                         margin={ { top: 18 } }>
+                                 <XAxis dataKey='score' orientation='bottom' height={ 15 } />
+                                 <YAxis />
+                                 <Bar dataKey='occurence' fill={ barPayload.fill } isAnimationActive={ false } />
+                               </BarChart>
+                    });
+                    return <div key={ 'fork' + forkIndex }>
+                             <br/>
+                             <div>
+                               <b>{ `Fork ${forkIndex} / ${forkHistograms.length}` }</b>
+                             </div>
+                             <div>
+                               { histogramCharts }
+                             </div>
+                             <div>
+                               { `Showing ${histogramCharts.length}  runs from ${forkHistograms[forkIndex].length} ...` }
+                             </div>
+                           </div>
+                });
             }
-            const forkScoreDatas = forkScores.map((iterationScoreArray) => {
-                return iterationScoreArray.map((element) => {
-                    return {
-                        data: round(element, roundScores),
-                    }
-                })
-            });
-            const tooltipWidth = forkScores[0].length * 54
+            if (forkScores) {
+                const forkScoreDatas = forkScores.map((iterationScoreArray) => {
+                    return iterationScoreArray.map((element) => {
+                        return {
+                            data: round(element, roundScores),
+                        }
+                    })
+                });
+                const tooltipWidth = forkScores[0].length * 54
 
-            const BarLabel = (props) => {
-                return (
-                    <text
-                          stroke={ blue }
-                          fontSize={ 9 }
-                          fontWeight='normal'
-                          textAnchor={ props.textAnchor }
-                          x={ props.x }
-                          y={ props.y - 1 }
-                          width={ props.width }
-                          height={ props.height }>
-                      { props['data'].toLocaleString() }
-                    </text>
-                );
-            };
+                const BarLabel = (props) => {
+                    return (
+                        <text
+                              stroke={ blue }
+                              fontSize={ 9 }
+                              fontWeight='normal'
+                              textAnchor={ props.textAnchor }
+                              x={ props.x }
+                              y={ props.y - 1 }
+                              width={ props.width }
+                              height={ props.height }>
+                          { props['data'].toLocaleString() }
+                        </text>
+                    );
+                };
 
 
-            return forkScoreDatas.map((data, index) => <div key={ 'iterations' + index }>
-                                                         <BarChart
-                                                                   width={ tooltipWidth }
-                                                                   height={ 36 }
-                                                                   data={ data }
-                                                                   margin={ { top: 18 } }>
-                                                           <Bar
-                                                                dataKey='data'
-                                                                fill={ barPayload.fill }
-                                                                isAnimationActive={ false }
-                                                                label={ <BarLabel/> } />
-                                                         </BarChart>
-                                                       </div>
-            )
+                return forkScoreDatas.map((data, index) => <div key={ 'iterations' + index }>
+                                                             <BarChart
+                                                                       width={ tooltipWidth }
+                                                                       height={ 36 }
+                                                                       data={ data }
+                                                                       margin={ { top: 18 } }>
+                                                               <Bar
+                                                                    dataKey='data'
+                                                                    fill={ barPayload.fill }
+                                                                    isAnimationActive={ false }
+                                                                    label={ <BarLabel/> } />
+                                                             </BarChart>
+                                                           </div>
+                )
+            }
+            return null;
         });
 
         return (
@@ -141,7 +178,7 @@ export default class SingleRunChartTooltip extends Component {
                 </tbody>
               </Table>
               <div style={ { textAlign: 'center' } }>
-                <u><h5>Iterations</h5></u>
+                <u><h5>Raw Data</h5></u>
               </div>
               <div style={ { fontSize: '0.72em' } }>
                 { iterationCharts }

@@ -33,5 +33,9 @@ export default class MetricExtractor {
         return this.getMetricObject(benchmark).rawData;
     }
 
+    extractRawDataHistogram(benchmark) {
+        return this.getMetricObject(benchmark).rawDataHistogram;
+    }
+
 }
 

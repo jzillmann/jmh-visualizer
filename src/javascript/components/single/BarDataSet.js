@@ -95,7 +95,11 @@ function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection
                 dataObject[barGroup + 'Confidence'] = scoreConfidence;
                 dataObject[barGroup + 'Error'] = scoreError;
                 dataObject[barGroup + 'ErrorBarInterval'] = errorBarInterval;
-                dataObject[barGroup + 'SubScores'] = metricExtractor.extractRawData(benchmark);
+                if (benchmark.mode === 'sample') {
+                    dataObject[barGroup + 'SubScoresHistogram'] = metricExtractor.extractRawDataHistogram(benchmark);
+                } else {
+                    dataObject[barGroup + 'SubScores'] = metricExtractor.extractRawData(benchmark);
+                }
             }
         });
         return dataObject;

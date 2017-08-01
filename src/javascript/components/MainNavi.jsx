@@ -63,6 +63,10 @@ export default class MainNavi extends React.Component {
                         <LinkIcon />
                         { ' JMH ' }
                         </MenuItem>
+                        <MenuItem href="http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/" target="_blank">
+                        <LinkIcon />
+                        { ' JMH Samples' }
+                        </MenuItem>
                         <MenuItem divider />
                         <OverlayTrigger
                                         trigger="click"

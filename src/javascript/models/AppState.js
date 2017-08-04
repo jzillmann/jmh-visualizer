@@ -12,9 +12,11 @@ export default class AppState {
         this.selectedBenchmarkCollection = null;
         this.selectedMetric = 'Score';
         this.history = history;
+        this.uploadedBenchmarks = false;
 
         //bind functions
         this.uploadBenchmarkRuns = this.uploadBenchmarkRuns.bind(this);
+        this.initBenchmarkRuns = this.initBenchmarkRuns.bind(this);
         this.selectBenchmarkRuns = this.selectBenchmarkRuns.bind(this);
         this.goBack = this.goBack.bind(this);
         this.selectMetric = this.selectMetric.bind(this);
@@ -30,6 +32,11 @@ export default class AppState {
     }
 
     uploadBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
+        this.uploadedBenchmarks = true;
+        this.initBenchmarkRuns(benchmarkRuns);
+    }
+
+    initBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
         this.benchmarkRuns = benchmarkRuns;
         this.benchmarkRunSelection = Array(benchmarkRuns.length).fill(true);
         this.renderFunction(this)

@@ -35,12 +35,12 @@ const appState = new AppState({
 }, history);
 
 if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
-    appState.uploadBenchmarkRuns(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef
+    appState.initBenchmarkRuns(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef
         name: runName,
         benchmarks: providedBenchmarkStore[runName] // eslint-disable-line no-undef
     })));
 } else {
-    appState.uploadBenchmarkRuns([]);
+    appState.initBenchmarkRuns([]);
 }
 
-// appState.uploadBenchmarkRuns(examples.singleRunExample)
+// appState.initBenchmarkRuns(examples.singleRunExample)

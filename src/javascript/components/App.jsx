@@ -77,12 +77,12 @@ export default class App extends React.Component {
                               <div>
                                 <PontingHandIcon/>
                                 { ' ' }
-                                <a onClick={ () => appState.uploadBenchmarkRuns(appState.examples.singleRunExample) }>Load Single Run Example</a>
+                                <a onClick={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) }>Load Single Run Example</a>
                               </div>
                               <div>
                                 <PontingHandIcon/>
                                 { ' ' }
-                                <a onClick={ () => appState.uploadBenchmarkRuns(appState.examples.twoRunsExample) }>Load Two Run Example</a>
+                                <a onClick={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) }>Load Two Run Example</a>
                               </div>
                             </div>
             categories = [];
@@ -91,7 +91,7 @@ export default class App extends React.Component {
         } else if (selectedBenchmarkRuns.length > 2) {
             alert("More then 2 runs not supported!");
         } else {
-            if (providedBenchmarks.length == 0) { // eslint-disable-line no-undef
+            if (appState.uploadedBenchmarks) {
                 window.onbeforeunload = function() {
                     return "You will loose the current benchmarks.";
                 };

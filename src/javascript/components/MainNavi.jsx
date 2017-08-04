@@ -1,14 +1,19 @@
 import React from 'react';
-import AppLogo from './AppLogo.jsx';
-import TwoRunSelectionBar from './TwoRunSelectionBar.jsx'
 
 import Navbar from 'react-bootstrap/lib/Navbar'
+import Nav from 'react-bootstrap/lib/Nav'
+import NavItem from 'react-bootstrap/lib/NavItem'
 import Dropdown from 'react-bootstrap/lib/Dropdown'
 import MenuItem from 'react-bootstrap/lib/MenuItem'
 import Popover from 'react-bootstrap/lib/Popover'
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 
 import LinkIcon from 'react-icons/lib/fa/external-link'
+
+import AppLogo from './AppLogo.jsx';
+import DoingWorkSpinner from './DoingWorkSpinner.jsx';
+import TwoRunSelectionBar from './TwoRunSelectionBar.jsx'
+import { blue } from '../functions/colors.js'
 
 export default class MainNavi extends React.Component {
 
@@ -42,7 +47,7 @@ export default class MainNavi extends React.Component {
                      </MenuItem>;
 
         const navBar = settings.showHeader // eslint-disable-line no-undef
-            ? <Navbar inverse={ true }>
+            ? <Navbar inverse={ true } fluid={ true }>
                 <Navbar.Header>
                   <Navbar.Brand>
                     <Dropdown id="logo-dropdown">
@@ -80,6 +85,11 @@ export default class MainNavi extends React.Component {
                     </Dropdown>
                   </Navbar.Brand>
                 </Navbar.Header>
+                <Nav>
+                  <NavItem>
+                    <DoingWorkSpinner.Component color={ blue } />
+                  </NavItem>
+                </Nav>
               </Navbar> : null;
 
         return (

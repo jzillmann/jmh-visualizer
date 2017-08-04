@@ -14,6 +14,7 @@ import Toggle from 'react-toggle'
 import "react-toggle/style.css"
 
 import EyeIcon from 'react-icons/lib/fa/eye'
+import DetailsIcon from 'react-icons/lib/fa/search-plus'
 import HelpIcon from 'react-icons/lib/md/help-outline'
 
 import AutoAffix from 'react-overlays/lib/AutoAffix';
@@ -22,12 +23,7 @@ import PrimaryMetricExtractor from '../models/extractor/PrimaryMetricExtractor.j
 import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtractor.js'
 import { getUniqueBenchmarkModesAccrossCollections } from '../functions/parse.js'
 
-
-var Scroll = require('react-scroll');
-var scrollSpy = Scroll.scrollSpy;
-var scroller = Scroll.scroller;
-var Element = Scroll.Element;
-var Link = Scroll.Link;
+import Scrollspy from 'react-scrollspy'
 
 function createMetricExtractor(metricType) {
     return metricType === 'Score' ? new PrimaryMetricExtractor() : new SecondaryMetricExtractor(metricType);
@@ -41,6 +37,7 @@ export default class RunView extends React.Component {
         runSelection: React.PropTypes.object.isRequired,
         selectedMetric: React.PropTypes.string.isRequired,
         selectMetricFunction: React.PropTypes.func.isRequired,
+        selectBenchmarkSetFunction: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -48,14 +45,12 @@ export default class RunView extends React.Component {
         this.state = {
             metricType: props.selectedMetric,
             metricTypeExtractor: createMetricExtractor(props.selectedMetric),
+            selectedView: 'summary',
             focusedCollections: new Set(),
             axisScalesSync: true
         };
     }
 
-    componentDidMount() {
-        scrollSpy.update();
-    }
 
     selectMetricType(event) {
         const metricType = event.target.value;
@@ -72,16 +67,14 @@ export default class RunView extends React.Component {
         });
     }
 
-
-    scrollTo(benchmarkCollectionId) {
-        scroller.scrollTo(benchmarkCollectionId, {
-            duration: 500,
-            smooth: true,
-            delay: 100,
-            offset: -200,
-            spy: true,
-            activeClass: this.state.focusedCollections.size > 0 ? '' : 'active'
+    selectView(view) {
+        this.setState({
+            selectedView: view
         });
+    }
+
+    showDetails(benchmarkCollection) {
+        this.props.selectBenchmarkSetFunction(benchmarkCollection);
     }
 
     focusCollection(benchmarkCollectionName) {
@@ -134,9 +127,9 @@ export default class RunView extends React.Component {
                 }
             }
         }
-        const benchmarkCollectionViews = filteredBenchmarkCollections.map(benchmarkCollection => <Element name={ benchmarkCollection.key } key={ benchmarkCollection.key }>
+        const benchmarkCollectionViews = filteredBenchmarkCollections.map(benchmarkCollection => <section id={ benchmarkCollection.name } key={ benchmarkCollection.key }>
                                                                                                    { collectionViewFactory.createCollectionView(benchmarkCollection, runSelection, metricTypeExtractor, dataMax) }
-                                                                                                 </Element>);
+                                                                                                 </section>);
 
         const metrics = new Set(['Score']);
         benchmarkCollections.forEach(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).forEach(benchmark => {
@@ -187,23 +180,51 @@ export default class RunView extends React.Component {
                           </InputGroup>
                         </FormGroup>
                         <hr/>
-                        <ul className="nav">
-                          { sideBarBenchmarks.map((benchmarkCollection) => <Link
-                                                                                 key={ benchmarkCollection.key }
-                                                                                 activeClass={ focusedCollections.size > 0 ? '' : 'active' }
-                                                                                 to={ benchmarkCollection.key }
-                                                                                 spy={ true }
-                                                                                 smooth={ true }
-                                                                                 duration={ 500 }
-                                                                                 offset={ -200 }>
-                                                                           <li role="presentation">
-                                                                             <span onClick={ this.focusCollection.bind(this, benchmarkCollection.name) } className={ focusedCollections.has(benchmarkCollection.name) ? 'focused' : '' }><sup><EyeIcon /></sup></span>
-                                                                             <div onClick={ this.scrollTo.bind(this, benchmarkCollection.key) } style={ { display: 'inline' } }>
-                                                                               { ' ' + benchmarkCollection.name }
-                                                                             </div>
-                                                                           </li>
-                                                                           </Link>
-                            ) }
+                        <ul className="bs-docs-sidenav nav">
+                          <li className={ this.state.selectedView === 'summary' ? 'active' : '' }>
+                            <div>
+                              <a onClick={ this.selectView.bind(this, 'summary') }>Summary</a>
+                            </div>
+                            <ul className="nav">
+                              <li>
+                                <div>
+                                  <a>Improvements</a>
+                                </div>
+                              </li>
+                              <li>
+                                <div>
+                                  <a>Regressions</a>
+                                </div>
+                              </li>
+                              <li>
+                                <div>
+                                  <a>Unchanged</a>
+                                </div>
+                              </li>
+                            </ul>
+                          </li>
+                          <li className={ this.state.selectedView === 'benchmarks' ? 'active' : '' }>
+                            <div>
+                              <a onClick={ this.selectView.bind(this, 'benchmarks') }>Benchmarks</a>
+                            </div>
+                            <Scrollspy
+                                       className="nav"
+                                       items={ sideBarBenchmarks.map(benchmarkCollection => benchmarkCollection.name) }
+                                       currentClassName="active"
+                                       offset={ -90 }>
+                              { sideBarBenchmarks.map((benchmarkCollection) => <li key={ benchmarkCollection.key }>
+                                                                                 <div>
+                                                                                   <span onClick={ this.focusCollection.bind(this, benchmarkCollection.name) } className={ focusedCollections.has(benchmarkCollection.name) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>
+                                                                                   <span onClick={ this.showDetails.bind(this, benchmarkCollection) } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>
+                                                                                   <a href={ '#' + benchmarkCollection.name }>
+                                                                                     { benchmarkCollection.name }
+                                                                                   </a>
+                                                                                 </div>
+                                                                               </li>
+                                
+                                ) }
+                            </Scrollspy>
+                          </li>
                         </ul>
                       </div>
                     </AutoAffix>

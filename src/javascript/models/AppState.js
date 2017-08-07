@@ -13,6 +13,7 @@ export default class AppState {
         this.selectedMetric = 'Score';
         this.history = history;
         this.uploadedBenchmarks = false;
+        this.focusedCollections = new Set();
 
         //bind functions
         this.uploadBenchmarkRuns = this.uploadBenchmarkRuns.bind(this);
@@ -23,6 +24,7 @@ export default class AppState {
         this.selectBenchmarkCollection = this.selectBenchmarkCollection.bind(this);
         this.unselectBenchmarkCollection = this.unselectBenchmarkCollection.bind(this);
         this.selectedBenchmarks = this.selectedBenchmarks.bind(this);
+        this.focusCollection = this.focusCollection.bind(this);
 
         this.history.listen((location, action) => {
             if (action === 'POP') {
@@ -39,13 +41,13 @@ export default class AppState {
     initBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
         this.benchmarkRuns = benchmarkRuns;
         this.benchmarkRunSelection = Array(benchmarkRuns.length).fill(true);
-        this.renderFunction(this)
+        this.renderFunction(this);
     }
 
     // expects array of boolean with length of total JMH runs
     selectBenchmarkRuns(benchmarkRunSelection) {
         this.benchmarkRunSelection = benchmarkRunSelection;
-        this.renderFunction(this)
+        this.renderFunction(this);
     }
 
     goBack() {
@@ -54,6 +56,7 @@ export default class AppState {
 
     selectMetric(metric) {
         this.selectedMetric = metric;
+        this.renderFunction(this);
     }
 
     selectBenchmarkCollection(benchmarkCollection:BenchmarkCollection) {
@@ -64,11 +67,21 @@ export default class AppState {
 
     unselectBenchmarkCollection() {
         this.selectedBenchmarkCollection = null;
-        this.renderFunction(this)
+        this.renderFunction(this);
     }
 
     selectedBenchmarks() {
-        return this.benchmarkRuns.filter((run, pos) => this.benchmarkRunSelection[pos])
+        return this.benchmarkRuns.filter((run, pos) => this.benchmarkRunSelection[pos]);
+    }
+
+    focusCollection(benchmarkCollectionName) {
+        const alreadyFocused = this.focusedCollections.has(benchmarkCollectionName);
+        if (alreadyFocused) {
+            this.focusedCollections.delete(benchmarkCollectionName);
+        } else {
+            this.focusedCollections.add(benchmarkCollectionName);
+        }
+        this.renderFunction(this);
     }
 
 }

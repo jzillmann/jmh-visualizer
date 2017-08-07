@@ -1,38 +1,50 @@
 import React from 'react';
 
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-
 import RunSelection from '../models/RunSelection.js'
 import MainNavi from './MainNavi.jsx';
-import MainView from './MainView.jsx';
-import TocSidebar from './TocSidebar.jsx';
+import SplitPane from './SplitPane.jsx'
+
+import UploadMainView from './UploadMainView.jsx';
+import UploadSideBar from './UploadSideBar.jsx';
+
+import SingleRunView from './single/SingleRunView.jsx';
+import SingleRunSideBar from './single/SingleRunSideBar.jsx';
+
+
 
 import BackIcon from 'react-icons/lib/md/keyboard-backspace'
-import PontingHandIcon from 'react-icons/lib/fa/hand-o-right'
+import EyeIcon from 'react-icons/lib/fa/eye'
 
-import Dropzone from './Dropzone.jsx';
 import RunView from './RunView.jsx'
 import DetailView from './DetailView.jsx'
 
 
-import SingleRunViewFactory from './single/SingleRunViewFactory.jsx'
+import PrimaryMetricExtractor from '../models/extractor/PrimaryMetricExtractor.js'
+import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtractor.js'
+
 import SingleDetailViewFactory from './single/SingleDetailViewFactory.jsx'
 
 import TwoRunViewFactory from './two/TwoRunViewFactory.jsx'
 import TwoDetailViewFactory from './two/TwoDetailViewFactory.jsx'
 
 
+import DoingWorkSpinner from './DoingWorkSpinner.jsx';
 import FileUploader from '../functions/FileUploader.js'
 import { parseBenchmarkCollections } from '../functions/parse.js'
-import { blue } from '../functions/colors.js'
 
 export default class App extends React.Component {
 
     static propTypes = {
         appState: React.PropTypes.object.isRequired,
     };
+
+    componentWillUpdate() {
+        DoingWorkSpinner.show();
+    }
+
+    componentDidUpdate() {
+        DoingWorkSpinner.hide();
+    }
 
     render() {
         const {appState} = this.props;
@@ -55,39 +67,15 @@ export default class App extends React.Component {
         var selectCategoryFunction = (category) => alert(category);
         var elementIds = elements.map(element => element.key);
         var elementNames = ['A', 'B'];
+        var linkControlsCreators = [];
 
 
-        var mainView;
+        let mainView;
+        let sideBar;
         if (selectedBenchmarkRuns.length == 0) {
             const fileUploader = new FileUploader(appState.uploadBenchmarkRuns);
-            elements = [<Dropzone fileUploader={ fileUploader } />];
-            upperControls = <div style={ { whiteSpace: 'nowrap' } }>
-                              <div>
-                                <div className="btn btn-default" style={ { position: 'relative' } }>
-                                  Open File Dialog
-                                  <input
-                                         type="file"
-                                         multiple
-                                         accept=".json"
-                                         onChange={ (event) => fileUploader.upload([...event.target.files]) }
-                                         style={ { opacity: 0.0, position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 } } />
-                                </div>
-                              </div>
-                              <br/>
-                              <div>
-                                <PontingHandIcon/>
-                                { ' ' }
-                                <a onClick={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) }>Load Single Run Example</a>
-                              </div>
-                              <div>
-                                <PontingHandIcon/>
-                                { ' ' }
-                                <a onClick={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) }>Load Two Run Example</a>
-                              </div>
-                            </div>
-            categories = [];
-            elementIds = [];
-            elementNames = [];
+            mainView = <UploadMainView fileUploader={ fileUploader } />;
+            sideBar = <UploadSideBar fileUploader={ fileUploader } loadSingleRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) } loadTwoRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) } />;
         } else if (selectedBenchmarkRuns.length > 2) {
             alert("More then 2 runs not supported!");
         } else {
@@ -97,6 +85,7 @@ export default class App extends React.Component {
                 };
             }
 
+            // Details View
             if (appState.selectedBenchmarkCollection) {
                 if (selectedBenchmarkRuns.length == 1) {
                     const benchmarkRun = selectedBenchmarkRuns[0];
@@ -123,28 +112,56 @@ export default class App extends React.Component {
                                            metricViewFactory={ metricViewFactory } />
                 }
 
+            // Run View
             } else {
+                const metricType = appState.selectedMetric;
+                const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
+                const metricExtractor = createMetricExtractor(appState.selectedMetric);
+                const focusedCollections = appState.focusedCollections;
+                let runSelection;
                 if (selectedBenchmarkRuns.length == 1) {
-                    const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
-                    const benchmarkRun = selectedBenchmarkRuns[0];
-                    const collectionViewFactory = new SingleRunViewFactory({
-                        selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
-                    });
-                    const runSelection = new RunSelection([benchmarkRun.name], [0]);
-                    mainView = <RunView
-                                        benchmarkCollections={ benchmarkCollections }
-                                        runSelection={ runSelection }
-                                        collectionViewFactory={ collectionViewFactory }
-                                        selectedMetric={ appState.selectedMetric }
-                                        selectMetricFunction={ appState.selectMetric }
-                                        selectBenchmarkSetFunction={ appState.selectBenchmarkCollection } />
+                    runSelection = new RunSelection([selectedBenchmarkRuns[0].name], [0]);
                 } else if (selectedBenchmarkRuns.length == 2) {
-                    const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
+                    runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
+                }
+
+                let filteredBenchmarkCollections = metricType === 'Score' ? benchmarkCollections : benchmarkCollections.filter(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).find(benchmark => metricExtractor.hasMetric(benchmark)));
+                const sideBarBenchmarks = filteredBenchmarkCollections;
+                if (focusedCollections.size > 0) {
+                    filteredBenchmarkCollections = filteredBenchmarkCollections.filter(benchmarkCollection => focusedCollections.has(benchmarkCollection.key));
+                }
+                const metricsSet = new Set(['Score']);
+                filteredBenchmarkCollections.forEach(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).forEach(benchmark => {
+                    Object.keys(benchmark.secondaryMetrics).forEach(metricKey => metricsSet.add(metricKey));
+                }));
+                const metrics = Array.from(metricsSet);
+
+                linkControlsCreators.push((elementId) => <span key={ `focus-${elementId}` } onClick={ appState.focusCollection.bind(null, elementId) } className={ appState.focusedCollections.has(elementId) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>);
+                // linkControls.push(<span onClick={ this.showDetails.bind(this, benchmarkCollection) } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
+
+                if (selectedBenchmarkRuns.length == 1) {
+                    mainView = <SingleRunView
+                                              benchmarkCollections={ filteredBenchmarkCollections }
+                                              focusedCollections={ appState.focusedCollections }
+                                              runSelection={ runSelection }
+                                              metricExtractor={ metricExtractor }
+                                              selectedMetric={ appState.selectedMetric }
+                                              selectMetricFunction={ appState.selectMetric }
+                                              selectBenchmarkSetFunction={ appState.selectBenchmarkCollection } />
+                    sideBar = <SingleRunSideBar
+                                                container={ this }
+                                                benchmarkCollections={ sideBarBenchmarks }
+                                                metrics={ metrics }
+                                                metricExtractor={ metricExtractor }
+                                                selectMetricFunction={ appState.selectMetric }
+                                                focusedBenchmarkBundles={ appState.focusedCollections }
+                                                focusBenchmarkBundleFunction={ appState.focusCollection }
+                                                selectBenchmarkBundleFunction={ appState.selectBenchmarkCollection } />
+                } else if (selectedBenchmarkRuns.length == 2) {
                     const collectionViewFactory = new TwoRunViewFactory({
                         benchmarkRuns: selectedBenchmarkRuns,
                         selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
                     });
-                    const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
                     mainView = <RunView
                                         benchmarkCollections={ benchmarkCollections }
                                         runSelection={ runSelection }
@@ -156,33 +173,20 @@ export default class App extends React.Component {
             }
         }
 
-        console.debug(mainView);
-
         return (
             <div>
               <MainNavi runs={ appState.benchmarkRuns } runSelection={ appState.benchmarkRunSelection } selectRunsFunction={ appState.selectBenchmarkRuns } />
               <div style={ { paddingBottom: 20 + 'px' } }>
-                <Grid fluid={ true }>
-                  <Row>
-                    <Col xs={ 14 } md={ 10 }>
-                    <MainView elements={ elements } />
-                    </Col>
-                    <Col xs={ 4 } md={ 2 }>
-                    <TocSidebar
-                                upperControls={ upperControls }
-                                categories={ categories }
-                                activeCategory={ activeCategory }
-                                selectCategoryFunction={ selectCategoryFunction }
-                                elementIds={ elementIds }
-                                elementNames={ elementNames } />
-                    </Col>
-                  </Row>
-                </Grid>
+                <SplitPane left={ mainView } right={ sideBar } />
               </div>
             </div>
         );
     }
 
+}
+
+function createMetricExtractor(metricType) {
+    return metricType === 'Score' ? new PrimaryMetricExtractor() : new SecondaryMetricExtractor(metricType);
 }
 
 

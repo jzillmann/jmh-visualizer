@@ -41,7 +41,11 @@ class DoingWorkSpinner extends React.Component {
     }
 
     render() {
-        const component = this.state.showBusy ? <Spinner name='three-bounce' color={ this.props.color } ref={ this.initElement } /> : '';
+        const component = this.state.showBusy ? <Spinner
+                                                         name='three-bounce'
+                                                         color={ this.props.color }
+                                                         fadeIn='none'
+                                                         ref={ this.initElement } /> : '';
         return (
             <div>
               { component }
@@ -54,9 +58,13 @@ class DoingWorkSpinner extends React.Component {
 export default {
     Component: DoingWorkSpinner,
     show() {
-        DoingWorkSpinner.instance.show()
+        if (DoingWorkSpinner.instance) {
+            DoingWorkSpinner.instance.show()
+        }
     },
     hide() {
-        DoingWorkSpinner.instance.hide()
+        if (DoingWorkSpinner.instance) {
+            DoingWorkSpinner.instance.hide()
+        }
     },
 }

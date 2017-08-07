@@ -1,13 +1,13 @@
 import React from 'react';
 
-import DropzoneLib from 'react-dropzone'
+import Dropzone from 'react-dropzone'
 import UploadIcon from 'react-icons/lib/fa/cloud-upload'
 import Alert from 'react-bootstrap/lib/Alert'
 
 import { blue, green } from '../functions/colors.js'
 
 // Dopzone for JSON files to upload
-export default class Dropzone extends React.Component {
+export default class UploadMainView extends React.Component {
 
     static propTypes = {
         fileUploader: React.PropTypes.object.isRequired,
@@ -23,7 +23,7 @@ export default class Dropzone extends React.Component {
 
     render() {
         return (
-            <DropzoneLib
+            <Dropzone
                          onDropAccepted={ this.onDrop.bind(this) }
                          onDropRejected={ () => alert('Only drop valid JSON files!') }
                          multiple={ true }
@@ -54,7 +54,7 @@ export default class Dropzone extends React.Component {
               <div style={ { fontSize: 12, textAlign: 'center' } }>
                 * Your data stays locally in your browser, it's not send to any server!
               </div>
-            </DropzoneLib>
+            </Dropzone>
         );
     }
 }

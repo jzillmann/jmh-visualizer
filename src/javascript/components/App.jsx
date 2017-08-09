@@ -9,13 +9,13 @@ import UploadSideBar from './UploadSideBar.jsx';
 
 import SingleRunView from './single/SingleRunView.jsx';
 import SingleRunSideBar from './single/SingleRunSideBar.jsx';
-
+import SingleDetailView from './single/SingleDetailView.jsx';
+import SingleDetailSideBar from './single/SingleDetailSideBar.jsx';
 
 
 import BackIcon from 'react-icons/lib/md/keyboard-backspace'
 import EyeIcon from 'react-icons/lib/fa/eye'
 
-import RunView from './RunView.jsx'
 import DetailView from './DetailView.jsx'
 
 
@@ -24,7 +24,6 @@ import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtract
 
 import SingleDetailViewFactory from './single/SingleDetailViewFactory.jsx'
 
-import TwoRunViewFactory from './two/TwoRunViewFactory.jsx'
 import TwoDetailViewFactory from './two/TwoDetailViewFactory.jsx'
 
 
@@ -85,8 +84,20 @@ export default class App extends React.Component {
                 };
             }
 
+            let runSelection;
+            if (selectedBenchmarkRuns.length == 1) {
+                runSelection = new RunSelection([selectedBenchmarkRuns[0].name], [0]);
+            } else if (selectedBenchmarkRuns.length == 2) {
+                runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
+            }
+
             // Details View
             if (appState.selectedBenchmarkCollection) {
+                const benchmarkCollection = appState.selectedBenchmarkCollection;
+                const secondaryMetrics = Array.from(benchmarkCollection.benchmarks(runSelection).reduce((aggregate, benchmark) => {
+                    Object.keys(benchmark.secondaryMetrics).forEach(metricKey => aggregate.add(metricKey));
+                    return aggregate;
+                }, new Set()));
                 if (selectedBenchmarkRuns.length == 1) {
                     const benchmarkRun = selectedBenchmarkRuns[0];
                     const runSelection = new RunSelection([benchmarkRun.name], [0]);
@@ -99,6 +110,15 @@ export default class App extends React.Component {
                                            goBackFunction={ appState.goBack }
                                            selectBenchmarkCollectionFunction={ appState.selectBenchmarkCollection }
                                            metricViewFactory={ metricViewFactory } />
+
+                    mainView = <SingleDetailView benchmarkBundle={ appState.selectedBenchmarkCollection } runSelection={ runSelection } secondaryMetrics={ secondaryMetrics } />
+                    sideBar = <SingleDetailSideBar
+                                                   container={ this }
+                                                   benchmarkCollection={ appState.selectedBenchmarkCollection }
+                                                   benchmarkCollections={ benchmarkCollections }
+                                                   secondaryMetrics={ secondaryMetrics }
+                                                   goBackFunction={ appState.goBack }
+                                                   selectBenchmarkBundleFunction={ appState.selectBenchmarkCollection } />
                 } else if (selectedBenchmarkRuns.length == 2) {
                     const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
                     const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
@@ -118,12 +138,6 @@ export default class App extends React.Component {
                 const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
                 const metricExtractor = createMetricExtractor(appState.selectedMetric);
                 const focusedCollections = appState.focusedCollections;
-                let runSelection;
-                if (selectedBenchmarkRuns.length == 1) {
-                    runSelection = new RunSelection([selectedBenchmarkRuns[0].name], [0]);
-                } else if (selectedBenchmarkRuns.length == 2) {
-                    runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
-                }
 
                 let filteredBenchmarkCollections = metricType === 'Score' ? benchmarkCollections : benchmarkCollections.filter(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).find(benchmark => metricExtractor.hasMetric(benchmark)));
                 const sideBarBenchmarks = filteredBenchmarkCollections;
@@ -158,6 +172,7 @@ export default class App extends React.Component {
                                                 focusBenchmarkBundleFunction={ appState.focusCollection }
                                                 selectBenchmarkBundleFunction={ appState.selectBenchmarkCollection } />
                 } else if (selectedBenchmarkRuns.length == 2) {
+                    /*
                     const collectionViewFactory = new TwoRunViewFactory({
                         benchmarkRuns: selectedBenchmarkRuns,
                         selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
@@ -169,6 +184,7 @@ export default class App extends React.Component {
                                         selectedMetric={ appState.selectedMetric }
                                         selectMetricFunction={ appState.selectMetric }
                                         selectBenchmarkSetFunction={ appState.selectBenchmarkCollection } />
+                                        */
                 }
             }
         }

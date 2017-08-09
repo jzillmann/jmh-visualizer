@@ -47,7 +47,7 @@ export default class SingleRunSideBar extends React.Component {
                                       <OverlayTrigger placement="bottom" overlay={ <Tooltip id="tooltip">
                                                                                      No secondary metrics found!
                                                                                    </Tooltip> }>
-                                        <div>
+                                            <div>
                                           <HelpIcon/>
                                         </div>
                                       </OverlayTrigger>

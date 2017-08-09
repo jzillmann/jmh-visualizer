@@ -72,7 +72,7 @@ export default class SingleRunView extends React.Component {
 
         const elements = [];
         elements.push(
-            <div>
+            <div key='summary'>
               <Badge>
                 { benchmarkCollections.length }
               </Badge>

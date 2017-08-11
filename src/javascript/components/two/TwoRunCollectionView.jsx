@@ -55,19 +55,21 @@ export default class TwoRunCollectionView extends React.Component {
         let newBenchmarks = [];
         let removedBenchmarks = [];
         const secondaryMetrics = new Set();
+        let hasSomethingToCompare = false;
         benchmarkCollection.benchmarkResults.forEach(benchmarkResult => {
             if (benchmarkResult.benchmarks[0] === null || !metricExtractor.hasMetric(benchmarkResult.benchmarks[0])) {
                 newBenchmarks.push(benchmarkResult.name);
             } else if (benchmarkResult.benchmarks[1] === null || !metricExtractor.hasMetric(benchmarkResult.benchmarks[1])) {
                 removedBenchmarks.push(benchmarkResult.name);
             } else {
+                hasSomethingToCompare = true;
                 Object.keys(benchmarkResult.benchmarks[0].secondaryMetrics).forEach(secondayMetric => secondaryMetrics.add(secondayMetric));
                 Object.keys(benchmarkResult.benchmarks[1].secondaryMetrics).forEach(secondayMetric => secondaryMetrics.add(secondayMetric));
             }
         });
 
         const detailsIcon = secondaryMetrics.size > 0 ? <sup><BadgeWithTooltip tooltip={ secondaryMetrics.size + ' secondary metrics results' }> <DeatailsIcon/> { ' ' + secondaryMetrics.size } </BadgeWithTooltip> { ' | ' }</sup> : undefined;
-        var scoresChart = <DiffBarChartView runNames={ runSelection.names } dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, metricExtractor) } metricExtractor={ metricExtractor } />;
+        var scoresChart = hasSomethingToCompare ? <DiffBarChartView runNames={ runSelection.names } dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, metricExtractor) } metricExtractor={ metricExtractor } /> : null;
 
         return (
             <div>

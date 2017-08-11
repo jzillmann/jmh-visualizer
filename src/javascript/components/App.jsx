@@ -7,11 +7,13 @@ import SplitPane from './SplitPane.jsx'
 import UploadMainView from './UploadMainView.jsx';
 import UploadSideBar from './UploadSideBar.jsx';
 
+import RunSideBar from './RunSideBar.jsx';
+
 import SingleRunView from './single/SingleRunView.jsx';
-import SingleRunSideBar from './single/SingleRunSideBar.jsx';
 import SingleDetailView from './single/SingleDetailView.jsx';
 import SingleDetailSideBar from './single/SingleDetailSideBar.jsx';
 
+import TwoRunsView from './two/TwoRunsView.jsx';
 
 import BackIcon from 'react-icons/lib/md/keyboard-backspace'
 import EyeIcon from 'react-icons/lib/fa/eye'
@@ -145,33 +147,23 @@ export default class App extends React.Component {
                                               focusedCollections={ appState.focusedCollections }
                                               runSelection={ runSelection }
                                               metricExtractor={ metricExtractor }
-                                              selectedMetric={ appState.selectedMetric }
-                                              selectMetricFunction={ appState.selectMetric }
                                               selectBenchmarkSetFunction={ appState.selectBenchmarkCollection } />
-                    sideBar = <SingleRunSideBar
-                                                container={ this }
-                                                benchmarkCollections={ sideBarBenchmarks }
-                                                metrics={ metrics }
-                                                metricExtractor={ metricExtractor }
-                                                selectMetricFunction={ appState.selectMetric }
-                                                focusedBenchmarkBundles={ appState.focusedCollections }
-                                                focusBenchmarkBundleFunction={ appState.focusCollection }
-                                                selectBenchmarkBundleFunction={ appState.selectBenchmarkCollection } />
                 } else if (selectedBenchmarkRuns.length == 2) {
-                    /*
-                    const collectionViewFactory = new TwoRunViewFactory({
-                        benchmarkRuns: selectedBenchmarkRuns,
-                        selectBenchmarkCollectionFunction: appState.selectBenchmarkCollection
-                    });
-                    mainView = <RunView
-                                        benchmarkCollections={ benchmarkCollections }
-                                        runSelection={ runSelection }
-                                        collectionViewFactory={ collectionViewFactory }
-                                        selectedMetric={ appState.selectedMetric }
-                                        selectMetricFunction={ appState.selectMetric }
-                                        selectBenchmarkSetFunction={ appState.selectBenchmarkCollection } />
-                                        */
+                    mainView = <TwoRunsView
+                                            benchmarkCollections={ filteredBenchmarkCollections }
+                                            runSelection={ runSelection }
+                                            metricExtractor={ metricExtractor }
+                                            selectBenchmarkSetFunction={ appState.selectBenchmarkCollection } />
                 }
+                sideBar = <RunSideBar
+                                      container={ this }
+                                      benchmarkCollections={ sideBarBenchmarks }
+                                      metrics={ metrics }
+                                      metricExtractor={ metricExtractor }
+                                      selectMetricFunction={ appState.selectMetric }
+                                      focusedBenchmarkBundles={ appState.focusedCollections }
+                                      focusBenchmarkBundleFunction={ appState.focusCollection }
+                                      selectBenchmarkBundleFunction={ appState.selectBenchmarkCollection } />
             }
         }
 

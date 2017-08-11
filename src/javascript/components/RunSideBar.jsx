@@ -10,8 +10,9 @@ import HelpIcon from 'react-icons/lib/md/help-outline'
 import DetailsIcon from 'react-icons/lib/fa/search-plus'
 import EyeIcon from 'react-icons/lib/fa/eye'
 
-import TocSideBar from '../TocSideBar.jsx'
+import TocSideBar from './TocSideBar.jsx'
 
+// Side bar for SingleRunView, TwoRunViews, etc...
 export default class SingleRunSideBar extends React.Component {
 
     static propTypes = {

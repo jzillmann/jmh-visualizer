@@ -20,8 +20,6 @@ export default class SingleRunView extends React.Component {
         focusedCollections: React.PropTypes.object.isRequired,
         runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectedMetric: React.PropTypes.string.isRequired,
-        selectMetricFunction: React.PropTypes.func.isRequired,
         selectBenchmarkSetFunction: React.PropTypes.func.isRequired,
     };
 

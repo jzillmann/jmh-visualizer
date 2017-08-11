@@ -9,12 +9,6 @@ class DoingWorkSpinner extends React.Component {
         color: React.PropTypes.string.isRequired
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            showBusy: false,
-        };
-    }
 
     componentWillMount() {
         DoingWorkSpinner.instance = this
@@ -24,31 +18,29 @@ class DoingWorkSpinner extends React.Component {
         delete DoingWorkSpinner.instance
     }
 
-    initElement = (el) => {
-        this.element = el
+    shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
+        return false;
     }
 
     show() {
-        this.setState({
-            showBusy: true,
-        });
+        this.spinnerDiv.style.display = 'block'
     }
 
     hide() {
-        this.setState({
-            showBusy: false,
-        });
+        this.spinnerDiv.style.display = 'none'
     }
 
     render() {
-        const component = this.state.showBusy ? <Spinner
-                                                         name='three-bounce'
-                                                         color={ this.props.color }
-                                                         fadeIn='none'
-                                                         ref={ this.initElement } /> : '';
         return (
-            <div>
-              { component }
+            <div style={ { display: 'none' } } ref={ (input) => {
+                                             this.spinnerDiv = input;
+                                         } }>
+              <Spinner
+                       id='spinner'
+                       style={ { display: 'block' } }
+                       name='three-bounce'
+                       color={ this.props.color }
+                       fadeIn='none' />
             </div>
         )
     }
@@ -59,12 +51,15 @@ export default {
     Component: DoingWorkSpinner,
     show() {
         if (DoingWorkSpinner.instance) {
-            DoingWorkSpinner.instance.show()
+            DoingWorkSpinner.instance.show();
         }
     },
     hide() {
         if (DoingWorkSpinner.instance) {
-            DoingWorkSpinner.instance.hide()
+            // setTimeout(function() {
+            DoingWorkSpinner.instance.hide();
+            // }, 90);
+
         }
     },
 }

@@ -38,7 +38,6 @@ export default class SingleRunView extends React.Component {
         });
     }
 
-
     render() {
         const {focusedCollections, benchmarkCollections, runSelection, metricExtractor, selectBenchmarkSetFunction} = this.props;
         const {axisScalesSync} = this.state;

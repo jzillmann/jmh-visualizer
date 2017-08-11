@@ -22,8 +22,6 @@ import DetailView from './DetailView.jsx'
 import PrimaryMetricExtractor from '../models/extractor/PrimaryMetricExtractor.js'
 import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtractor.js'
 
-import SingleDetailViewFactory from './single/SingleDetailViewFactory.jsx'
-
 import TwoDetailViewFactory from './two/TwoDetailViewFactory.jsx'
 
 
@@ -37,11 +35,8 @@ export default class App extends React.Component {
         appState: React.PropTypes.object.isRequired,
     };
 
-    componentWillUpdate() {
-        DoingWorkSpinner.show();
-    }
-
     componentDidUpdate() {
+        // spinner will be shown on react.render(..), see entry.jsx
         DoingWorkSpinner.hide();
     }
 
@@ -102,15 +97,6 @@ export default class App extends React.Component {
                     const benchmarkRun = selectedBenchmarkRuns[0];
                     const runSelection = new RunSelection([benchmarkRun.name], [0]);
                     const benchmarkCollections = parseBenchmarkCollections(selectedBenchmarkRuns);
-                    const metricViewFactory = new SingleDetailViewFactory();
-                    mainView = <DetailView
-                                           benchmarkCollection={ appState.selectedBenchmarkCollection }
-                                           benchmarkCollections={ benchmarkCollections }
-                                           runSelection={ runSelection }
-                                           goBackFunction={ appState.goBack }
-                                           selectBenchmarkCollectionFunction={ appState.selectBenchmarkCollection }
-                                           metricViewFactory={ metricViewFactory } />
-
                     mainView = <SingleDetailView benchmarkBundle={ appState.selectedBenchmarkCollection } runSelection={ runSelection } secondaryMetrics={ secondaryMetrics } />
                     sideBar = <SingleDetailSideBar
                                                    container={ this }

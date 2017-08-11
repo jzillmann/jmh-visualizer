@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ReferenceLine, Cell } from 'recharts';
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ReferenceLine, Cell } from 'recharts';
 
 import TwoRunsChartTooltip from './TwoRunsChartTooltip.jsx';
 import { red, green, yellow, tooltipBackground } from '../../functions/colors.js'
@@ -22,9 +22,8 @@ export default class DiffBarChartView extends Component {
         const {runNames, dataSet} = this.props;
         const maxMethodNameLength = dataSet.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current), 32);
         const chartHeight = 100 + dataSet.length * 45;
-
         return (
-            <div>
+            <ResponsiveContainer width='100%' height={ chartHeight }>
               <BarChart
                         layout="vertical"
                         width={ 900 }
@@ -53,7 +52,7 @@ export default class DiffBarChartView extends Component {
                          wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
                 <Legend verticalAlign='top' payload={ [{ value: "Decrease in %", color: red, type: 'rect' }, { value: "Increase in %", color: green, type: 'rect' }] } height={ 30 } />
               </BarChart>
-            </div>
+            </ResponsiveContainer>
         );
     }
 }

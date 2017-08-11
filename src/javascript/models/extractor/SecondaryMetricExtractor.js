@@ -3,8 +3,7 @@ import MetricExtractor from '../MetricExtractor.js'
 export default class SecondaryMetricExtractor extends MetricExtractor {
 
     constructor(metricKey) {
-        super();
-        this.metricKey = metricKey;
+        super(metricKey);
     }
 
     getMetricObject(benchmark) { // eslint-disable-line no-unused-vars

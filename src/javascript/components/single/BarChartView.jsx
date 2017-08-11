@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ErrorBar } from 'recharts';
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ErrorBar } from 'recharts';
 
 import SingleRunChartTooltip from './SingleRunChartTooltip.jsx';
 import { formatNumber } from '../../functions/util.js'
@@ -78,7 +78,7 @@ export default class BarChartView extends Component {
         });
 
         return (
-            <div>
+            <ResponsiveContainer width='100%' height={ chartHeight }>
               <BarChart
                         layout="vertical"
                         width={ 900 }
@@ -92,7 +92,7 @@ export default class BarChartView extends Component {
                 <Legend verticalAlign='top' height={ 30 } />
                 { bars }
               </BarChart>
-            </div>
+            </ResponsiveContainer>
         );
     }
 }

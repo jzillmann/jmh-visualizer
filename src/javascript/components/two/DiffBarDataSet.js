@@ -27,9 +27,9 @@ export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:Ru
             let scoreDiff;
             if (metricType && metricType.increaseIsGood) {
                 // i.e. for throughput decrease is an increase, its worse basically
-                scoreDiff = round((score2ndRun - score1stRun) / score1stRun * 100, shouldRoundScores).toLocaleString();
+                scoreDiff = round((score2ndRun - score1stRun) / score1stRun * 100, shouldRoundScores);
             } else {
-                scoreDiff = round((score1stRun - score2ndRun) / score2ndRun * 100, shouldRoundScores).toLocaleString();
+                scoreDiff = round((score1stRun - score2ndRun) / score2ndRun * 100, shouldRoundScores);
             }
 
             return {

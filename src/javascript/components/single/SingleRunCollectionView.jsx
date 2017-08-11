@@ -2,7 +2,7 @@ import React from 'react';
 
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
-import DeatailsIcon from 'react-icons/lib/fa/search-plus'
+import DetailsIcon from 'react-icons/lib/fa/search-plus'
 
 import BadgeWithTooltip from '../lib/BadgeWithTooltip.jsx'
 import BarChartView from './BarChartView.jsx'
@@ -44,8 +44,8 @@ export default class SingleRunCollectionView extends React.Component {
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
         const secondaryMetricsCount = Object.keys(benchmarks[0].secondaryMetrics).length;
-        const detailsIcon = secondaryMetricsCount > 0 ? <sup><BadgeWithTooltip tooltip={ secondaryMetricsCount + ' secondary metrics results' }> <DeatailsIcon/> { ' ' + secondaryMetricsCount } </BadgeWithTooltip> { ' | ' }</sup> : undefined;
-        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, metricExtractor) } dataMax={dataMax} />;
+        const detailsIcon = secondaryMetricsCount > 0 ? <sup><BadgeWithTooltip tooltip={ secondaryMetricsCount + ' secondary metrics results' }> <DetailsIcon/> { ' ' + secondaryMetricsCount } </BadgeWithTooltip> { ' | ' }</sup> : undefined;
+        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, metricExtractor) } dataMax={ dataMax } />;
 
         return (
             <div>

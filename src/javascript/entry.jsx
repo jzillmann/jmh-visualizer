@@ -7,6 +7,7 @@ import Examples from './models/Examples.js';
 import { exampleRun1 } from './exampleBenchmark1.js';
 import { exampleRun2 } from './exampleBenchmark2.js';
 
+import DoingWorkSpinner from './components/DoingWorkSpinner.jsx';
 import App from './components/App.jsx';
 
 import createHistory from 'history/createBrowserHistory'
@@ -14,7 +15,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../css/sidenavi.css';
 
 function render(appState) {
-    ReactDOM.render(<App appState={ appState } />, document.getElementById('main'));
+    DoingWorkSpinner.show(); //App.componentDidUpdate() will hide again
+    setTimeout(() => {
+        ReactDOM.render(<App appState={ appState } />, document.getElementById('main'));
+    }, 0);
 }
 
 const examples = new Examples({
@@ -35,12 +39,12 @@ const appState = new AppState({
 }, history);
 
 if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
-    appState.uploadBenchmarkRuns(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef
+    appState.initBenchmarkRuns(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef
         name: runName,
         benchmarks: providedBenchmarkStore[runName] // eslint-disable-line no-undef
     })));
 } else {
-    appState.uploadBenchmarkRuns([]);
+    appState.initBenchmarkRuns([]);
 }
 
-// appState.uploadBenchmarkRuns(examples.singleRunExample)
+// appState.initBenchmarkRuns(examples.singleRunExample)

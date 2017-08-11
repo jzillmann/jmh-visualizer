@@ -1,6 +1,10 @@
 // An abstract class defining common extractions from benchmark results for score, gc, etc..
 export default class MetricExtractor {
 
+    constructor(metricKey) {
+        this.metricKey = metricKey;
+    }
+
     getMetricObject(benchmark) { // eslint-disable-line no-unused-vars
         throw new TypeError("Do not call abstract method foo from child.");
     }

@@ -1,11 +1,12 @@
 import React from 'react';
 
-import EyeIcon from 'react-icons/lib/fa/eye'
-import DetailsIcon from 'react-icons/lib/fa/search-plus'
-
 import AutoAffix from 'react-overlays/lib/AutoAffix';
+import TocLink from './TocLink.jsx'
 
-import Scrollspy from 'react-scrollspy'
+
+var Scroll = require('react-scroll');
+var scrollSpy = Scroll.scrollSpy;
+var scroller = Scroll.scroller;
 
 //Constructs a sidebar with a set of controls and links to the MainView sections
 export default class TocSidebar extends React.PureComponent {
@@ -20,6 +21,19 @@ export default class TocSidebar extends React.PureComponent {
         elementNames: React.PropTypes.array.isRequired,
         linkControlsCreators: React.PropTypes.array.isRequired,
     };
+
+    componentDidMount() {
+        scrollSpy.update();
+    }
+
+    scrollTo(elementId) {
+        scroller.scrollTo(elementId, {
+            duration: 500,
+            delay: 50,
+            smooth: 'linear',
+            offset: -25
+        });
+    }
 
     render() {
         const {container, upperControls, categories, activeCategory, selectCategoryFunction, elementIds, elementNames, linkControlsCreators} = this.props;
@@ -36,21 +50,25 @@ export default class TocSidebar extends React.PureComponent {
                                                      { category }
                                                    </a>
                                                  </div>
-                                                 <Scrollspy
-                                                            className="nav"
-                                                            items={ elementIds }
-                                                            currentClassName="active"
-                                                            offset={ -90 }>
-                                                   { category === activeCategory ? elementIds.map((elementId, i) => <li key={ elementId }>
+                                                 <ul className='nav'>
+                                                   { category === activeCategory ? elementIds.map((elementId, i) => <TocLink
+                                                                                                                             key={ elementId }
+                                                                                                                             activeClass="active"
+                                                                                                                             to={ elementId }
+                                                                                                                             spy={ true }
+                                                                                                                             offset={ -200 }
+                                                                                                                             duration={ 500 }
+                                                                                                                             delay={ 50 }
+                                                                                                                             smooth='linear'>
                                                                                                                       <div>
                                                                                                                         { linkControlsCreators.map(linkControlCreator => linkControlCreator(elementId)) }
-                                                                                                                        <a href={ '#' + elementId }>
+                                                                                                                        <a onClick={ this.scrollTo.bind(this, elementId) }>
                                                                                                                           { elementNames[i] }
                                                                                                                         </a>
                                                                                                                       </div>
-                                                                                                                    </li>)
+                                                                                                                    </TocLink>)
                                                      : '' }
-                                                 </Scrollspy>
+                                                 </ul>
                                                </li>) }
                 </ul>
               </div>

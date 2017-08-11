@@ -1,5 +1,6 @@
 import React from 'react';
 
+import TocElement from '../TocElement.jsx'
 import BarChartView from './BarChartView.jsx'
 import { createDataSetFromBenchmarks } from './BarDataSet.js'
 
@@ -23,18 +24,18 @@ export default class SingleDetailView extends React.Component {
         const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, runSelection, primaryMetricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
-        const scoreMetricView = <section id={ 'Score' } key={ 'Score' }>
+        const scoreMetricView = <TocElement name={ 'Score' } key={ 'Score' }>
                                   <h4>Score <sup>{ benchmarkModeBadges }</sup></h4>
                                   <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, primaryMetricExtractor) } />
                                   <br/>
                                   <br/>
-                                </section>;
-        const secondaryMetricViews = secondaryMetrics.map(secondaryMetric => <section id={ secondaryMetric } key={ secondaryMetric }>
+                                </TocElement>;
+        const secondaryMetricViews = secondaryMetrics.map(secondaryMetric => <TocElement name={ secondaryMetric } key={ secondaryMetric }>
                                                                                <h4>{ secondaryMetric + ' ' }<sup>{ createMetricBadge(secondaryMetric) }</sup></h4>
                                                                                <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, new SecondaryMetricExtractor(secondaryMetric)) } />
                                                                                <br/>
                                                                                <br/>
-                                                                             </section>);
+                                                                             </TocElement>);
         return <div>
                  <h3>{ benchmarkBundle.key }</h3>
                  <br/>

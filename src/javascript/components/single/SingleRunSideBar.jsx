@@ -47,7 +47,7 @@ export default class SingleRunSideBar extends React.Component {
                                       <OverlayTrigger placement="bottom" overlay={ <Tooltip id="tooltip">
                                                                                      No secondary metrics found!
                                                                                    </Tooltip> }>
-                                            <div>
+                                        <div>
                                           <HelpIcon/>
                                         </div>
                                       </OverlayTrigger>
@@ -58,8 +58,14 @@ export default class SingleRunSideBar extends React.Component {
         const elementIds = benchmarkCollections.map(benchmarkSet => benchmarkSet.key);
         const elementNames = benchmarkCollections.map(benchmarkSet => benchmarkSet.name);
 
-        const focusControlCreator = (elementId) => <span key={ `focus-${elementId}` } onClick={ focusBenchmarkBundleFunction.bind(null, elementId) } className={ focusedBenchmarkBundles.has(elementId) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>;
-        const detailsControlCreator = (elementId) => (<span key={ `detail-${elementId}` } onClick={ selectBenchmarkBundleFunction.bind(null, benchmarkCollections.find(bundle => bundle.key === elementId)) } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
+        const focusControlCreator = (elementId) => <span key={ `focus-${elementId}` } onClick={ (e) => {
+                                                 e.stopPropagation();
+                                                 focusBenchmarkBundleFunction(elementId)
+                                             } } className={ focusedBenchmarkBundles.has(elementId) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>;
+        const detailsControlCreator = (elementId) => (<span key={ `detail-${elementId}` } onClick={ (e) => {
+                                                  e.stopPropagation();
+                                                  selectBenchmarkBundleFunction(benchmarkCollections.find(bundle => bundle.key === elementId))
+                                              } } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
 
         return <TocSideBar
                            container={ container }

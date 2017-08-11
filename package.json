@@ -35,7 +35,7 @@
     "react-dropzone": "^3.13.4",
     "react-icons": "^2.2.1",
     "react-overlays": "^0.6.10",
-    "react-scrollspy": "^3.2.0",
+    "react-scroll": "^1.5.4",
     "react-spinkit": "^3.0.0",
     "react-toggle": "^4.0.1",
     "recharts": "^0.22.4"

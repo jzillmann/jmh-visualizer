@@ -5,9 +5,11 @@ import Tooltip from 'react-bootstrap/lib/Tooltip'
 import Badge from 'react-bootstrap/lib/Badge'
 
 import Toggle from 'react-toggle'
+import "react-toggle/style.css"
 
 import HelpIcon from 'react-icons/lib/md/help-outline'
 
+import TocElement from '../TocElement.jsx'
 import SingleRunCollectionView from './SingleRunCollectionView.jsx'
 import { getUniqueBenchmarkModesAccrossCollections } from '../../functions/parse.js'
 
@@ -82,14 +84,14 @@ export default class SingleRunView extends React.Component {
         );
 
         benchmarkCollections.forEach(benchmarkSet => {
-            elements.push(<section key={ benchmarkSet.key } id={ benchmarkSet.name }>
+            elements.push(<TocElement key={ benchmarkSet.key } name={ benchmarkSet.key }>
                             <SingleRunCollectionView
                                                      benchmarkCollection={ benchmarkSet }
                                                      runSelection={ runSelection }
                                                      metricExtractor={ metricExtractor }
                                                      selectBenchmarkCollectionFunction={ selectBenchmarkSetFunction }
                                                      dataMax={ dataMax } />
-                          </section>);
+                          </TocElement>);
         });
 
 

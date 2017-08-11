@@ -16,7 +16,6 @@ import SingleDetailView from './single/SingleDetailView.jsx';
 import TwoRunsView from './two/TwoRunsView.jsx';
 import TwoDetailView from './two/TwoDetailView.jsx';
 
-
 import PrimaryMetricExtractor from '../models/extractor/PrimaryMetricExtractor.js'
 import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtractor.js'
 
@@ -78,7 +77,6 @@ export default class App extends React.Component {
                     mainView = <TwoDetailView benchmarkBundle={ appState.selectedBenchmarkCollection } runSelection={ runSelection } secondaryMetrics={ secondaryMetrics } />
                 }
                 sideBar = <DetailSideBar
-                                         container={ this }
                                          benchmarkCollection={ appState.selectedBenchmarkCollection }
                                          benchmarkCollections={ benchmarkCollections }
                                          secondaryMetrics={ secondaryMetrics }
@@ -118,7 +116,6 @@ export default class App extends React.Component {
                                             selectBenchmarkSetFunction={ appState.selectBenchmarkCollection } />
                 }
                 sideBar = <RunSideBar
-                                      container={ this }
                                       benchmarkCollections={ sideBarBenchmarks }
                                       metrics={ metrics }
                                       metricExtractor={ metricExtractor }

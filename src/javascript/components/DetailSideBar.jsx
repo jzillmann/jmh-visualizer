@@ -6,13 +6,11 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 
 import BackIcon from 'react-icons/lib/md/keyboard-backspace'
 
-import TocSideBar from './TocSideBar.jsx'
+import TocList from './TocList.jsx'
 
 export default class DetailSideBar extends React.Component {
 
-
     static propTypes = {
-        container: React.PropTypes.object.isRequired,
         benchmarkCollection: React.PropTypes.object.isRequired,
         benchmarkCollections: React.PropTypes.array.isRequired,
         secondaryMetrics: React.PropTypes.array.isRequired,
@@ -21,7 +19,7 @@ export default class DetailSideBar extends React.Component {
     };
 
     render() {
-        const {container, benchmarkCollection, benchmarkCollections, secondaryMetrics, goBackFunction, selectBenchmarkBundleFunction} = this.props;
+        const {benchmarkCollection, benchmarkCollections, secondaryMetrics, goBackFunction, selectBenchmarkBundleFunction} = this.props;
 
         const benchmarkCollectionOptions = benchmarkCollections.map((collection, index) => <option key={ collection.key } value={ index }>
                                                                                              { collection.name }
@@ -30,30 +28,27 @@ export default class DetailSideBar extends React.Component {
 
         const metrics = ['Score'].concat(secondaryMetrics);
 
-        const upperControls = <div>
-                                <a onClick={ goBackFunction }>
-                                  <BackIcon/> Back..</a>
-                                <br/>
-                                <br/>
-                                <FormGroup bsSize="small" controlId="theForm">
-                                  <InputGroup>
-                                    <FormControl componentClass="select" onChange={ (event) => selectBenchmarkBundleFunction(benchmarkCollections[event.target.value]) } defaultValue={ selectedCollection }>
-                                      { benchmarkCollectionOptions }
-                                    </FormControl>
-                                  </InputGroup>
-                                </FormGroup>
-                              </div>;
-
-
-        return <TocSideBar
-                           container={ container }
-                           upperControls={ upperControls }
-                           categories={ ['Metrics'] }
-                           activeCategory={ 'Metrics' }
-                           selectCategoryFunction={ (category) => alert(category) }
-                           elementIds={ metrics }
-                           elementNames={ metrics }
-                           linkControlsCreators={ [] } />
+        return <div>
+                 <a onClick={ goBackFunction }>
+                   <BackIcon /> Back..</a>
+                 <br />
+                 <br />
+                 <FormGroup bsSize="small" controlId="theForm">
+                   <InputGroup>
+                     <FormControl componentClass="select" onChange={ (event) => selectBenchmarkBundleFunction(benchmarkCollections[event.target.value]) } defaultValue={ selectedCollection }>
+                       { benchmarkCollectionOptions }
+                     </FormControl>
+                   </InputGroup>
+                 </FormGroup>
+                 <hr />
+                 <TocList
+                          categories={ ['Metrics'] }
+                          activeCategory={ 'Metrics' }
+                          selectCategoryFunction={ (category) => alert(category) }
+                          elementIds={ metrics }
+                          elementNames={ metrics }
+                          linkControlsCreators={ [] } />
+               </div>
     }
 
 

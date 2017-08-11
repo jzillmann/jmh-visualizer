@@ -6,9 +6,9 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 
 import BackIcon from 'react-icons/lib/md/keyboard-backspace'
 
-import TocSideBar from '../TocSideBar.jsx'
+import TocSideBar from './TocSideBar.jsx'
 
-export default class SingleDetailSideBar extends React.Component {
+export default class DetailSideBar extends React.Component {
 
 
     static propTypes = {

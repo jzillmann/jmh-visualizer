@@ -13,7 +13,7 @@ import EyeIcon from 'react-icons/lib/fa/eye'
 import TocSideBar from './TocSideBar.jsx'
 
 // Side bar for SingleRunView, TwoRunViews, etc...
-export default class SingleRunSideBar extends React.Component {
+export default class RunSideBar extends React.Component {
 
     static propTypes = {
         container: React.PropTypes.object.isRequired,

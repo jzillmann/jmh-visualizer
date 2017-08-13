@@ -1,5 +1,5 @@
-import BenchmarkRun from './BenchmarkRun.js';
-import BenchmarkCollection from './BenchmarkCollection.js';
+import BenchmarkRun from 'models/BenchmarkRun.js';
+import BenchmarkCollection from 'models/BenchmarkCollection.js';
 
 // Holds the state of the Application
 export default class AppState {

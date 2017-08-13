@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TocLink from './TocLink.jsx'
+import TocLink from 'components/TocLink.jsx'
 
 var Scroll = require('react-scroll');
 var scrollSpy = Scroll.scrollSpy;

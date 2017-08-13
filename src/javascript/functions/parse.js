@@ -1,6 +1,6 @@
-import BenchmarkRun from '../models/BenchmarkRun.js';
-import BenchmarkCollection from '../models/BenchmarkCollection.js';
-import BenchmarkResults from '../models/BenchmarkResults.js';
+import BenchmarkRun from 'models/BenchmarkRun.js';
+import BenchmarkCollection from 'models/BenchmarkCollection.js';
+import BenchmarkResults from 'models/BenchmarkResults.js';
 
 //TODO cleanup
 

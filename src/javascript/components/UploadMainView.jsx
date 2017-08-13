@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone'
 import UploadIcon from 'react-icons/lib/fa/cloud-upload'
 import Alert from 'react-bootstrap/lib/Alert'
 
-import { blue, green } from '../functions/colors.js'
+import { blue, green } from 'functions/colors.js'
 
 // Dopzone for JSON files to upload
 export default class UploadMainView extends React.Component {
@@ -24,16 +24,16 @@ export default class UploadMainView extends React.Component {
     render() {
         return (
             <Dropzone
-                         onDropAccepted={ this.onDrop.bind(this) }
-                         onDropRejected={ () => alert('Only drop valid JSON files!') }
-                         multiple={ true }
-                         accept='.json'
-                         disableClick={ true }
-                         disablePreview={ true }
-                         className="container-fluid"
-                         style={ { width: '100%', height: '81vh', borderWidth: 1, borderColor: blue, borderStyle: 'dashed', borderRadius: 25, padding: 20, textAlign: 'center', verticalAlign: 'middle' } } //TODO seems to be a bug with dropzone... rejectStyle is always taken
-                         rejectStyle={ { borderColor: green, borderWidth: 3, borderStyle: 'dotted' } }
-                         activeStyle={ { borderColor: green, borderWidth: 3, borderStyle: 'dotted' } }>
+                      onDropAccepted={ this.onDrop.bind(this) }
+                      onDropRejected={ () => alert('Only drop valid JSON files!') }
+                      multiple={ true }
+                      accept='.json'
+                      disableClick={ true }
+                      disablePreview={ true }
+                      className="container-fluid"
+                      style={ { width: '100%', height: '81vh', borderWidth: 1, borderColor: blue, borderStyle: 'dashed', borderRadius: 25, padding: 20, textAlign: 'center', verticalAlign: 'middle' } } //TODO seems to be a bug with dropzone... rejectStyle is always taken
+                      rejectStyle={ { borderColor: green, borderWidth: 3, borderStyle: 'dotted' } }
+                      activeStyle={ { borderColor: green, borderWidth: 3, borderStyle: 'dotted' } }>
               <div>
                 <h1 style={ { marginBottom: 20 } }>Dropzone</h1>
                 <h5>Drop one or two of your JMH JSON report file(s) here!</h5>

@@ -10,10 +10,10 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 
 import LinkIcon from 'react-icons/lib/fa/external-link'
 
-import AppLogo from './AppLogo.jsx';
-import DoingWorkSpinner from './DoingWorkSpinner.jsx';
-import TwoRunSelectionBar from './TwoRunSelectionBar.jsx'
-import { blue } from '../functions/colors.js'
+import AppLogo from 'components/AppLogo.jsx';
+import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
+import TwoRunSelectionBar from 'components/TwoRunSelectionBar.jsx'
+import { blue } from 'functions/colors.js'
 
 export default class MainNavi extends React.Component {
 

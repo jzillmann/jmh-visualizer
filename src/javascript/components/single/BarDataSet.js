@@ -13,9 +13,9 @@ export default class BarDataSet {
     }
 }
 
-import RunSelection from '../../models/RunSelection.js'
-import MetricExtractor from '../../models/MetricExtractor.js'
-import { groupBy, shouldRound, round } from '../../functions/util.js'
+import RunSelection from 'models/RunSelection.js'
+import MetricExtractor from 'models/MetricExtractor.js'
+import { groupBy, shouldRound, round } from 'functions/util.js'
 
 // The datasets will differ in case the benchmark-class uses params or not:
 // 0 - no param => standard

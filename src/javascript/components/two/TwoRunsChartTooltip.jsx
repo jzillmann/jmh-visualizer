@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import Table from 'react-bootstrap/lib/Table'
 
-import { formatNumber } from '../../functions/util.js'
-import { blue, red, green } from '../../functions/colors.js'
+import { formatNumber } from 'functions/util.js'
+import { blue, red, green } from 'functions/colors.js'
 
 export default class TwoRunsChartTooltip extends Component {
 

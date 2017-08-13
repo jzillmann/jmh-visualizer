@@ -1,6 +1,6 @@
-import RunSelection from './RunSelection.js'
+import RunSelection from 'models/RunSelection.js'
 
-import { flatten } from '../functions/util.js'
+import { flatten } from 'functions/util.js'
 
 // Holds a collection of benchmarks, typically those from a benchmark class
 export default class BenchmarkCollection {

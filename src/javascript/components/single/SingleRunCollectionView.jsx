@@ -4,12 +4,12 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import DetailsIcon from 'react-icons/lib/fa/search-plus'
 
-import BadgeWithTooltip from '../lib/BadgeWithTooltip.jsx'
-import BarChartView from './BarChartView.jsx'
+import BadgeWithTooltip from 'components/lib/BadgeWithTooltip.jsx'
+import BarChartView from 'components/single/BarChartView.jsx'
 
-import { createDataSetFromBenchmarks } from './BarDataSet.js'
-import { getUniqueBenchmarkModes } from '../../functions/parse.js'
-import { createMetricBadge } from '../commons.jsx';
+import { createDataSetFromBenchmarks } from 'components/single/BarDataSet.js'
+import { getUniqueBenchmarkModes } from 'functions/parse.js'
+import { createMetricBadge } from 'components/commons.jsx';
 
 // The view for a bunch of benchmarks, usually all of a benchmark class
 export default class SingleRunCollectionView extends React.Component {

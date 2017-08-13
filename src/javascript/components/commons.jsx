@@ -1,8 +1,8 @@
 import React from 'react';
 
-import BadgeWithTooltip from './lib/BadgeWithTooltip.jsx'
+import BadgeWithTooltip from 'components/lib/BadgeWithTooltip.jsx'
 
-import { getMetricType } from '../models/MetricType.js'
+import { getMetricType } from 'models/MetricType.js'
 
 export function createMetricBadge(metricKey) {
     const metricType = getMetricType(metricKey);

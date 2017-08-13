@@ -1,27 +1,27 @@
 import React from 'react';
 
-import RunSelection from '../models/RunSelection.js'
-import MainNavi from './MainNavi.jsx';
-import SplitPane from './SplitPane.jsx'
+import RunSelection from 'models/RunSelection.js'
+import MainNavi from 'components/MainNavi.jsx';
+import SplitPane from 'components/lib/SplitPane.jsx'
 
-import UploadMainView from './UploadMainView.jsx';
-import UploadSideBar from './UploadSideBar.jsx';
+import UploadMainView from 'components/UploadMainView.jsx';
+import UploadSideBar from 'components/UploadSideBar.jsx';
 
-import RunSideBar from './RunSideBar.jsx';
-import DetailSideBar from './DetailSideBar.jsx';
+import RunSideBar from 'components/RunSideBar.jsx';
+import DetailSideBar from 'components/DetailSideBar.jsx';
 
-import SingleRunView from './single/SingleRunView.jsx';
-import SingleDetailView from './single/SingleDetailView.jsx';
+import SingleRunView from 'components/single/SingleRunView.jsx';
+import SingleDetailView from 'components/single/SingleDetailView.jsx';
 
-import TwoRunsView from './two/TwoRunsView.jsx';
-import TwoDetailView from './two/TwoDetailView.jsx';
+import TwoRunsView from 'components/two/TwoRunsView.jsx';
+import TwoDetailView from 'components/two/TwoDetailView.jsx';
 
-import PrimaryMetricExtractor from '../models/extractor/PrimaryMetricExtractor.js'
-import SecondaryMetricExtractor from '../models/extractor/SecondaryMetricExtractor.js'
+import PrimaryMetricExtractor from 'models/extractor/PrimaryMetricExtractor.js'
+import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.js'
 
-import DoingWorkSpinner from './DoingWorkSpinner.jsx';
-import FileUploader from '../functions/FileUploader.js'
-import { parseBenchmarkCollections } from '../functions/parse.js'
+import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
+import FileUploader from 'functions/FileUploader.js'
+import { parseBenchmarkCollections } from 'functions/parse.js'
 
 export default class App extends React.Component {
 

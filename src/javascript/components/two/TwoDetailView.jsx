@@ -1,13 +1,13 @@
 import React from 'react';
 
-import TocElement from '../TocElement.jsx'
-import DiffBarChartView from './DiffBarChartView.jsx'
-import { createDataSetFromBenchmarks } from './DiffBarDataSet.js'
+import TocElement from 'components/TocElement.jsx'
+import DiffBarChartView from 'components/two/DiffBarChartView.jsx'
+import { createDataSetFromBenchmarks } from 'components/two/DiffBarDataSet.js'
 
-import PrimaryMetricExtractor from '../../models/extractor/PrimaryMetricExtractor.js'
-import SecondaryMetricExtractor from '../../models/extractor/SecondaryMetricExtractor.js'
-import { getUniqueBenchmarkModes } from '../../functions/parse.js'
-import { createMetricBadge } from '../commons.jsx';
+import PrimaryMetricExtractor from 'models/extractor/PrimaryMetricExtractor.js'
+import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.js'
+import { getUniqueBenchmarkModes } from 'functions/parse.js'
+import { createMetricBadge } from 'components/commons.jsx';
 
 export default class TwoDetailView extends React.Component {
 

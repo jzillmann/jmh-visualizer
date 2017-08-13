@@ -9,9 +9,9 @@ import "react-toggle/style.css"
 
 import HelpIcon from 'react-icons/lib/md/help-outline'
 
-import TocElement from '../TocElement.jsx'
-import SingleRunCollectionView from './SingleRunCollectionView.jsx'
-import { getUniqueBenchmarkModesAccrossCollections } from '../../functions/parse.js'
+import TocElement from 'components/TocElement.jsx'
+import SingleRunCollectionView from 'components/single/SingleRunCollectionView.jsx'
+import { getUniqueBenchmarkModesAccrossCollections } from 'functions/parse.js'
 
 export default class SingleRunView extends React.Component {
 

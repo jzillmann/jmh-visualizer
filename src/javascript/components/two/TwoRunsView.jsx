@@ -2,8 +2,8 @@ import React from 'react';
 
 import Badge from 'react-bootstrap/lib/Badge'
 
-import TocElement from '../TocElement.jsx'
-import TwoRunCollectionView from './TwoRunCollectionView.jsx'
+import TocElement from 'components/TocElement.jsx'
+import TwoRunCollectionView from 'components/two/TwoRunCollectionView.jsx'
 
 export default class TwoRunsView extends React.Component {
 

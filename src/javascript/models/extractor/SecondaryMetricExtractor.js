@@ -1,4 +1,4 @@
-import MetricExtractor from '../MetricExtractor.js'
+import MetricExtractor from 'models/MetricExtractor.js'
 
 export default class SecondaryMetricExtractor extends MetricExtractor {
 

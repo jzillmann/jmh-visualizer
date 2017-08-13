@@ -1,4 +1,4 @@
-import RunSelection from './RunSelection.js'
+import RunSelection from 'models/RunSelection.js'
 
 // Has the original benchmark results from all runs for a benchmark method 
 export default class BenchmarkResults {

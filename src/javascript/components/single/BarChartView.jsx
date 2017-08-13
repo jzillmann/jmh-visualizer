@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ErrorBar } from 'recharts';
 
-import SingleRunChartTooltip from './SingleRunChartTooltip.jsx';
-import { formatNumber } from '../../functions/util.js'
-import { blue, red, green, lightBlack, tooltipBackground, barColors } from '../../functions/colors.js'
+import SingleRunChartTooltip from 'components/single/SingleRunChartTooltip.jsx';
+import { formatNumber } from 'functions/util.js'
+import { blue, red, green, lightBlack, tooltipBackground, barColors } from 'functions/colors.js'
 
 // Gathered report for one benchmark class
 export default class BarChartView extends Component {

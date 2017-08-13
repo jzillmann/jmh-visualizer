@@ -1,13 +1,13 @@
 import React from 'react';
 
-import TocElement from '../TocElement.jsx'
-import BarChartView from './BarChartView.jsx'
-import { createDataSetFromBenchmarks } from './BarDataSet.js'
+import TocElement from 'components/TocElement.jsx'
+import BarChartView from 'components/single/BarChartView.jsx'
+import { createDataSetFromBenchmarks } from 'components/single/BarDataSet.js'
 
-import PrimaryMetricExtractor from '../../models/extractor/PrimaryMetricExtractor.js'
-import SecondaryMetricExtractor from '../../models/extractor/SecondaryMetricExtractor.js'
-import { getUniqueBenchmarkModes } from '../../functions/parse.js'
-import { createMetricBadge } from '../commons.jsx';
+import PrimaryMetricExtractor from 'models/extractor/PrimaryMetricExtractor.js'
+import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.js'
+import { getUniqueBenchmarkModes } from 'functions/parse.js'
+import { createMetricBadge } from 'components/commons.jsx';
 
 export default class SingleDetailView extends React.Component {
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ReferenceLine, Cell } from 'recharts';
 
-import TwoRunsChartTooltip from './TwoRunsChartTooltip.jsx';
-import { red, green, yellow, tooltipBackground } from '../../functions/colors.js'
+import TwoRunsChartTooltip from 'components/two/TwoRunsChartTooltip.jsx';
+import { red, green, yellow, tooltipBackground } from 'functions/colors.js'
 
 // Chart showing increase/decrease in % for the benchmarks of a class from 2 runs.
 export default class DiffBarChartView extends Component {

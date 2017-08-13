@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 import Table from 'react-bootstrap/lib/Table'
 
-import { round, formatNumber } from '../../functions/util.js'
-import { blue, red } from '../../functions/colors.js'
+import { round, formatNumber } from 'functions/util.js'
+import { blue, red } from 'functions/colors.js'
 
 
 

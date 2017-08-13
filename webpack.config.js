@@ -9,6 +9,12 @@ const BUILD_DIR = path.resolve(__dirname, 'build');
 
 module.exports = {
     context: SOURCE_DIR,
+    resolve: {
+        modules: [
+            path.resolve(JAVASCRIPT_DIR),
+            path.resolve('./node_modules')
+        ]
+    },
     entry: {
         app: './javascript/entry.jsx'
     },

@@ -4,12 +4,12 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 import DeatailsIcon from 'react-icons/lib/fa/search-plus'
 
-import BadgeWithTooltip from '../lib/BadgeWithTooltip.jsx'
-import DiffBarChartView from './DiffBarChartView.jsx'
+import BadgeWithTooltip from 'components/lib/BadgeWithTooltip.jsx'
+import DiffBarChartView from 'components/two/DiffBarChartView.jsx'
 
-import { createMetricBadge } from '../commons.jsx';
-import { createDataSetFromBenchmarks } from './DiffBarDataSet.js'
-import { getUniqueBenchmarkModes } from '../../functions/parse.js'
+import { createMetricBadge } from 'components/commons.jsx';
+import { createDataSetFromBenchmarks } from 'components/two/DiffBarDataSet.js'
+import { getUniqueBenchmarkModes } from 'functions/parse.js'
 
 // The view for a bunch of benchmarks, usually all of a benchmark class
 export default class TwoRunCollectionView extends React.Component {

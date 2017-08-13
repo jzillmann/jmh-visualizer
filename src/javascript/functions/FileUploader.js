@@ -1,6 +1,6 @@
-import BenchmarkRun from '../models/BenchmarkRun.js';
+import BenchmarkRun from 'models/BenchmarkRun.js';
 
-import DoingWorkSpinner from '../components/DoingWorkSpinner.jsx';
+import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
 
 //A non-ui class which cares about upload file, converting them to json and passing them on to the AppState
 export default class FileUploader {

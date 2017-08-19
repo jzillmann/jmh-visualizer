@@ -1,6 +1,5 @@
 import React from 'react';
 
-import RunSelection from 'models/RunSelection.js'
 import MainNavi from 'components/MainNavi.jsx';
 import SplitPane from 'components/lib/SplitPane.jsx'
 
@@ -21,7 +20,6 @@ import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.
 
 import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
 import FileUploader from 'functions/FileUploader.js'
-import { parseBenchmarkBundles } from 'functions/parse.js'
 
 export default class App extends React.Component {
 
@@ -36,15 +34,15 @@ export default class App extends React.Component {
 
     render() {
         const {appState} = this.props;
-        const selectedBenchmarkRuns = appState.selectedBenchmarks();
+        const benchmarkSelection = appState.benchmarkSelection();
 
         let mainView;
         let sideBar;
-        if (selectedBenchmarkRuns.length == 0) {
+        if (benchmarkSelection.runNames.length == 0) {
             const fileUploader = new FileUploader(appState.uploadBenchmarkRuns);
             mainView = <UploadMainView fileUploader={ fileUploader } />;
             sideBar = <UploadSideBar fileUploader={ fileUploader } loadSingleRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) } loadTwoRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) } />;
-        } else if (selectedBenchmarkRuns.length > 2) {
+        } else if (benchmarkSelection.runNames.length > 2) {
             alert("More then 2 runs not supported!");
         } else {
             if (appState.uploadedBenchmarks) {
@@ -52,68 +50,57 @@ export default class App extends React.Component {
                     return "You will loose the current benchmarks.";
                 };
             }
-
-            let runSelection;
-            if (selectedBenchmarkRuns.length == 1) {
-                runSelection = new RunSelection([selectedBenchmarkRuns[0].name], [0]);
-            } else if (selectedBenchmarkRuns.length == 2) {
-                runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
-            }
+            const benchmarkBundles = benchmarkSelection.benchmarkBundles;
 
             // Details View
-            if (appState.selectedBenchmarkBundle) {
-                const benchmarkBundles = parseBenchmarkBundles(selectedBenchmarkRuns);
-                const benchmarkBundle = appState.selectedBenchmarkBundle;
-                const secondaryMetrics = Array.from(benchmarkBundle.benchmarks(runSelection).reduce((aggregate, benchmark) => {
+            if (appState.detailedBundle) {
+                const detailBundle = benchmarkSelection.benchmarkBundles.find(bundle => bundle.key === appState.detailedBundle);
+                const secondaryMetrics = Array.from(detailBundle.allBenchmarks().reduce((aggregate, benchmark) => {
                     Object.keys(benchmark.secondaryMetrics).forEach(metricKey => aggregate.add(metricKey));
                     return aggregate;
                 }, new Set()));
-                if (selectedBenchmarkRuns.length == 1) {
-                    const benchmarkRun = selectedBenchmarkRuns[0];
-                    const runSelection = new RunSelection([benchmarkRun.name], [0]);
-                    mainView = <SingleDetailView benchmarkBundle={ appState.selectedBenchmarkBundle } runSelection={ runSelection } secondaryMetrics={ secondaryMetrics } />
-                } else if (selectedBenchmarkRuns.length == 2) {
-                    const runSelection = new RunSelection(selectedBenchmarkRuns.map(benchmarkRun => benchmarkRun.name), [0, 1]);
-                    mainView = <TwoDetailView benchmarkBundle={ appState.selectedBenchmarkBundle } runSelection={ runSelection } secondaryMetrics={ secondaryMetrics } />
+                if (benchmarkSelection.runNames.length == 1) {
+                    mainView = <SingleDetailView runName={ benchmarkSelection.runNames[0] } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
+                } else if (benchmarkSelection.runNames.length == 2) {
+                    mainView = <TwoDetailView runNames={ benchmarkSelection.runNames } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
                 }
                 sideBar = <DetailSideBar
-                                         benchmarkBundle={ appState.selectedBenchmarkBundle }
+                                         benchmarkBundle={ detailBundle }
                                          benchmarkBundles={ benchmarkBundles }
                                          secondaryMetrics={ secondaryMetrics }
                                          goBackFunction={ appState.goBack }
-                                         selectBenchmarkBundleFunction={ appState.selectBenchmarkBundle } />
+                                         detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
 
             // Run View
             } else {
                 const metricType = appState.selectedMetric;
-                const benchmarkBundles = parseBenchmarkBundles(selectedBenchmarkRuns);
                 const metricExtractor = createMetricExtractor(appState.selectedMetric);
                 const focusedBundles = appState.focusedBundles;
 
-                let filteredBenchmarkBundles = metricType === 'Score' ? benchmarkBundles : benchmarkBundles.filter(benchmarkBundle => benchmarkBundle.benchmarks(runSelection).find(benchmark => metricExtractor.hasMetric(benchmark)));
+                let filteredBenchmarkBundles = metricType === 'Score' ? benchmarkBundles : benchmarkBundles.filter(benchmarkBundle => benchmarkBundle.allBenchmarks().find(benchmark => metricExtractor.hasMetric(benchmark)));
                 const sideBarBenchmarks = filteredBenchmarkBundles;
                 if (focusedBundles.size > 0) {
                     filteredBenchmarkBundles = filteredBenchmarkBundles.filter(benchmarkBundle => focusedBundles.has(benchmarkBundle.key));
                 }
                 const metricsSet = new Set(['Score']);
-                filteredBenchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.benchmarks(runSelection).forEach(benchmark => {
+                filteredBenchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.allBenchmarks().forEach(benchmark => {
                     Object.keys(benchmark.secondaryMetrics).forEach(metricKey => metricsSet.add(metricKey));
                 }));
                 const metrics = Array.from(metricsSet);
 
-                if (selectedBenchmarkRuns.length == 1) {
+                if (benchmarkSelection.runNames.length == 1) {
                     mainView = <SingleRunView
+                                              runName={ benchmarkSelection.runNames[0] }
                                               benchmarkBundles={ filteredBenchmarkBundles }
                                               focusedBundles={ appState.focusedBundles }
-                                              runSelection={ runSelection }
                                               metricExtractor={ metricExtractor }
-                                              selectBenchmarkBundleFunction={ appState.selectBenchmarkBundle } />
-                } else if (selectedBenchmarkRuns.length == 2) {
+                                              detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                } else if (benchmarkSelection.runNames.length == 2) {
                     mainView = <TwoRunsView
+                                            runNames={ benchmarkSelection.runNames }
                                             benchmarkBundles={ filteredBenchmarkBundles }
-                                            runSelection={ runSelection }
                                             metricExtractor={ metricExtractor }
-                                            selectBenchmarkBundleFunction={ appState.selectBenchmarkBundle } />
+                                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                 }
                 sideBar = <RunSideBar
                                       benchmarkBundles={ sideBarBenchmarks }
@@ -122,7 +109,7 @@ export default class App extends React.Component {
                                       selectMetricFunction={ appState.selectMetric }
                                       focusedBenchmarkBundles={ appState.focusedBundles }
                                       focusBenchmarkBundleFunction={ appState.focusBundle }
-                                      selectBenchmarkBundleFunction={ appState.selectBenchmarkBundle } />
+                                      detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
             }
         }
 

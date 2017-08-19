@@ -8,14 +8,14 @@ import TwoRunBundle from 'components/two/TwoRunBundle.jsx'
 export default class TwoRunsView extends React.Component {
 
     static propTypes = {
+        runNames: React.PropTypes.array.isRequired,
         benchmarkBundles: React.PropTypes.array.isRequired,
-        runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {benchmarkBundles, runSelection, metricExtractor, selectBenchmarkBundleFunction} = this.props;
+        const {runNames, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction} = this.props;
 
         const elements = [];
         elements.push(
@@ -32,10 +32,10 @@ export default class TwoRunsView extends React.Component {
         benchmarkBundles.forEach(benchmarkBundle => {
             elements.push(<TocElement key={ benchmarkBundle.key } name={ benchmarkBundle.key }>
                             <TwoRunBundle
+                                          runNames={ runNames }
                                           benchmarkBundle={ benchmarkBundle }
-                                          runSelection={ runSelection }
                                           metricExtractor={ metricExtractor }
-                                          selectBenchmarkBundleFunction={ selectBenchmarkBundleFunction } />
+                                          detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
                           </TocElement>);
         });
 

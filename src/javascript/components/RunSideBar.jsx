@@ -22,11 +22,11 @@ export default class RunSideBar extends React.Component {
         selectMetricFunction: React.PropTypes.func.isRequired,
         focusedBenchmarkBundles: React.PropTypes.object.isRequired,
         focusBenchmarkBundleFunction: React.PropTypes.func.isRequired,
-        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {benchmarkBundles, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, focusBenchmarkBundleFunction, selectBenchmarkBundleFunction} = this.props;
+        const {benchmarkBundles, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, focusBenchmarkBundleFunction, detailBenchmarkBundleFunction} = this.props;
 
         const metricsOptions = metrics.filter(aMetric => aMetric.startsWith('·') || aMetric === 'Score').map(metric => <option key={ metric } value={ metric }>
                                                                                                                          { metric }
@@ -41,7 +41,7 @@ export default class RunSideBar extends React.Component {
                                              } } className={ focusedBenchmarkBundles.has(elementId) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>;
         const detailsControlCreator = (elementId) => (<span key={ `detail-${elementId}` } onClick={ (e) => {
                                                   e.stopPropagation();
-                                                  selectBenchmarkBundleFunction(benchmarkBundles.find(bundle => bundle.key === elementId))
+                                                  detailBenchmarkBundleFunction(elementId)
                                               } } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
 
         return <div>

@@ -15,10 +15,10 @@ import { getUniqueBenchmarkModes } from 'functions/parse.js'
 export default class TwoRunBundle extends React.Component {
 
     static propTypes = {
+        runNames: React.PropTypes.array.isRequired,
         benchmarkBundle: React.PropTypes.object.isRequired,
-        runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired
+        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired
     };
 
     state = {
@@ -41,16 +41,16 @@ export default class TwoRunBundle extends React.Component {
     }
 
     showDetails() {
-        this.props.selectBenchmarkBundleFunction(this.props.benchmarkBundle);
+        this.props.detailBenchmarkBundleFunction(this.props.benchmarkBundle.key);
     }
 
 
     render() {
-        const {benchmarkBundle, runSelection, metricExtractor} = this.props;
+        const {runNames, benchmarkBundle, metricExtractor} = this.props;
 
-        const benchmarks1 = benchmarkBundle.benchmarks(runSelection.subSelection(0));
-        const benchmarks2 = benchmarkBundle.benchmarks(runSelection.subSelection(1));
-        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, runSelection, metricExtractor);
+        const benchmarks1 = benchmarkBundle.benchmarksFromRun(0);
+        const benchmarks2 = benchmarkBundle.benchmarksFromRun(1);
+        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, metricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
         let newBenchmarks = [];
         let removedBenchmarks = [];
@@ -69,7 +69,7 @@ export default class TwoRunBundle extends React.Component {
         });
 
         const detailsIcon = secondaryMetrics.size > 0 ? <sup><BadgeWithTooltip tooltip={ secondaryMetrics.size + ' secondary metrics results' }> <DeatailsIcon/> { ' ' + secondaryMetrics.size } </BadgeWithTooltip> { ' | ' }</sup> : undefined;
-        var scoresChart = hasSomethingToCompare ? <DiffBarChartView runNames={ runSelection.names } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, metricExtractor) } metricExtractor={ metricExtractor } /> : null;
+        var scoresChart = hasSomethingToCompare ? <DiffBarChartView runNames={ runNames } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, metricExtractor) } metricExtractor={ metricExtractor } /> : null;
 
         return (
             <div>

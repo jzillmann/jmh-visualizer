@@ -12,21 +12,21 @@ import { createMetricBadge } from 'components/commons.jsx';
 export default class TwoDetailView extends React.Component {
 
     static propTypes = {
+        runNames: React.PropTypes.array.isRequired,
         benchmarkBundle: React.PropTypes.object.isRequired,
-        runSelection: React.PropTypes.object.isRequired,
         secondaryMetrics: React.PropTypes.array.isRequired,
     };
 
     render() {
-        const {benchmarkBundle, runSelection, secondaryMetrics} = this.props;
+        const {runNames, benchmarkBundle, secondaryMetrics} = this.props;
 
         const primaryMetricExtractor = new PrimaryMetricExtractor();
-        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, runSelection, primaryMetricExtractor);
+        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, primaryMetricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
         const scoreMetricView = <TocElement name={ 'Score' } key={ 'Score' }>
                                   <h4>Score <sup>{ benchmarkModeBadges }</sup></h4>
-                                  <DiffBarChartView runNames={ runSelection.names } metricExtractor={ primaryMetricExtractor } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, primaryMetricExtractor) } />
+                                  <DiffBarChartView runNames={ runNames } metricExtractor={ primaryMetricExtractor } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, primaryMetricExtractor) } />
                                   <br/>
                                   <br/>
                                 </TocElement>;
@@ -34,7 +34,7 @@ export default class TwoDetailView extends React.Component {
             const metricExtractor = new SecondaryMetricExtractor(secondaryMetric);
             return <TocElement name={ secondaryMetric } key={ secondaryMetric }>
                      <h4>{ secondaryMetric + ' ' }<sup>{ createMetricBadge(secondaryMetric) }</sup></h4>
-                     <DiffBarChartView runNames={ runSelection.names } metricExtractor={ metricExtractor } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, metricExtractor) } />
+                     <DiffBarChartView runNames={ runNames } metricExtractor={ metricExtractor } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, metricExtractor) } />
                      <br/>
                      <br/>
                    </TocElement>

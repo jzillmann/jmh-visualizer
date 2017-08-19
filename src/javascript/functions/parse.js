@@ -46,17 +46,17 @@ export function getUniqueParamValues(benchmarks, paramName) {
 }
 
 
-export function getUniqueBenchmarkModes(benchmarkBundle:BenchmarkBundle, runSelection, metricExtractor) {
+export function getUniqueBenchmarkModes(benchmarkBundle:BenchmarkBundle, metricExtractor) {
     const modes = new Set();
-    benchmarkBundle.benchmarks(runSelection).forEach(benchmark => {
+    benchmarkBundle.allBenchmarks().forEach(benchmark => {
         modes.add(metricExtractor.extractType(benchmark));
     });
     return Array.from(modes);
 }
 
-export function getUniqueBenchmarkModesAccrossBundles(benchmarkBundles:BenchmarkBundle[], runSelection, metricExtractor) {
+export function getUniqueBenchmarkModesAccrossBundles(benchmarkBundles:BenchmarkBundle[], metricExtractor) {
     const modes = new Set();
-    benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.benchmarks(runSelection).forEach(benchmark => {
+    benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.allBenchmarks().forEach(benchmark => {
         modes.add(metricExtractor.extractType(benchmark));
     }));
     return Array.from(modes);

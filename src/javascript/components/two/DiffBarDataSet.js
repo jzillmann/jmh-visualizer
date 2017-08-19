@@ -1,13 +1,12 @@
-import RunSelection from 'models/RunSelection.js'
 import MetricExtractor from 'models/MetricExtractor.js'
 import { getMetricType } from 'models/MetricType.js'
 
 import { shouldRound, round } from 'functions/util.js'
 
-export function createDataSetFromBenchmarks(benchmarkBundle, runSelection:RunSelection, metricExtractor:MetricExtractor) {
+export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor:MetricExtractor) {
 
     const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
-    return benchmarkBundle.benchmarkMethods.map((benchmarkMethod, i) => {
+    const data = benchmarkBundle.benchmarkMethods.map((benchmarkMethod, i) => {
         let benchmarkKey = benchmarkMethod.name;
         if (benchmarkMethod.params) {
             benchmarkKey += ' [' + benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') + ']';
@@ -41,8 +40,12 @@ export function createDataSetFromBenchmarks(benchmarkBundle, runSelection:RunSel
                 score2ndRun: score2ndRun,
                 scoreError1stRun: scoreError1stRun,
                 scoreError2ndRun: scoreError2ndRun,
-                roundScores: shouldRoundScores
             }
         }
     }).filter((element) => element !== undefined);
+
+    return {
+        data: data,
+        roundScores: shouldRoundScores,
+    }
 }

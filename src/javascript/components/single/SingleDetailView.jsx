@@ -12,27 +12,27 @@ import { createMetricBadge } from 'components/commons.jsx';
 export default class SingleDetailView extends React.Component {
 
     static propTypes = {
+        runName: React.PropTypes.string.isRequired,
         benchmarkBundle: React.PropTypes.object.isRequired,
-        runSelection: React.PropTypes.object.isRequired,
         secondaryMetrics: React.PropTypes.array.isRequired,
     };
 
     render() {
-        const {benchmarkBundle, runSelection, secondaryMetrics} = this.props;
+        const {runName, benchmarkBundle, secondaryMetrics} = this.props;
 
         const primaryMetricExtractor = new PrimaryMetricExtractor();
-        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, runSelection, primaryMetricExtractor);
+        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, primaryMetricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
         const scoreMetricView = <TocElement name={ 'Score' } key={ 'Score' }>
                                   <h4>Score <sup>{ benchmarkModeBadges }</sup></h4>
-                                  <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, primaryMetricExtractor) } />
+                                  <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, primaryMetricExtractor) } />
                                   <br/>
                                   <br/>
                                 </TocElement>;
         const secondaryMetricViews = secondaryMetrics.map(secondaryMetric => <TocElement name={ secondaryMetric } key={ secondaryMetric }>
                                                                                <h4>{ secondaryMetric + ' ' }<sup>{ createMetricBadge(secondaryMetric) }</sup></h4>
-                                                                               <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, new SecondaryMetricExtractor(secondaryMetric)) } />
+                                                                               <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, new SecondaryMetricExtractor(secondaryMetric)) } />
                                                                                <br/>
                                                                                <br/>
                                                                              </TocElement>);

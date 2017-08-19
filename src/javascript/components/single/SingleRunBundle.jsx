@@ -15,10 +15,10 @@ import { createMetricBadge } from 'components/commons.jsx';
 export default class SingleRunBundle extends React.Component {
 
     static propTypes = {
+        runName: React.PropTypes.string.isRequired,
         benchmarkBundle: React.PropTypes.object.isRequired,
-        runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
         dataMax: React.PropTypes.number
     };
 
@@ -33,19 +33,19 @@ export default class SingleRunBundle extends React.Component {
     }
 
     showDetails() {
-        this.props.selectBenchmarkBundleFunction(this.props.benchmarkBundle);
+        this.props.detailBenchmarkBundleFunction(this.props.benchmarkBundle.key);
     }
 
     render() {
-        const {benchmarkBundle, runSelection, metricExtractor, dataMax} = this.props;
+        const {runName, benchmarkBundle, metricExtractor, dataMax} = this.props;
 
-        const benchmarks = benchmarkBundle.benchmarks(runSelection);
-        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, runSelection, metricExtractor);
+        const benchmarks = benchmarkBundle.allBenchmarks();
+        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, metricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
         const secondaryMetricsCount = Object.keys(benchmarks[0].secondaryMetrics).length;
         const detailsIcon = secondaryMetricsCount > 0 ? <sup><BadgeWithTooltip tooltip={ secondaryMetricsCount + ' secondary metrics results' }> <DetailsIcon/> { ' ' + secondaryMetricsCount } </BadgeWithTooltip> { ' | ' }</sup> : undefined;
-        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, metricExtractor) } dataMax={ dataMax } />;
+        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, metricExtractor) } dataMax={ dataMax } />;
 
         return (
             <div>

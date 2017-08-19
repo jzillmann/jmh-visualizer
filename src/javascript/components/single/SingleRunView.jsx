@@ -16,11 +16,11 @@ import { getUniqueBenchmarkModesAccrossBundles } from 'functions/parse.js'
 export default class SingleRunView extends React.Component {
 
     static propTypes = {
+        runName: React.PropTypes.string.isRequired,
         benchmarkBundles: React.PropTypes.array.isRequired,
         focusedBundles: React.PropTypes.object.isRequired,
-        runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -37,13 +37,13 @@ export default class SingleRunView extends React.Component {
     }
 
     render() {
-        const {focusedBundles, benchmarkBundles, runSelection, metricExtractor, selectBenchmarkBundleFunction} = this.props;
+        const {runName, focusedBundles, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction} = this.props;
         const {axisScalesSync} = this.state;
 
         let synchronizeAxisScalesToggle;
         let dataMax;
         if (focusedBundles.size > 1) {
-            const benchmarkModes = getUniqueBenchmarkModesAccrossBundles(benchmarkBundles, runSelection, metricExtractor);
+            const benchmarkModes = getUniqueBenchmarkModesAccrossBundles(benchmarkBundles, metricExtractor);
             const axisScalesSyncPossible = benchmarkModes.length == 1;
             const switchTooltip = axisScalesSyncPossible ? ' Sync Axis Scales' : `No Axis Scale syncing possible because of multiple benchmark modes: ${benchmarkModes}!`;
             synchronizeAxisScalesToggle = <div>
@@ -62,7 +62,7 @@ export default class SingleRunView extends React.Component {
                                           </div>;
             if (axisScalesSync && axisScalesSyncPossible) {
                 dataMax = 0;
-                benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.benchmarks(runSelection).forEach(benchmark => {
+                benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.allBenchmarks().forEach(benchmark => {
                     dataMax = Math.max(dataMax, metricExtractor.extractScore(benchmark));
                     dataMax = Math.max(dataMax, metricExtractor.extractScoreConfidence(benchmark)[1]);
                 }));
@@ -75,7 +75,7 @@ export default class SingleRunView extends React.Component {
               <Badge>
                 { benchmarkBundles.length }
               </Badge>
-              { ` different benchmark classes for single run '${ runSelection.names[0] }' and metric '${metricExtractor.metricKey}' detected!` }
+              { ` different benchmark classes for single run '${ runName }' and metric '${metricExtractor.metricKey}' detected!` }
               <span style={ { position: 'absolute', right: 20 } }>{ synchronizeAxisScalesToggle }</span>
             </div>
         );
@@ -83,10 +83,10 @@ export default class SingleRunView extends React.Component {
         benchmarkBundles.forEach(bundle => {
             elements.push(<TocElement key={ bundle.key } name={ bundle.key }>
                             <SingleRunBundle
+                                             runName={ runName }
                                              benchmarkBundle={ bundle }
-                                             runSelection={ runSelection }
                                              metricExtractor={ metricExtractor }
-                                             selectBenchmarkBundleFunction={ selectBenchmarkBundleFunction }
+                                             detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction }
                                              dataMax={ dataMax } />
                           </TocElement>);
         });

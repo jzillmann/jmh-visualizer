@@ -15,16 +15,14 @@ export default class DetailSideBar extends React.Component {
         benchmarkBundles: React.PropTypes.array.isRequired,
         secondaryMetrics: React.PropTypes.array.isRequired,
         goBackFunction: React.PropTypes.func.isRequired,
-        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {benchmarkBundle, benchmarkBundles, secondaryMetrics, goBackFunction, selectBenchmarkBundleFunction} = this.props;
-
-        const benchmarkBundleOptions = benchmarkBundles.map((bundle, index) => <option key={ bundle.key } value={ index }>
-                                                                                 { bundle.name }
-                                                                               </option>);
-        const selectedBundle = benchmarkBundles.findIndex(bundle => bundle.key === benchmarkBundle.key);
+        const {benchmarkBundle, benchmarkBundles, secondaryMetrics, goBackFunction, detailBenchmarkBundleFunction} = this.props;
+        const benchmarkBundleOptions = benchmarkBundles.map(bundle => <option key={ bundle.key } value={ bundle.key }>
+                                                                        { bundle.name }
+                                                                      </option>);
 
         const metrics = ['Score'].concat(secondaryMetrics);
 
@@ -35,7 +33,7 @@ export default class DetailSideBar extends React.Component {
                  <br />
                  <FormGroup bsSize="small" controlId="theForm">
                    <InputGroup>
-                     <FormControl componentClass="select" onChange={ (event) => selectBenchmarkBundleFunction(benchmarkBundles[event.target.value]) } defaultValue={ selectedBundle }>
+                     <FormControl componentClass="select" onChange={ (event) => detailBenchmarkBundleFunction(event.target.value) } defaultValue={ benchmarkBundle.key }>
                        { benchmarkBundleOptions }
                      </FormControl>
                    </InputGroup>

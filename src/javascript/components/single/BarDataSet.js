@@ -2,7 +2,7 @@
 // A dataset for a BarChart
 export default class BarDataSet {
     constructor(options) {
-        this.benchmarkCollectionKey = options.benchmarkCollectionKey;
+        this.id = options.id;
         this.runName = options.runName;
         this.metricKey = options.metricKey;
         this.scoreUnit = options.scoreUnit;
@@ -13,7 +13,6 @@ export default class BarDataSet {
     }
 }
 
-import RunSelection from 'models/RunSelection.js'
 import MetricExtractor from 'models/MetricExtractor.js'
 import { groupBy, shouldRound, round } from 'functions/util.js'
 
@@ -24,37 +23,38 @@ import { groupBy, shouldRound, round } from 'functions/util.js'
 // 3 - 2 params, single methods => convert to (2)
 // 4 - 2+ params, multi methods => combine params & convert to (2)
 // 5 - 3+ params, single methods => combine params & convert to (0)
-export function createDataSetFromBenchmarks(benchmarkBundle, runSelection:RunSelection, metricExtractor:MetricExtractor) {
+export function createDataSetFromBenchmarks(runName, benchmarkBundle, metricExtractor:MetricExtractor) {
+    const id = `${runName}:${benchmarkBundle.key}#${metricExtractor.metricKey}`;
     const benchmarkMethods = benchmarkBundle.benchmarkMethods;
     const methodCount = benchmarkBundle.methodNames.length;
-    const params = benchmarkMethods[0].params; //TODO get from collection as well ?
     const metricType = metricExtractor.extractType(benchmarkMethods[0].benchmarks[0]);
+    const params = benchmarkMethods[0].params; //TODO get from collection as well ?
     const scoreUnit = metricExtractor.hasMetric(benchmarkMethods[0].benchmarks[0]) ? metricExtractor.extractScoreUnit(benchmarkMethods[0].benchmarks[0]) : '';
 
     if (!params) {
         //case 0
-        return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.name, () => `${metricType} ${scoreUnit}`);
+        return createBarDataSet(id, benchmarkMethods, metricExtractor, (method) => method.name, () => `${metricType} ${scoreUnit}`);
     } else { // all other cases
         const paramNames = params.map(param => param[0]);
         if (paramNames.length == 1) {
             if (methodCount == 1) {
                 // case 1
-                return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.params[0][0] + '=' + method.params[0][1], () => `${metricType} ${scoreUnit}`);
+                return createBarDataSet(id, benchmarkMethods, metricExtractor, (method) => method.params[0][0] + '=' + method.params[0][1], () => `${metricType} ${scoreUnit}`);
             } else {
                 // case 2
-                return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.name, (method) => method.params[0][1]);
+                return createBarDataSet(id, benchmarkMethods, metricExtractor, (method) => method.name, (method) => method.params[0][1]);
             }
         } else if (paramNames.length == 2 && methodCount == 1) {
             // case 3
-            return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.params[0][1], (method) => method.params[1][1]);
+            return createBarDataSet(id, benchmarkMethods, metricExtractor, (method) => method.params[0][1], (method) => method.params[1][1]);
         } else {
             if (methodCount > 1) {
                 // case 4
-                return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.name, (method) => method.params.map(param => param[1]).join(':'));
+                return createBarDataSet(id, benchmarkMethods, metricExtractor, (method) => method.name, (method) => method.params.map(param => param[1]).join(':'));
             } else {
                 // case 5
                 const barName = paramNames.join(':');
-                return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.params.map(param => param[1]).join(':'), () => barName);
+                return createBarDataSet(id, benchmarkMethods, metricExtractor, (method) => method.params.map(param => param[1]).join(':'), () => barName);
             }
         }
     }
@@ -62,7 +62,7 @@ export function createDataSetFromBenchmarks(benchmarkBundle, runSelection:RunSel
 
 
 //Each benchmark can have multiple bar's attached
-function createBarDataSet(benchmarkCollectionKey, benchmarkMethods, runSelection, metricExtractor, groupFunction, barGroupFunction) {
+function createBarDataSet(id, benchmarkMethods, metricExtractor, groupFunction, barGroupFunction) {
     var dataMax = 0;
     var scoreUnit;
     const shouldRoundScores = shouldRound(benchmarkMethods, metricExtractor);
@@ -75,7 +75,7 @@ function createBarDataSet(benchmarkCollectionKey, benchmarkMethods, runSelection
             name: benchmarkName,
         };
         benchmarkGroup.values.forEach(benchmarkMethod => {
-            const [benchmark] = benchmarkMethod.selectBenchmarks(runSelection);
+            const [benchmark] = benchmarkMethod.benchmarks;
             if (metricExtractor.hasMetric(benchmark)) {
                 const score = round(metricExtractor.extractScore(benchmark), shouldRoundScores);
                 const scoreConfidence = metricExtractor.extractScoreConfidence(benchmark).map(scoreConf => round(scoreConf, shouldRoundScores));
@@ -106,8 +106,7 @@ function createBarDataSet(benchmarkCollectionKey, benchmarkMethods, runSelection
     });
 
     return new BarDataSet({
-        benchmarkCollectionKey: benchmarkCollectionKey,
-        runName: runSelection.names[0],
+        id: id,
         metricKey: metricExtractor.metricKey,
         scoreUnit: scoreUnit,
         barGroups: [...barGroups],

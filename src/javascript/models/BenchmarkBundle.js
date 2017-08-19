@@ -1,5 +1,3 @@
-import RunSelection from 'models/RunSelection.js'
-
 import { flatten } from 'functions/util.js'
 
 // Holds a collection of benchmarks, typically those from a benchmark class
@@ -12,9 +10,15 @@ export default class BenchmarkBundle {
         this.benchmarkMethods = options.benchmarkMethods; //BenchmarkMethod(name, benchmarks[])[]
     }
 
-    //Returns all non-null benchmarks for all runs or selected runs based on the given runSelection
-    benchmarks(runSelection:RunSelection) {
-        return flatten(this.benchmarkMethods.map(result => result.selectBenchmarks(runSelection)));
+
+    //Returns all non-null benchmarks for all runs
+    allBenchmarks() {
+        return flatten(this.benchmarkMethods.map(method => method.benchmarks.filter(benchmark => benchmark)));
+    }
+
+    //Returns all non-null benchmarks for a given runs
+    benchmarksFromRun(runIndex) {
+        return flatten(this.benchmarkMethods.map(method => method.benchmarks[runIndex]));
     }
 
 }

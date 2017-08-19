@@ -1,5 +1,8 @@
 import BenchmarkRun from 'models/BenchmarkRun.js';
 import BenchmarkBundle from 'models/BenchmarkBundle.js';
+import BenchmarkSelection from 'models/BenchmarkSelection.js';
+
+import { parseBenchmarkBundles } from 'functions/parse.js'
 
 // Holds the state of the Application
 export default class AppState {
@@ -9,26 +12,26 @@ export default class AppState {
         this.examples = options.examples;
         this.benchmarkRuns = [];
         this.benchmarkRunSelection = [];
-        this.selectedBenchmarkBundle = null;
-        this.selectedMetric = 'Score';
-        this.history = history;
         this.uploadedBenchmarks = false;
-        this.focusedBundles = new Set();
+        this.selectedMetric = 'Score';
+        this.detailedBundle = null; // bundleKey
+        this.focusedBundles = new Set(); // [] bundleKeys
+        this.history = history;
 
         //bind functions
         this.uploadBenchmarkRuns = this.uploadBenchmarkRuns.bind(this);
         this.initBenchmarkRuns = this.initBenchmarkRuns.bind(this);
         this.selectBenchmarkRuns = this.selectBenchmarkRuns.bind(this);
-        this.goBack = this.goBack.bind(this);
         this.selectMetric = this.selectMetric.bind(this);
-        this.selectBenchmarkBundle = this.selectBenchmarkBundle.bind(this);
-        this.unselectBenchmarkBundle = this.unselectBenchmarkBundle.bind(this);
-        this.selectedBenchmarks = this.selectedBenchmarks.bind(this);
+        this.detailBenchmarkBundle = this.detailBenchmarkBundle.bind(this);
+        this.undetailBenchmarkBundle = this.undetailBenchmarkBundle.bind(this);
         this.focusBundle = this.focusBundle.bind(this);
+        this.benchmarkSelection = this.benchmarkSelection.bind(this);
+        this.goBack = this.goBack.bind(this);
 
         this.history.listen((location, action) => {
             if (action === 'POP') {
-                this.unselectBenchmarkBundle();
+                this.undetailBenchmarkBundle();
             }
         });
     }
@@ -62,21 +65,18 @@ export default class AppState {
     }
 
     // Select bundle for detail view
-    selectBenchmarkBundle(benchmarkBundle:BenchmarkBundle) {
-        this.selectedBenchmarkBundle = benchmarkBundle;
+    detailBenchmarkBundle(benchmarkBundleKey) {
+        this.detailedBundle = benchmarkBundleKey;
         this.renderFunction(this);
         this.history.push('#details');
     }
 
     // Unselect detail view bundle
-    unselectBenchmarkBundle() {
-        this.selectedBenchmarkBundle = null;
+    undetailBenchmarkBundle() {
+        this.detailedBundle = null;
         this.renderFunction(this);
     }
 
-    selectedBenchmarks() {
-        return this.benchmarkRuns.filter((run, pos) => this.benchmarkRunSelection[pos]);
-    }
 
     focusBundle(benchmarkBundleName) {
         const alreadyFocused = this.focusedBundles.has(benchmarkBundleName);
@@ -86,6 +86,15 @@ export default class AppState {
             this.focusedBundles.add(benchmarkBundleName);
         }
         this.renderFunction(this);
+    }
+
+    // Return the BenchmarkSelection based on the selected runs
+    benchmarkSelection() {
+        const selectedBenchmarkRuns = this.benchmarkRuns.filter((run, pos) => this.benchmarkRunSelection[pos]);
+        return new BenchmarkSelection({
+            runNames: selectedBenchmarkRuns.map(run => run.name),
+            benchmarkBundles: parseBenchmarkBundles(selectedBenchmarkRuns)
+        });
     }
 
 }

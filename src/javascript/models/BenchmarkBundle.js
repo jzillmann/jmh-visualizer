@@ -18,7 +18,7 @@ export default class BenchmarkBundle {
 
     //Returns all non-null benchmarks for a given runs
     benchmarksFromRun(runIndex) {
-        return flatten(this.benchmarkMethods.map(method => method.benchmarks[runIndex]));
+        return flatten(this.benchmarkMethods.map(method => method.benchmarks[runIndex]).filter(benchmark => benchmark));
     }
 
 }

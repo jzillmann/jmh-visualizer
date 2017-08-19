@@ -1,5 +1,4 @@
 import BenchmarkRun from 'models/BenchmarkRun.js';
-import BenchmarkBundle from 'models/BenchmarkBundle.js';
 import BenchmarkSelection from 'models/BenchmarkSelection.js';
 
 import { parseBenchmarkBundles } from 'functions/parse.js'

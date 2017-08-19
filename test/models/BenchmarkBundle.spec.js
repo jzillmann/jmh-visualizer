@@ -2,7 +2,6 @@ import { expect } from 'chai';
 
 import BenchmarkBundle from '../../src/javascript/models/BenchmarkBundle.js'
 import BenchmarkMethod from '../../src/javascript/models/BenchmarkMethod.js'
-import RunSelection from '../../src/javascript/models/RunSelection.js'
 
 
 describe('functions: parseBenchmarkCollections', () => {
@@ -55,13 +54,9 @@ describe('functions: parseBenchmarkCollections', () => {
             ]
         });
 
-        const selectAll = new RunSelection(['run1', 'run2'], [0, 1]);
-        const selectFirst = new RunSelection(['run1'], [0]);
-        const selectSecond = new RunSelection(['run2'], [1]);
-
         //select all runs
-        expect(benchmarkBundle.benchmarks(selectAll)).to.have.lengthOf(4);
-        expect(benchmarkBundle.benchmarks(selectAll)).to.have.members([
+        expect(benchmarkBundle.allBenchmarks()).to.have.lengthOf(4);
+        expect(benchmarkBundle.allBenchmarks()).to.have.members([
             benchmarkBundle.benchmarkMethods[0].benchmarks[0],
             benchmarkBundle.benchmarkMethods[0].benchmarks[1],
             benchmarkBundle.benchmarkMethods[1].benchmarks[0],
@@ -69,15 +64,15 @@ describe('functions: parseBenchmarkCollections', () => {
         ]);
 
         //select first run
-        expect(benchmarkBundle.benchmarks(selectFirst)).to.have.lengthOf(2);
-        expect(benchmarkBundle.benchmarks(selectFirst)).to.have.members([
+        expect(benchmarkBundle.benchmarksFromRun(0)).to.have.lengthOf(2);
+        expect(benchmarkBundle.benchmarksFromRun(0)).to.have.members([
             benchmarkBundle.benchmarkMethods[0].benchmarks[0],
             benchmarkBundle.benchmarkMethods[1].benchmarks[0],
         ]);
 
         //select second run
-        expect(benchmarkBundle.benchmarks(selectSecond)).to.have.lengthOf(2);
-        expect(benchmarkBundle.benchmarks(selectSecond)).to.have.members([
+        expect(benchmarkBundle.benchmarksFromRun(1)).to.have.lengthOf(2);
+        expect(benchmarkBundle.benchmarksFromRun(1)).to.have.members([
             benchmarkBundle.benchmarkMethods[0].benchmarks[1],
             benchmarkBundle.benchmarkMethods[2].benchmarks[1],
         ]);

@@ -20,11 +20,12 @@ export default class FileUploader {
         const uploadFunction = this.uploadBenchmarksFunction;
         files.forEach((file, i) => {
             const reader = new FileReader();
+            const runName = file.name.replace('.json', '');
             reader.onload = function(evt) {
                 try {
                     var parsedBenchmarks = JSON.parse(evt.target.result);
                     const benchmarkRun = new BenchmarkRun({
-                        name: file.name,
+                        name: runName,
                         benchmarks: parsedBenchmarks
                     });
                     benchmarkRuns.push(benchmarkRun);

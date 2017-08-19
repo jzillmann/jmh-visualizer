@@ -2,6 +2,10 @@
 
 Visually explore your [JMH](http://openjdk.java.net/projects/code-tools/jmh/) Benchmarks! Online version at http://jmh.morethan.io!
 
+Comes with 2 companion projects:
+- [Gradle plugin](https://github.com/jzillmann/gradle-jmh-report)
+- [Jenkins plugin](https://github.com/jenkinsci/jmh-report-plugin)
+
 ## Features
 
 - Serverless architecture - All happens locally in your browser

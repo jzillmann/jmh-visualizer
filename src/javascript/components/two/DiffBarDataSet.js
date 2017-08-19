@@ -4,17 +4,17 @@ import { getMetricType } from 'models/MetricType.js'
 
 import { shouldRound, round } from 'functions/util.js'
 
-export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:RunSelection, metricExtractor:MetricExtractor) {
+export function createDataSetFromBenchmarks(benchmarkBundle, runSelection:RunSelection, metricExtractor:MetricExtractor) {
 
-    const shouldRoundScores = shouldRound(benchmarkCollection.benchmarkResults, metricExtractor);
-    return benchmarkCollection.benchmarkResults.map((benchmarkResult, i) => {
-        let benchmarkKey = benchmarkResult.name;
-        if (benchmarkResult.params) {
-            benchmarkKey += ' [' + benchmarkResult.params.map(param => param[0] + '=' + param[1]).join(':') + ']';
+    const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
+    return benchmarkBundle.benchmarkMethods.map((benchmarkMethod, i) => {
+        let benchmarkKey = benchmarkMethod.name;
+        if (benchmarkMethod.params) {
+            benchmarkKey += ' [' + benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') + ']';
         }
 
-        const firstRunBenchmark = benchmarkResult.benchmarks[0];
-        const secondRunBenchmark = benchmarkResult.benchmarks[1];
+        const firstRunBenchmark = benchmarkMethod.benchmarks[0];
+        const secondRunBenchmark = benchmarkMethod.benchmarks[1];
 
         if (firstRunBenchmark && secondRunBenchmark && metricExtractor.hasMetric(firstRunBenchmark) && metricExtractor.hasMetric(secondRunBenchmark)) {
             const scoreUnit = metricExtractor.extractScoreUnit(firstRunBenchmark);

@@ -1,6 +1,6 @@
 import BenchmarkRun from 'models/BenchmarkRun.js';
-import BenchmarkCollection from 'models/BenchmarkCollection.js';
-import BenchmarkResults from 'models/BenchmarkResults.js';
+import BenchmarkBundle from 'models/BenchmarkBundle.js';
+import BenchmarkMethod from 'models/BenchmarkMethod.js';
 
 //TODO cleanup
 
@@ -46,17 +46,17 @@ export function getUniqueParamValues(benchmarks, paramName) {
 }
 
 
-export function getUniqueBenchmarkModes(benchmarkCollection:BenchmarkCollection, runSelection, metricExtractor) {
+export function getUniqueBenchmarkModes(benchmarkBundle:BenchmarkBundle, runSelection, metricExtractor) {
     const modes = new Set();
-    benchmarkCollection.benchmarks(runSelection).forEach(benchmark => {
+    benchmarkBundle.benchmarks(runSelection).forEach(benchmark => {
         modes.add(metricExtractor.extractType(benchmark));
     });
     return Array.from(modes);
 }
 
-export function getUniqueBenchmarkModesAccrossCollections(benchmarkCollections:BenchmarkCollection[], runSelection, metricExtractor) {
+export function getUniqueBenchmarkModesAccrossBundles(benchmarkBundles:BenchmarkBundle[], runSelection, metricExtractor) {
     const modes = new Set();
-    benchmarkCollections.forEach(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).forEach(benchmark => {
+    benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.benchmarks(runSelection).forEach(benchmark => {
         modes.add(metricExtractor.extractType(benchmark));
     }));
     return Array.from(modes);
@@ -65,31 +65,31 @@ export function getUniqueBenchmarkModesAccrossCollections(benchmarkCollections:B
 /*
  * 
  */
-export function parseBenchmarkCollections(benchmarkRuns:BenchmarkRun[]) {
+export function parseBenchmarkBundles(benchmarkRuns:BenchmarkRun[]) {
     const classToBenchmarksMap = parseMultiRunBenchmarkMap(benchmarkRuns);
-    const benchmarkCollections = [];
+    const benchmarkBundles = [];
     for ( let [fullName, benchmarkRunMap] of classToBenchmarksMap ) {
-        const benchmarkResults = [];
+        const benchmarkMethods = [];
         const methodNames = new Set();
         for ( let [key, benchmarks] of benchmarkRunMap ) {
             const keyParts = key.split(' ');
             const methodName = keyParts.shift();
             const params = keyParts.length > 0 ? keyParts.map(paramString => paramString.split('=')) : null;
-            benchmarkResults.push(new BenchmarkResults({
+            benchmarkMethods.push(new BenchmarkMethod({
                 name: methodName,
                 params: params,
                 benchmarks: benchmarks
             }));
             methodNames.add(methodName);
         }
-        benchmarkCollections.push(new BenchmarkCollection({
+        benchmarkBundles.push(new BenchmarkBundle({
             key: fullName,
             name: parseClassNameFromFullName(fullName),
-            benchmarkResults: benchmarkResults,
+            benchmarkMethods: benchmarkMethods,
             methodNames: [...methodNames]
         }));
     }
-    return benchmarkCollections;
+    return benchmarkBundles;
 }
 
 /*

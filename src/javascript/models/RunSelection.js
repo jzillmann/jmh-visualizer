@@ -1,4 +1,4 @@
-// Which benchmarks of a BenchmarkResults should be shown in a view
+// Which benchmarks of a BenchmarkMethod should be shown in a view
 export default class RunSelection {
 
     constructor(names, indices) {

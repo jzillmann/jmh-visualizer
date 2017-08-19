@@ -3,19 +3,19 @@ import React from 'react';
 import Badge from 'react-bootstrap/lib/Badge'
 
 import TocElement from 'components/TocElement.jsx'
-import TwoRunCollectionView from 'components/two/TwoRunCollectionView.jsx'
+import TwoRunBundle from 'components/two/TwoRunBundle.jsx'
 
 export default class TwoRunsView extends React.Component {
 
     static propTypes = {
-        benchmarkCollections: React.PropTypes.array.isRequired,
+        benchmarkBundles: React.PropTypes.array.isRequired,
         runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectBenchmarkSetFunction: React.PropTypes.func.isRequired,
+        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {benchmarkCollections, runSelection, metricExtractor, selectBenchmarkSetFunction} = this.props;
+        const {benchmarkBundles, runSelection, metricExtractor, selectBenchmarkBundleFunction} = this.props;
 
         const elements = [];
         elements.push(
@@ -23,19 +23,19 @@ export default class TwoRunsView extends React.Component {
               Comparing
               { ' ' }
               <Badge>
-                { benchmarkCollections.length }
+                { benchmarkBundles.length }
               </Badge> different Benchmark classes for metric '
               { metricExtractor.metricKey }' on 2 runs.
             </div>
         );
 
-        benchmarkCollections.forEach(benchmarkSet => {
-            elements.push(<TocElement key={ benchmarkSet.key } name={ benchmarkSet.key }>
-                            <TwoRunCollectionView
-                                                  benchmarkCollection={ benchmarkSet }
-                                                  runSelection={ runSelection }
-                                                  metricExtractor={ metricExtractor }
-                                                  selectBenchmarkCollectionFunction={ selectBenchmarkSetFunction } />
+        benchmarkBundles.forEach(benchmarkBundle => {
+            elements.push(<TocElement key={ benchmarkBundle.key } name={ benchmarkBundle.key }>
+                            <TwoRunBundle
+                                          benchmarkBundle={ benchmarkBundle }
+                                          runSelection={ runSelection }
+                                          metricExtractor={ metricExtractor }
+                                          selectBenchmarkBundleFunction={ selectBenchmarkBundleFunction } />
                           </TocElement>);
         });
 

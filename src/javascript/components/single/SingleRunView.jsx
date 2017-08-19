@@ -10,17 +10,17 @@ import "react-toggle/style.css"
 import HelpIcon from 'react-icons/lib/md/help-outline'
 
 import TocElement from 'components/TocElement.jsx'
-import SingleRunCollectionView from 'components/single/SingleRunCollectionView.jsx'
-import { getUniqueBenchmarkModesAccrossCollections } from 'functions/parse.js'
+import SingleRunBundle from 'components/single/SingleRunBundle.jsx'
+import { getUniqueBenchmarkModesAccrossBundles } from 'functions/parse.js'
 
 export default class SingleRunView extends React.Component {
 
     static propTypes = {
-        benchmarkCollections: React.PropTypes.array.isRequired,
-        focusedCollections: React.PropTypes.object.isRequired,
+        benchmarkBundles: React.PropTypes.array.isRequired,
+        focusedBundles: React.PropTypes.object.isRequired,
         runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectBenchmarkSetFunction: React.PropTypes.func.isRequired,
+        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -37,13 +37,13 @@ export default class SingleRunView extends React.Component {
     }
 
     render() {
-        const {focusedCollections, benchmarkCollections, runSelection, metricExtractor, selectBenchmarkSetFunction} = this.props;
+        const {focusedBundles, benchmarkBundles, runSelection, metricExtractor, selectBenchmarkBundleFunction} = this.props;
         const {axisScalesSync} = this.state;
 
         let synchronizeAxisScalesToggle;
         let dataMax;
-        if (focusedCollections.size > 1) {
-            const benchmarkModes = getUniqueBenchmarkModesAccrossCollections(benchmarkCollections, runSelection, metricExtractor);
+        if (focusedBundles.size > 1) {
+            const benchmarkModes = getUniqueBenchmarkModesAccrossBundles(benchmarkBundles, runSelection, metricExtractor);
             const axisScalesSyncPossible = benchmarkModes.length == 1;
             const switchTooltip = axisScalesSyncPossible ? ' Sync Axis Scales' : `No Axis Scale syncing possible because of multiple benchmark modes: ${benchmarkModes}!`;
             synchronizeAxisScalesToggle = <div>
@@ -62,7 +62,7 @@ export default class SingleRunView extends React.Component {
                                           </div>;
             if (axisScalesSync && axisScalesSyncPossible) {
                 dataMax = 0;
-                benchmarkCollections.forEach(benchmarkCollection => benchmarkCollection.benchmarks(runSelection).forEach(benchmark => {
+                benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.benchmarks(runSelection).forEach(benchmark => {
                     dataMax = Math.max(dataMax, metricExtractor.extractScore(benchmark));
                     dataMax = Math.max(dataMax, metricExtractor.extractScoreConfidence(benchmark)[1]);
                 }));
@@ -73,21 +73,21 @@ export default class SingleRunView extends React.Component {
         elements.push(
             <div key='summary'>
               <Badge>
-                { benchmarkCollections.length }
+                { benchmarkBundles.length }
               </Badge>
               { ` different benchmark classes for single run '${ runSelection.names[0] }' and metric '${metricExtractor.metricKey}' detected!` }
               <span style={ { position: 'absolute', right: 20 } }>{ synchronizeAxisScalesToggle }</span>
             </div>
         );
 
-        benchmarkCollections.forEach(benchmarkSet => {
-            elements.push(<TocElement key={ benchmarkSet.key } name={ benchmarkSet.key }>
-                            <SingleRunCollectionView
-                                                     benchmarkCollection={ benchmarkSet }
-                                                     runSelection={ runSelection }
-                                                     metricExtractor={ metricExtractor }
-                                                     selectBenchmarkCollectionFunction={ selectBenchmarkSetFunction }
-                                                     dataMax={ dataMax } />
+        benchmarkBundles.forEach(bundle => {
+            elements.push(<TocElement key={ bundle.key } name={ bundle.key }>
+                            <SingleRunBundle
+                                             benchmarkBundle={ bundle }
+                                             runSelection={ runSelection }
+                                             metricExtractor={ metricExtractor }
+                                             selectBenchmarkBundleFunction={ selectBenchmarkBundleFunction }
+                                             dataMax={ dataMax } />
                           </TocElement>);
         });
 

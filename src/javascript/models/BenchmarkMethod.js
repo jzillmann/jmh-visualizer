@@ -1,16 +1,16 @@
 import RunSelection from 'models/RunSelection.js'
 
 // Has the original benchmark results from all runs for a benchmark method 
-export default class BenchmarkResults {
+export default class BenchmarkMethod {
 
     constructor(options) {
         this.name = options.name; // method name (can occure multiple times with use of params)
         this.params = options.params; //[[key][value]...]
-        this.benchmarks = options.benchmarks; // original benchmark object
+        this.benchmarks = options.benchmarks; // [{run1}, {run2}] original benchmark object per run
     }
 
     selectBenchmarks(runSelection:RunSelection) {
-        return runSelection.indices.filter(runId => this.benchmarks[runId]).map(nonNullRunId => this.benchmarks[nonNullRunId]);
+        return runSelection.indices.filter(runId => this.benchmarks[runId]).map(selectedRunId => this.benchmarks[selectedRunId]);
     }
 
 }

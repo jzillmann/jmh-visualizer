@@ -16,7 +16,7 @@ import TocList from 'components/TocList.jsx'
 export default class RunSideBar extends React.Component {
 
     static propTypes = {
-        benchmarkCollections: React.PropTypes.array.isRequired,
+        benchmarkBundles: React.PropTypes.array.isRequired,
         metrics: React.PropTypes.array.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
         selectMetricFunction: React.PropTypes.func.isRequired,
@@ -26,14 +26,14 @@ export default class RunSideBar extends React.Component {
     };
 
     render() {
-        const {benchmarkCollections, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, focusBenchmarkBundleFunction, selectBenchmarkBundleFunction} = this.props;
+        const {benchmarkBundles, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, focusBenchmarkBundleFunction, selectBenchmarkBundleFunction} = this.props;
 
         const metricsOptions = metrics.filter(aMetric => aMetric.startsWith('·') || aMetric === 'Score').map(metric => <option key={ metric } value={ metric }>
                                                                                                                          { metric }
                                                                                                                        </option>);
 
-        const elementIds = benchmarkCollections.map(benchmarkSet => benchmarkSet.key);
-        const elementNames = benchmarkCollections.map(benchmarkSet => benchmarkSet.name);
+        const elementIds = benchmarkBundles.map(bundle => bundle.key);
+        const elementNames = benchmarkBundles.map(bundle => bundle.name);
 
         const focusControlCreator = (elementId) => <span key={ `focus-${elementId}` } onClick={ (e) => {
                                                  e.stopPropagation();
@@ -41,7 +41,7 @@ export default class RunSideBar extends React.Component {
                                              } } className={ focusedBenchmarkBundles.has(elementId) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>;
         const detailsControlCreator = (elementId) => (<span key={ `detail-${elementId}` } onClick={ (e) => {
                                                   e.stopPropagation();
-                                                  selectBenchmarkBundleFunction(benchmarkCollections.find(bundle => bundle.key === elementId))
+                                                  selectBenchmarkBundleFunction(benchmarkBundles.find(bundle => bundle.key === elementId))
                                               } } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
 
         return <div>

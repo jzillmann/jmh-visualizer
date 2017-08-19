@@ -1,18 +1,18 @@
 import { expect } from 'chai';
 
-import BenchmarkCollection from '../../src/javascript/models/BenchmarkCollection.js'
-import BenchmarkResults from '../../src/javascript/models/BenchmarkResults.js'
+import BenchmarkBundle from '../../src/javascript/models/BenchmarkBundle.js'
+import BenchmarkMethod from '../../src/javascript/models/BenchmarkMethod.js'
 import RunSelection from '../../src/javascript/models/RunSelection.js'
 
 
 describe('functions: parseBenchmarkCollections', () => {
 
     it('default', () => {
-        const benchmarkCollection = new BenchmarkCollection({
+        const benchmarkBundle = new BenchmarkBundle({
             key: 'com.A',
             name: 'A',
-            benchmarkResults: [
-                new BenchmarkResults({
+            benchmarkMethods: [
+                new BenchmarkMethod({
                     name: 'bench',
                     benchmarks: [
                         {
@@ -28,7 +28,7 @@ describe('functions: parseBenchmarkCollections', () => {
                         }
                     ]
                 }),
-                new BenchmarkResults({
+                new BenchmarkMethod({
                     name: 'bench2',
                     benchmarks: [
                         {
@@ -40,7 +40,7 @@ describe('functions: parseBenchmarkCollections', () => {
                         null
                     ]
                 }),
-                new BenchmarkResults({
+                new BenchmarkMethod({
                     name: 'bench3',
                     benchmarks: [
                         null,
@@ -60,26 +60,26 @@ describe('functions: parseBenchmarkCollections', () => {
         const selectSecond = new RunSelection(['run2'], [1]);
 
         //select all runs
-        expect(benchmarkCollection.benchmarks(selectAll)).to.have.lengthOf(4);
-        expect(benchmarkCollection.benchmarks(selectAll)).to.have.members([
-            benchmarkCollection.benchmarkResults[0].benchmarks[0],
-            benchmarkCollection.benchmarkResults[0].benchmarks[1],
-            benchmarkCollection.benchmarkResults[1].benchmarks[0],
-            benchmarkCollection.benchmarkResults[2].benchmarks[1],
+        expect(benchmarkBundle.benchmarks(selectAll)).to.have.lengthOf(4);
+        expect(benchmarkBundle.benchmarks(selectAll)).to.have.members([
+            benchmarkBundle.benchmarkMethods[0].benchmarks[0],
+            benchmarkBundle.benchmarkMethods[0].benchmarks[1],
+            benchmarkBundle.benchmarkMethods[1].benchmarks[0],
+            benchmarkBundle.benchmarkMethods[2].benchmarks[1],
         ]);
 
         //select first run
-        expect(benchmarkCollection.benchmarks(selectFirst)).to.have.lengthOf(2);
-        expect(benchmarkCollection.benchmarks(selectFirst)).to.have.members([
-            benchmarkCollection.benchmarkResults[0].benchmarks[0],
-            benchmarkCollection.benchmarkResults[1].benchmarks[0],
+        expect(benchmarkBundle.benchmarks(selectFirst)).to.have.lengthOf(2);
+        expect(benchmarkBundle.benchmarks(selectFirst)).to.have.members([
+            benchmarkBundle.benchmarkMethods[0].benchmarks[0],
+            benchmarkBundle.benchmarkMethods[1].benchmarks[0],
         ]);
 
         //select second run
-        expect(benchmarkCollection.benchmarks(selectSecond)).to.have.lengthOf(2);
-        expect(benchmarkCollection.benchmarks(selectSecond)).to.have.members([
-            benchmarkCollection.benchmarkResults[0].benchmarks[1],
-            benchmarkCollection.benchmarkResults[2].benchmarks[1],
+        expect(benchmarkBundle.benchmarks(selectSecond)).to.have.lengthOf(2);
+        expect(benchmarkBundle.benchmarks(selectSecond)).to.have.members([
+            benchmarkBundle.benchmarkMethods[0].benchmarks[1],
+            benchmarkBundle.benchmarkMethods[2].benchmarks[1],
         ]);
 
 

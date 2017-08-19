@@ -24,37 +24,37 @@ import { groupBy, shouldRound, round } from 'functions/util.js'
 // 3 - 2 params, single methods => convert to (2)
 // 4 - 2+ params, multi methods => combine params & convert to (2)
 // 5 - 3+ params, single methods => combine params & convert to (0)
-export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:RunSelection, metricExtractor:MetricExtractor) {
-    const benchmarkResults = benchmarkCollection.benchmarkResults;
-    const methodCount = benchmarkCollection.methodNames.length;
-    const params = benchmarkResults[0].params; //TODO get from collection as well ?
-    const metricType = metricExtractor.extractType(benchmarkResults[0].benchmarks[0]);
-    const scoreUnit = metricExtractor.hasMetric(benchmarkResults[0].benchmarks[0]) ? metricExtractor.extractScoreUnit(benchmarkResults[0].benchmarks[0]) : '';
+export function createDataSetFromBenchmarks(benchmarkBundle, runSelection:RunSelection, metricExtractor:MetricExtractor) {
+    const benchmarkMethods = benchmarkBundle.benchmarkMethods;
+    const methodCount = benchmarkBundle.methodNames.length;
+    const params = benchmarkMethods[0].params; //TODO get from collection as well ?
+    const metricType = metricExtractor.extractType(benchmarkMethods[0].benchmarks[0]);
+    const scoreUnit = metricExtractor.hasMetric(benchmarkMethods[0].benchmarks[0]) ? metricExtractor.extractScoreUnit(benchmarkMethods[0].benchmarks[0]) : '';
 
     if (!params) {
         //case 0
-        return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.name, () => `${metricType} ${scoreUnit}`);
+        return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.name, () => `${metricType} ${scoreUnit}`);
     } else { // all other cases
         const paramNames = params.map(param => param[0]);
         if (paramNames.length == 1) {
             if (methodCount == 1) {
                 // case 1
-                return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.params[0][0] + '=' + result.params[0][1], () => `${metricType} ${scoreUnit}`);
+                return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.params[0][0] + '=' + method.params[0][1], () => `${metricType} ${scoreUnit}`);
             } else {
                 // case 2
-                return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.name, (result) => result.params[0][1]);
+                return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.name, (method) => method.params[0][1]);
             }
         } else if (paramNames.length == 2 && methodCount == 1) {
             // case 3
-            return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.params[0][1], (result) => result.params[1][1]);
+            return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.params[0][1], (method) => method.params[1][1]);
         } else {
             if (methodCount > 1) {
                 // case 4
-                return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.name, (result) => result.params.map(param => param[1]).join(':'));
+                return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.name, (method) => method.params.map(param => param[1]).join(':'));
             } else {
                 // case 5
                 const barName = paramNames.join(':');
-                return createBarDataSet(benchmarkCollection.key, benchmarkResults, runSelection, metricExtractor, (result) => result.params.map(param => param[1]).join(':'), () => barName);
+                return createBarDataSet(benchmarkBundle.key, benchmarkMethods, runSelection, metricExtractor, (method) => method.params.map(param => param[1]).join(':'), () => barName);
             }
         }
     }
@@ -62,11 +62,11 @@ export function createDataSetFromBenchmarks(benchmarkCollection, runSelection:Ru
 
 
 //Each benchmark can have multiple bar's attached
-function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection, metricExtractor, groupFunction, barGroupFunction) {
+function createBarDataSet(benchmarkCollectionKey, benchmarkMethods, runSelection, metricExtractor, groupFunction, barGroupFunction) {
     var dataMax = 0;
     var scoreUnit;
-    const shouldRoundScores = shouldRound(benchmarkResults, metricExtractor);
-    const groupedBenchmarks = groupBy(benchmarkResults, groupFunction);
+    const shouldRoundScores = shouldRound(benchmarkMethods, metricExtractor);
+    const groupedBenchmarks = groupBy(benchmarkMethods, groupFunction);
     const barGroups = new Set();
     const data = groupedBenchmarks.map((benchmarkGroup, i) => {
         const benchmarkName = benchmarkGroup.key;
@@ -74,8 +74,8 @@ function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection
             index: i,
             name: benchmarkName,
         };
-        benchmarkGroup.values.forEach(benchmarkResult => {
-            const [benchmark] = benchmarkResult.selectBenchmarks(runSelection);
+        benchmarkGroup.values.forEach(benchmarkMethod => {
+            const [benchmark] = benchmarkMethod.selectBenchmarks(runSelection);
             if (metricExtractor.hasMetric(benchmark)) {
                 const score = round(metricExtractor.extractScore(benchmark), shouldRoundScores);
                 const scoreConfidence = metricExtractor.extractScoreConfidence(benchmark).map(scoreConf => round(scoreConf, shouldRoundScores));
@@ -89,7 +89,7 @@ function createBarDataSet(benchmarkCollectionKey, benchmarkResults, runSelection
                 dataMax = Math.max(dataMax, scoreConfidence[1]);
                 dataMax = Math.max(dataMax, 1);
 
-                const barGroup = barGroupFunction(benchmarkResult);
+                const barGroup = barGroupFunction(benchmarkMethod);
                 barGroups.add(barGroup);
                 dataObject[barGroup] = score;
                 dataObject[barGroup + 'Confidence'] = scoreConfidence;

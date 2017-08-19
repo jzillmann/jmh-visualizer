@@ -11,20 +11,20 @@ import TocList from 'components/TocList.jsx'
 export default class DetailSideBar extends React.Component {
 
     static propTypes = {
-        benchmarkCollection: React.PropTypes.object.isRequired,
-        benchmarkCollections: React.PropTypes.array.isRequired,
+        benchmarkBundle: React.PropTypes.object.isRequired,
+        benchmarkBundles: React.PropTypes.array.isRequired,
         secondaryMetrics: React.PropTypes.array.isRequired,
         goBackFunction: React.PropTypes.func.isRequired,
         selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {benchmarkCollection, benchmarkCollections, secondaryMetrics, goBackFunction, selectBenchmarkBundleFunction} = this.props;
+        const {benchmarkBundle, benchmarkBundles, secondaryMetrics, goBackFunction, selectBenchmarkBundleFunction} = this.props;
 
-        const benchmarkCollectionOptions = benchmarkCollections.map((collection, index) => <option key={ collection.key } value={ index }>
-                                                                                             { collection.name }
-                                                                                           </option>);
-        const selectedCollection = benchmarkCollections.findIndex(collection => collection.key === benchmarkCollection.key);
+        const benchmarkBundleOptions = benchmarkBundles.map((bundle, index) => <option key={ bundle.key } value={ index }>
+                                                                                 { bundle.name }
+                                                                               </option>);
+        const selectedBundle = benchmarkBundles.findIndex(bundle => bundle.key === benchmarkBundle.key);
 
         const metrics = ['Score'].concat(secondaryMetrics);
 
@@ -35,8 +35,8 @@ export default class DetailSideBar extends React.Component {
                  <br />
                  <FormGroup bsSize="small" controlId="theForm">
                    <InputGroup>
-                     <FormControl componentClass="select" onChange={ (event) => selectBenchmarkBundleFunction(benchmarkCollections[event.target.value]) } defaultValue={ selectedCollection }>
-                       { benchmarkCollectionOptions }
+                     <FormControl componentClass="select" onChange={ (event) => selectBenchmarkBundleFunction(benchmarkBundles[event.target.value]) } defaultValue={ selectedBundle }>
+                       { benchmarkBundleOptions }
                      </FormControl>
                    </InputGroup>
                  </FormGroup>

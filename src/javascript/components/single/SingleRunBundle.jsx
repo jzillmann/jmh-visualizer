@@ -12,13 +12,13 @@ import { getUniqueBenchmarkModes } from 'functions/parse.js'
 import { createMetricBadge } from 'components/commons.jsx';
 
 // The view for a bunch of benchmarks, usually all of a benchmark class
-export default class SingleRunCollectionView extends React.Component {
+export default class SingleRunBundle extends React.Component {
 
     static propTypes = {
-        benchmarkCollection: React.PropTypes.object.isRequired,
+        benchmarkBundle: React.PropTypes.object.isRequired,
         runSelection: React.PropTypes.object.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
-        selectBenchmarkCollectionFunction: React.PropTypes.func.isRequired,
+        selectBenchmarkBundleFunction: React.PropTypes.func.isRequired,
         dataMax: React.PropTypes.number
     };
 
@@ -33,24 +33,24 @@ export default class SingleRunCollectionView extends React.Component {
     }
 
     showDetails() {
-        this.props.selectBenchmarkCollectionFunction(this.props.benchmarkCollection);
+        this.props.selectBenchmarkBundleFunction(this.props.benchmarkBundle);
     }
 
     render() {
-        const {benchmarkCollection, runSelection, metricExtractor, dataMax} = this.props;
+        const {benchmarkBundle, runSelection, metricExtractor, dataMax} = this.props;
 
-        const benchmarks = benchmarkCollection.benchmarks(runSelection);
-        const benchmarkModes = getUniqueBenchmarkModes(benchmarkCollection, runSelection, metricExtractor);
+        const benchmarks = benchmarkBundle.benchmarks(runSelection);
+        const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, runSelection, metricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
         const secondaryMetricsCount = Object.keys(benchmarks[0].secondaryMetrics).length;
         const detailsIcon = secondaryMetricsCount > 0 ? <sup><BadgeWithTooltip tooltip={ secondaryMetricsCount + ' secondary metrics results' }> <DetailsIcon/> { ' ' + secondaryMetricsCount } </BadgeWithTooltip> { ' | ' }</sup> : undefined;
-        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkCollection, runSelection, metricExtractor) } dataMax={ dataMax } />;
+        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(benchmarkBundle, runSelection, metricExtractor) } dataMax={ dataMax } />;
 
         return (
             <div>
               <div>
-                <h3 id={ benchmarkCollection.key }><span><span style={ { cursor: 'pointer' } } onClick={ this.showDetails.bind(this) }>{ benchmarkCollection.name + ' ' } { detailsIcon }</span><sup>{ benchmarkModeBadges }</sup></span></h3>
+                <h3 id={ benchmarkBundle.key }><span><span style={ { cursor: 'pointer' } } onClick={ this.showDetails.bind(this) }>{ benchmarkBundle.name + ' ' } { detailsIcon }</span><sup>{ benchmarkModeBadges }</sup></span></h3>
               </div>
               <div style={ { fontSize: '0.90em' } }>
                 { scoresChart }

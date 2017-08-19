@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 
-import { parseMethodName, parseBenchmarkName, getUniqueParamValues, parseBenchmarkCollections } from '../../src/javascript/functions/parse.js'
+import { parseMethodName, parseBenchmarkName, getUniqueParamValues, parseBenchmarkBundles } from '../../src/javascript/functions/parse.js'
 import BenchmarkRun from '../../src/javascript/models/BenchmarkRun.js'
-import BenchmarkCollection from '../../src/javascript/models/BenchmarkCollection.js'
-import BenchmarkResults from '../../src/javascript/models/BenchmarkResults.js'
+import BenchmarkBundle from '../../src/javascript/models/BenchmarkBundle.js'
+import BenchmarkMethod from '../../src/javascript/models/BenchmarkMethod.js'
 
 
 describe('functions: parseMethodName', () => {
@@ -95,7 +95,7 @@ describe('functions: getUniqueParamValues', () => {
 
 });
 
-describe('functions: parseBenchmarkCollections', () => {
+describe('functions: parseBenchmarkBundles', () => {
 
     it('default', () => {
         const run1 = new BenchmarkRun({
@@ -130,41 +130,41 @@ describe('functions: parseBenchmarkCollections', () => {
                 }
             ]
         });
-        const benchmarkCollections = parseBenchmarkCollections([run1, run2]);
-        const expectedCollections = [
-            new BenchmarkCollection({
+        const benchmarkBundles = parseBenchmarkBundles([run1, run2]);
+        const expectedBundles = [
+            new BenchmarkBundle({
                 key: 'com.A',
                 name: 'A',
                 methodNames: ['bench'],
-                benchmarkResults: [new BenchmarkResults({
+                benchmarkMethods: [new BenchmarkMethod({
                     name: 'bench',
                     params: null,
                     benchmarks: [run1.benchmarks[0], null]
                 })]
             }),
-            new BenchmarkCollection({
+            new BenchmarkBundle({
                 key: 'com.B',
                 name: 'B',
                 methodNames: ['bench', 'bench2'],
-                benchmarkResults: [
-                    new BenchmarkResults({
+                benchmarkMethods: [
+                    new BenchmarkMethod({
                         name: 'bench',
                         params: null,
                         benchmarks: [run1.benchmarks[1], run2.benchmarks[0]]
                     }),
-                    new BenchmarkResults({
+                    new BenchmarkMethod({
                         name: 'bench2',
                         params: null,
                         benchmarks: [null, run2.benchmarks[1]]
                     })
                 ]
             }),
-            new BenchmarkCollection({
+            new BenchmarkBundle({
                 key: 'com.C',
                 name: 'C',
                 methodNames: ['bench'],
-                benchmarkResults: [
-                    new BenchmarkResults({
+                benchmarkMethods: [
+                    new BenchmarkMethod({
                         name: 'bench',
                         params: null,
                         benchmarks: [null, run2.benchmarks[2]]
@@ -173,8 +173,8 @@ describe('functions: parseBenchmarkCollections', () => {
             })
         ];
 
-        expect(benchmarkCollections).to.have.lengthOf(3);
-        expect(benchmarkCollections).to.deep.equal(expectedCollections);
+        expect(benchmarkBundles).to.have.lengthOf(3);
+        expect(benchmarkBundles).to.deep.equal(expectedBundles);
     });
 
 });

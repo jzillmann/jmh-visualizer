@@ -10,10 +10,4 @@ export default class RunSelection {
         return new RunSelection([this.names[index]], [this.indices[index]]);
     }
 
-    reverse() {
-        return new RunSelection(this.names.reverse(), this.indices.reverse());
-    }
-
-
-
 }

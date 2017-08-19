@@ -25,7 +25,7 @@ export default class TwoRunsView extends React.Component {
               <Badge>
                 { benchmarkCollections.length }
               </Badge> different Benchmark classes for metric '
-              { metricExtractor.metricType }' on 2 runs.
+              { metricExtractor.metricKey }' on 2 runs.
             </div>
         );
 

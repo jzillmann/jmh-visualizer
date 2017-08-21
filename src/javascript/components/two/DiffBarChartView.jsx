@@ -15,7 +15,7 @@ export default class DiffBarChartView extends Component {
 
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
         //only update if order of runs has changed
-        return this.props.runNames[0] !== nextProps.runNames[0] || this.props.metricExtractor !== nextProps.metricExtractor;
+        return this.props.runNames[0] !== nextProps.runNames[0] || this.props.metricExtractor.metricKey !== nextProps.metricExtractor.metricKey;
     }
 
     render() {

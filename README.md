@@ -6,8 +6,6 @@ Comes with 2 companion projects:
 - [Gradle plugin](https://github.com/jzillmann/gradle-jmh-report)
 - [Jenkins plugin](https://github.com/jenkinsci/jmh-report-plugin)
 
-*Note:* This plugin is not for executing benchmarks, its for reporting on already executed benchmarks. There are multiple ways how you can setup your JMH benchmark execution in Gradle, i've written in this [blog post](https://blog.morethan.io/jmh-with-gradle-from-easy-to-simple-dc872d57cf7f) about it!
-
 ## Features
 
 - Serverless architecture - All happens locally in your browser

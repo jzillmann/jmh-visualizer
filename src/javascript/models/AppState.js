@@ -15,6 +15,9 @@ export default class AppState {
         this.selectedMetric = 'Score';
         this.detailedBundle = null; // bundleKey
         this.focusedBundles = new Set(); // [] bundleKeys
+        this.singleRunCategories = ['Benchmarks'];
+        this.twoRunsCategories = ['Summary', 'Benchmarks'];
+        this.activeCategory = null;
         this.history = history;
 
         //bind functions
@@ -25,6 +28,7 @@ export default class AppState {
         this.detailBenchmarkBundle = this.detailBenchmarkBundle.bind(this);
         this.undetailBenchmarkBundle = this.undetailBenchmarkBundle.bind(this);
         this.focusBundle = this.focusBundle.bind(this);
+        this.selectCategory = this.selectCategory.bind(this);
         this.benchmarkSelection = this.benchmarkSelection.bind(this);
         this.goBack = this.goBack.bind(this);
 
@@ -94,6 +98,12 @@ export default class AppState {
             runNames: selectedBenchmarkRuns.map(run => run.name),
             benchmarkBundles: parseBenchmarkBundles(selectedBenchmarkRuns)
         });
+    }
+
+    selectCategory(category) {
+        this.activeCategory = category;
+        this.focusedBundles.clear();
+        this.renderFunction(this);
     }
 
 }

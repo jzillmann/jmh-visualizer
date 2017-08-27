@@ -21,12 +21,15 @@ export default class RunSideBar extends React.Component {
         metricExtractor: React.PropTypes.object.isRequired,
         selectMetricFunction: React.PropTypes.func.isRequired,
         focusedBenchmarkBundles: React.PropTypes.object.isRequired,
+        categories: React.PropTypes.array.isRequired,
+        activeCategory: React.PropTypes.string.isRequired,
         focusBenchmarkBundleFunction: React.PropTypes.func.isRequired,
         detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        selectCategoryFunction: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {benchmarkBundles, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, focusBenchmarkBundleFunction, detailBenchmarkBundleFunction} = this.props;
+        const {benchmarkBundles, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, categories, activeCategory, selectCategoryFunction, focusBenchmarkBundleFunction, detailBenchmarkBundleFunction} = this.props;
 
         const metricsOptions = metrics.filter(aMetric => aMetric.startsWith('·') || aMetric === 'Score').map(metric => <option key={ metric } value={ metric }>
                                                                                                                          { metric }
@@ -68,9 +71,9 @@ export default class RunSideBar extends React.Component {
                  </FormGroup>
                  <hr />
                  <TocList
-                          categories={ ['Benchmarks'] }
-                          activeCategory={ 'Benchmarks' }
-                          selectCategoryFunction={ (category) => alert(category) }
+                          categories={ categories }
+                          activeCategory={ activeCategory }
+                          selectCategoryFunction={ selectCategoryFunction }
                           elementIds={ elementIds }
                           elementNames={ elementNames }
                           linkControlsCreators={ [focusControlCreator, detailsControlCreator] } />

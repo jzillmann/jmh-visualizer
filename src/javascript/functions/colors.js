@@ -6,12 +6,22 @@ export const lightBlack = '#143049';
 export const brown = '#b77033';
 
 //taken from http://www.color-hex.com/color/337ab7 => 3 tints from related colors
+export const blues = [blue, '#22527b', '#63a0d4'];
+export const greens = ['#7ab733', '#a1cc70', '#c9e2ad'];
+export const browns = [brown, '#cc9a70', '#e2c5ad'];
+export const violets = ['#b7337a', '#cc70a1', '#e9c1d7'];
+export const yellows = [yellow, '#ccc970', '#e2e0ad'];
+
+export const reds = ['#7b2c22', red, '#d47063']
+
+
 export const barColors = [
-    '#337ab7', '#22527b', '#63a0d4',
-    '#7ab733', '#a1cc70', '#c9e2ad',
-    '#b77033', '#cc9a70', '#e2c5ad',
-    '#b7337a', '#cc70a1', '#e9c1d7',
-    '#b7b233', '#ccc970', '#e2e0ad'
+    ...blues,
+    ...greens,
+    ...browns,
+    ...violets,
+    ...yellows,
+    ...reds,
 ];
 
 export const tooltipBackground = '#efefef';

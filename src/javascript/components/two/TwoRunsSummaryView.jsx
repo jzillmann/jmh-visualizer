@@ -6,7 +6,7 @@ import TocElement from 'components/TocElement.jsx'
 import TwoRunBundle from 'components/two/TwoRunBundle.jsx'
 import TwoRunsSummaryChart from 'components/two/TwoRunsSummaryChart.jsx'
 
-export default class TwoRunsView extends React.Component {
+export default class TwoRunsSummaryView extends React.Component {
 
     static propTypes = {
         runNames: React.PropTypes.array.isRequired,
@@ -29,18 +29,19 @@ export default class TwoRunsView extends React.Component {
               { runNames[0] }' and '
               { runNames[1] }' on metric '
               { metricExtractor.metricKey }'.
+              <TwoRunsSummaryChart benchmarkBundles={ benchmarkBundles } metricExtractor={ metricExtractor } />
             </div>
         );
 
-        benchmarkBundles.forEach(benchmarkBundle => {
-            elements.push(<TocElement key={ benchmarkBundle.key } name={ benchmarkBundle.key }>
-                            <TwoRunBundle
-                                          runNames={ runNames }
-                                          benchmarkBundle={ benchmarkBundle }
-                                          metricExtractor={ metricExtractor }
-                                          detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
-                          </TocElement>);
-        });
+        // benchmarkBundles.forEach(benchmarkBundle => {
+        //     elements.push(<TocElement key={ benchmarkBundle.key } name={ benchmarkBundle.key }>
+        //                     <TwoRunBundle
+        //                                   runNames={ runNames }
+        //                                   benchmarkBundle={ benchmarkBundle }
+        //                                   metricExtractor={ metricExtractor }
+        //                                   detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
+        //                   </TocElement>);
+        // });
 
 
         return <div>

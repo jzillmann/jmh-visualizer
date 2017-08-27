@@ -13,6 +13,7 @@ import SingleRunView from 'components/single/SingleRunView.jsx';
 import SingleDetailView from 'components/single/SingleDetailView.jsx';
 
 import TwoRunsView from 'components/two/TwoRunsView.jsx';
+import TwoRunsSummaryView from 'components/two/TwoRunsSummaryView.jsx';
 import TwoDetailView from 'components/two/TwoDetailView.jsx';
 
 import PrimaryMetricExtractor from 'models/extractor/PrimaryMetricExtractor.js'
@@ -78,7 +79,7 @@ export default class App extends React.Component {
                 const focusedBundles = appState.focusedBundles;
 
                 let filteredBenchmarkBundles = metricType === 'Score' ? benchmarkBundles : benchmarkBundles.filter(benchmarkBundle => benchmarkBundle.allBenchmarks().find(benchmark => metricExtractor.hasMetric(benchmark)));
-                const sideBarBenchmarks = filteredBenchmarkBundles;
+                let sideBarBenchmarks = filteredBenchmarkBundles;
                 if (focusedBundles.size > 0) {
                     filteredBenchmarkBundles = filteredBenchmarkBundles.filter(benchmarkBundle => focusedBundles.has(benchmarkBundle.key));
                 }
@@ -88,7 +89,11 @@ export default class App extends React.Component {
                 }));
                 const metrics = Array.from(metricsSet);
 
+                let categories;
+                let activeCategory;
                 if (benchmarkSelection.runNames.length == 1) {
+                    categories = appState.singleRunCategories;
+                    activeCategory = appState.activeCategory ? appState.activeCategory : categories[0];
                     mainView = <SingleRunView
                                               runName={ benchmarkSelection.runNames[0] }
                                               benchmarkBundles={ filteredBenchmarkBundles }
@@ -96,20 +101,34 @@ export default class App extends React.Component {
                                               metricExtractor={ metricExtractor }
                                               detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                 } else if (benchmarkSelection.runNames.length == 2) {
-                    mainView = <TwoRunsView
-                                            runNames={ benchmarkSelection.runNames }
-                                            benchmarkBundles={ filteredBenchmarkBundles }
-                                            metricExtractor={ metricExtractor }
-                                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                    categories = appState.twoRunsCategories;
+                    activeCategory = appState.activeCategory ? appState.activeCategory : categories[0];
+                    if (activeCategory === 'Summary') {
+                        sideBarBenchmarks = [];
+                        mainView = <TwoRunsSummaryView
+                                                       runNames={ benchmarkSelection.runNames }
+                                                       benchmarkBundles={ filteredBenchmarkBundles }
+                                                       metricExtractor={ metricExtractor }
+                                                       detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                    } else {
+                        mainView = <TwoRunsView
+                                                runNames={ benchmarkSelection.runNames }
+                                                benchmarkBundles={ filteredBenchmarkBundles }
+                                                metricExtractor={ metricExtractor }
+                                                detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                    }
                 }
                 sideBar = <RunSideBar
                                       benchmarkBundles={ sideBarBenchmarks }
                                       metrics={ metrics }
                                       metricExtractor={ metricExtractor }
-                                      selectMetricFunction={ appState.selectMetric }
                                       focusedBenchmarkBundles={ appState.focusedBundles }
+                                      categories={ categories }
+                                      activeCategory={ activeCategory }
+                                      selectMetricFunction={ appState.selectMetric }
                                       focusBenchmarkBundleFunction={ appState.focusBundle }
-                                      detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                                      detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle }
+                                      selectCategoryFunction={ appState.selectCategory } />
             }
         }
 

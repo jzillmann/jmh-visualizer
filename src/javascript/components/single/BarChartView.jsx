@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ErrorBar } from 'recharts';
 
@@ -7,7 +7,7 @@ import { formatNumber } from 'functions/util.js'
 import { blue, red, green, lightBlack, tooltipBackground, barColors } from 'functions/colors.js'
 
 // Gathered report for one benchmark class
-export default class BarChartView extends Component {
+export default class BarChartView extends React.Component {
 
     static propTypes = {
         dataSet: React.PropTypes.object.isRequired,

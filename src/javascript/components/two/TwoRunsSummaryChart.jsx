@@ -13,46 +13,46 @@ export default class TwoRunsSummaryChart extends React.Component {
     static propTypes = {
         benchmarkBundles: React.PropTypes.array.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
+        minDeviation: React.PropTypes.number.isRequired,
     };
 
     render() {
-        const {benchmarkBundles, metricExtractor} = this.props;
+        const {benchmarkBundles, metricExtractor, minDeviation} = this.props;
 
-        const ignoreLevel = 5;
         const buckets = [
             {
-                name: `> ${ignoreLevel}% improvement`,
+                name: `> ${minDeviation}% improvement`,
                 color: greens[2],
-                min: ignoreLevel,
-                max: ignoreLevel + 10
+                min: minDeviation,
+                max: minDeviation + 10
             },
             {
-                name: `> ${ignoreLevel+10}% improvement`,
+                name: `> ${minDeviation+10}% improvement`,
                 color: greens[1],
-                min: ignoreLevel + 10,
-                max: ignoreLevel + 20
+                min: minDeviation + 10,
+                max: minDeviation + 20
             },
             {
-                name: `> ${ignoreLevel+20}% improvement`,
+                name: `> ${minDeviation+20}% improvement`,
                 color: greens[0],
-                min: ignoreLevel + 20
+                min: minDeviation + 20
             },
             {
-                name: `> ${ignoreLevel}% decline`,
+                name: `> ${minDeviation}% decline`,
                 color: reds[2],
-                min: -(ignoreLevel),
-                max: -(ignoreLevel + 10)
+                min: -(minDeviation),
+                max: -(minDeviation + 10)
             },
             {
-                name: `> ${ignoreLevel+10}% decline`,
+                name: `> ${minDeviation+10}% decline`,
                 color: reds[1],
-                min: -(ignoreLevel + 10),
-                max: -(ignoreLevel + 20)
+                min: -(minDeviation + 10),
+                max: -(minDeviation + 20)
             },
             {
-                name: `> ${ignoreLevel+20}% decline`,
+                name: `> ${minDeviation+20}% decline`,
                 color: reds[0],
-                min: -(ignoreLevel + 20)
+                min: -(minDeviation + 20)
             },
         ];
 
@@ -99,13 +99,13 @@ export default class TwoRunsSummaryChart extends React.Component {
 
 
         const innerUnchangedBucket = {
-            name: `Unchanged (<${ignoreLevel}%)`,
+            name: `Unchanged (<${minDeviation}%)`,
             type: 'inner',
             count: 0
 
         };
         const innerChangedBucket = {
-            name: `Changed (>${ignoreLevel}%)`,
+            name: `Changed (>${minDeviation}%)`,
             type: 'inner',
             count: 0
         };
@@ -183,12 +183,12 @@ export default class TwoRunsSummaryChart extends React.Component {
 }
 
 const RADIAN = Math.PI / 180;
-function customInnerPieLabel({cx, cy, midAngle, innerRadius, outerRadius, label}) { // eslint-disable-line react/prop-types
+function customInnerPieLabel({cx, cy, midAngle, innerRadius, outerRadius, label, value}) { // eslint-disable-line react/prop-types
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN) - 25;
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-    if (!label) {
+    if (!label || value == 0) {
         return null;
     }
 

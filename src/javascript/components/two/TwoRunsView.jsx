@@ -4,7 +4,6 @@ import Badge from 'react-bootstrap/lib/Badge'
 
 import TocElement from 'components/TocElement.jsx'
 import TwoRunBundle from 'components/two/TwoRunBundle.jsx'
-import TwoRunsSummaryChart from 'components/two/TwoRunsSummaryChart.jsx'
 
 export default class TwoRunsView extends React.Component {
 

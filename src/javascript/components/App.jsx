@@ -108,6 +108,7 @@ export default class App extends React.Component {
                         mainView = <TwoRunsSummaryView
                                                        runNames={ benchmarkSelection.runNames }
                                                        benchmarkBundles={ filteredBenchmarkBundles }
+                                                       minDeviation={ 5 }
                                                        metricExtractor={ metricExtractor }
                                                        detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                     } else {

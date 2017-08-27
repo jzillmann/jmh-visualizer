@@ -39,6 +39,7 @@
     "react-scroll": "^1.5.4",
     "react-spinkit": "^3.0.0",
     "react-toggle": "^4.0.1",
+    "react-tooltip": "^3.3.0",
     "recharts": "^0.22.4"
   },
   "devDependencies": {

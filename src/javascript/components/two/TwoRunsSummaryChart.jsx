@@ -2,22 +2,18 @@ import React from 'react';
 
 import { Tooltip, Cell, PieChart, Pie, Text, Legend } from 'recharts';
 
-import { getMetricType } from 'models/MetricType.js'
-import { flatten } from 'functions/util.js'
-import { shouldRound, round } from 'functions/util.js'
 import { blue, green, yellow, tooltipBackground, blues, greens, reds } from 'functions/colors.js'
 
 // A Pie chart giving a quick overview on number of increases/decrease from run1 vs run2
 export default class TwoRunsSummaryChart extends React.Component {
 
     static propTypes = {
-        benchmarkBundles: React.PropTypes.array.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
+        benchmarkDiffs: React.PropTypes.array.isRequired,
         minDeviation: React.PropTypes.number.isRequired,
     };
 
     render() {
-        const {benchmarkBundles, metricExtractor, minDeviation} = this.props;
+        const {benchmarkDiffs, minDeviation} = this.props;
 
         const buckets = [
             {
@@ -66,36 +62,18 @@ export default class TwoRunsSummaryChart extends React.Component {
             })
         });
 
-        const benchmarkDiffs = flatten(benchmarkBundles.map(benchmarkBundle => benchmarkBundle.benchmarkMethods.map(benchmarkMethod => {
-            const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
-            let benchmarkKey = benchmarkBundle.key + '#' + benchmarkMethod.name;
-            if (benchmarkMethod.params) {
-                benchmarkKey += ' [' + benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') + ']';
+        const bucketedBenchmarkDiffs = benchmarkDiffs.map(benchmarkDiff => {
+            let benchmarkKey = benchmarkDiff.bundleKey + '#' + benchmarkDiff.benchmarkMethod.name;
+            if (benchmarkDiff.benchmarkMethod.params) {
+                benchmarkKey += ' [' + benchmarkDiff.benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') + ']';
             }
-
-            const firstRunBenchmark = benchmarkMethod.benchmarks[0];
-            const secondRunBenchmark = benchmarkMethod.benchmarks[1];
-
-            if (firstRunBenchmark && secondRunBenchmark && metricExtractor.hasMetric(firstRunBenchmark) && metricExtractor.hasMetric(secondRunBenchmark)) {
-                const metricType = getMetricType(metricExtractor.extractType(firstRunBenchmark));
-                const score1stRun = round(metricExtractor.extractScore(firstRunBenchmark), shouldRoundScores);
-                const score2ndRun = round(metricExtractor.extractScore(secondRunBenchmark), shouldRoundScores);
-
-                let scoreDiff;
-                if (metricType && metricType.increaseIsGood) {
-                    // i.e. for throughput decrease is an increase, its worse basically
-                    scoreDiff = round((score2ndRun - score1stRun) / score1stRun * 100, shouldRoundScores);
-                } else {
-                    scoreDiff = round((score1stRun - score2ndRun) / score2ndRun * 100, shouldRoundScores);
-                }
-
-                return {
-                    key: benchmarkKey,
-                    scoreDiff: scoreDiff,
-                    bucketId: getBucketId(scoreDiff)
-                }
+            return {
+                key: benchmarkKey,
+                scoreDiff: benchmarkDiff.scoreDiff,
+                bucketId: getBucketId(benchmarkDiff.scoreDiff)
             }
-        }).filter((element) => element !== undefined)));
+        });
+
 
 
         const innerUnchangedBucket = {
@@ -110,7 +88,7 @@ export default class TwoRunsSummaryChart extends React.Component {
             count: 0
         };
         const bucketContentsObject = {};
-        benchmarkDiffs.forEach(benchmarkDiff => {
+        bucketedBenchmarkDiffs.forEach(benchmarkDiff => {
             const bucketId = benchmarkDiff.bucketId;
             if (bucketId == -1) {
                 innerUnchangedBucket.count++;
@@ -132,8 +110,8 @@ export default class TwoRunsSummaryChart extends React.Component {
                 });
             }
         });
-        innerUnchangedBucket.label = `${innerUnchangedBucket.count}/${benchmarkDiffs.length}`;
-        innerChangedBucket.label = `${innerChangedBucket.count}/${benchmarkDiffs.length}`;
+        innerUnchangedBucket.label = `${innerUnchangedBucket.count}/${bucketedBenchmarkDiffs.length}`;
+        innerChangedBucket.label = `${innerChangedBucket.count}/${bucketedBenchmarkDiffs.length}`;
         const bucketContents = buckets.map((bucket, i) => bucketContentsObject[i]).filter(bucketContent => bucketContent);
         const cx = '28%';
 
@@ -172,7 +150,7 @@ export default class TwoRunsSummaryChart extends React.Component {
                 <Tooltip
                          content={ <ChartTooltip /> }
                          offset={ 10 }
-                         position={ { x: 490, y: 9 } }
+                         position={ { x: 490, y: 54 } }
                          cursor={ { stroke: green, strokeWidth: 2 } }
                          wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
                 <Legend verticalAlign='middle' align='right' layout='vertical' />
@@ -247,7 +225,7 @@ class ChartTooltip extends React.Component {
         }
 
         return (
-            <div style={ { padding: 18 } }>
+            <div style={ { paddingRight: 18 } }>
               <div style={ { textAlign: 'center' } }>
                 <h5 style={ { color: dataPiece.color } }><u>{ dataPiece.name }</u></h5>
               </div>

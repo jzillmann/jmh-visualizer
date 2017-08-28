@@ -93,7 +93,10 @@ export default class App extends React.Component {
                 let activeCategory;
                 if (benchmarkSelection.runNames.length == 1) {
                     categories = appState.singleRunCategories;
-                    activeCategory = appState.activeCategory ? appState.activeCategory : categories[0];
+                    activeCategory = appState.activeCategory;
+                    if (!activeCategory || !categories.includes(activeCategory)) {
+                        activeCategory = categories[0];
+                    }
                     mainView = <SingleRunView
                                               runName={ benchmarkSelection.runNames[0] }
                                               benchmarkBundles={ filteredBenchmarkBundles }

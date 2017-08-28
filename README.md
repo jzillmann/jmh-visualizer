@@ -14,6 +14,7 @@ Comes with 2 companion projects:
   - Link to the original JSON
   - Show individual runs as tooltip
 - Compare the benchmarks of 2 runs (two JSON files) grouped by benchmark class
+  - Summary of noteable changes
   - Vertical bar-chart from -100% to 100%
   - Link to the original JSON
   - Show score and error of both runs in tooltip
@@ -22,6 +23,7 @@ Comes with 2 companion projects:
 
 ## Major Changes
 
+- **Aug 2017** - 0.6 Layout change & Summary support
 - **Jul 2017** - 0.5 Focussing of benchmarks
 - **May 2017** - 0.4 Secondary Metrics support
 - **Apr 2017** - 0.3 Error Bars & Params support

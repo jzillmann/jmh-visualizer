@@ -100,7 +100,11 @@ export default class TwoRunsSummaryView extends React.Component {
                        { i }
                      </td>
                      <td>
-                       <Tooltip id={ 'class' + i } place="right">
+                       <Tooltip
+                                id={ 'class' + i }
+                                place='top'
+                                globalEventOff='click'
+                                effect='float'>
                          { benchmarkDiff.bundleKey + '#' + benchmarkDiff.benchmarkMethod.name + '()' }
                        </Tooltip>
                        <span

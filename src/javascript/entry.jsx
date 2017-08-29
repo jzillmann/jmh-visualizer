@@ -38,13 +38,21 @@ const appState = new AppState({
     examples: examples,
 }, history);
 
+
 if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
     appState.initBenchmarkRuns(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef
         name: runName,
         benchmarks: providedBenchmarkStore[runName] // eslint-disable-line no-undef
     })));
 } else {
-    appState.initBenchmarkRuns([]);
+    const urlHash = window.location.hash;
+    if (urlHash === '#singleRunExample') {
+        appState.initBenchmarkRuns(appState.examples.singleRunExample);
+    } else if (urlHash === '#twoRunsExample') {
+        appState.initBenchmarkRuns(appState.examples.twoRunsExample);
+    } else {
+        appState.initBenchmarkRuns([]);
+    }
 }
 
 // appState.initBenchmarkRuns(examples.singleRunExample)

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Tooltip, Cell, PieChart, Pie, Text, Legend } from 'recharts';
+import { Tooltip, Cell, PieChart, Pie, Text, Legend, Surface, Symbols } from 'recharts';
 
-import { blue, green, yellow, tooltipBackground, blues, greens, reds } from 'functions/colors.js'
+import { blue, green, yellow, red, tooltipBackground, greens, reds } from 'functions/colors.js'
 
 // A Pie chart giving a quick overview on number of increases/decrease from run1 vs run2
 export default class TwoRunsSummaryChart extends React.Component {
@@ -76,14 +76,19 @@ export default class TwoRunsSummaryChart extends React.Component {
 
 
 
-        const innerUnchangedBucket = {
+        const unchangedBucket = {
             name: `Unchanged (<${minDeviation}%)`,
             type: 'inner',
             count: 0
 
         };
-        const innerChangedBucket = {
-            name: `Changed (>${minDeviation}%)`,
+        const improvedBucket = {
+            name: `Improved (>${minDeviation}%)`,
+            type: 'inner',
+            count: 0
+        };
+        const worsenedBucket = {
+            name: `Declined (<-${minDeviation}%)`,
             type: 'inner',
             count: 0
         };
@@ -91,9 +96,13 @@ export default class TwoRunsSummaryChart extends React.Component {
         bucketedBenchmarkDiffs.forEach(benchmarkDiff => {
             const bucketId = benchmarkDiff.bucketId;
             if (bucketId == -1) {
-                innerUnchangedBucket.count++;
+                unchangedBucket.count++;
             } else {
-                innerChangedBucket.count++;
+                if (bucketId < 3) {
+                    improvedBucket.count++;
+                } else {
+                    worsenedBucket.count++;
+                }
                 if (!bucketContentsObject[bucketId]) {
                     bucketContentsObject[bucketId] = {
                         name: buckets[bucketId].name,
@@ -110,8 +119,9 @@ export default class TwoRunsSummaryChart extends React.Component {
                 });
             }
         });
-        innerUnchangedBucket.label = `${innerUnchangedBucket.count}/${bucketedBenchmarkDiffs.length}`;
-        innerChangedBucket.label = `${innerChangedBucket.count}/${bucketedBenchmarkDiffs.length}`;
+        unchangedBucket.label = `${unchangedBucket.count}/${bucketedBenchmarkDiffs.length}`;
+        improvedBucket.label = `${improvedBucket.count}/${bucketedBenchmarkDiffs.length}`;
+        worsenedBucket.label = `${worsenedBucket.count}/${bucketedBenchmarkDiffs.length}`;
         const bucketContents = buckets.map((bucket, i) => bucketContentsObject[i]).filter(bucketContent => bucketContent);
         const cx = '28%';
 
@@ -119,7 +129,7 @@ export default class TwoRunsSummaryChart extends React.Component {
             <div style={ { marginLeft: 18 } }>
               <PieChart width={ 450 } height={ 270 }>
                 <Pie
-                     data={ [innerUnchangedBucket, innerChangedBucket] }
+                     data={ [unchangedBucket, improvedBucket, worsenedBucket] }
                      valueKey='count'
                      cx={ cx }
                      cy={ '50%' }
@@ -130,7 +140,8 @@ export default class TwoRunsSummaryChart extends React.Component {
                      label={ customInnerPieLabel }
                      animationDuration={ 540 }>
                   <Cell key='unchanged' fill={ blue } />
-                  <Cell key='changed' fill={ blues[1] } />
+                  <Cell key='improved' fill={ green } />
+                  <Cell key='improved' fill={ red } />
                 </Pie>
                 <Pie
                      data={ bucketContents }
@@ -153,11 +164,44 @@ export default class TwoRunsSummaryChart extends React.Component {
                          position={ { x: 490, y: 54 } }
                          cursor={ { stroke: green, strokeWidth: 2 } }
                          wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
-                <Legend verticalAlign='middle' align='right' layout='vertical' />
+                <Legend
+                        content={ renderLegend }
+                        verticalAlign='middle'
+                        align='right'
+                        layout='vertical' />
               </PieChart>
             </div>
         )
     }
+}
+
+function renderLegend(props) {
+    const {payload} = props; // eslint-disable-line react/prop-types
+    let inner = true;
+    return (
+        <ul>
+          { payload.map((entry, index) => {
+                const showSeparator = inner && entry.payload.type !== 'inner';
+                if (showSeparator) {
+                    inner = false;
+                }
+                return (
+                    <div className="legend-item" key={ `item-${index}` }>
+                      { showSeparator &&
+                        <hr/> }
+                      <Surface width={ 10 } height={ 10 }>
+                        <Symbols
+                                 cx={ 5 }
+                                 cy={ 5 }
+                                 type="square"
+                                 size={ 54 }
+                                 fill={ entry.color } />
+                      </Surface> <span>{ entry.value }</span>
+                    </div>
+                )
+            }) }
+        </ul>
+    );
 }
 
 const RADIAN = Math.PI / 180;

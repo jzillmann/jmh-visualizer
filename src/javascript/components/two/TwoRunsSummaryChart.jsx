@@ -77,13 +77,13 @@ export default class TwoRunsSummaryChart extends React.Component {
 
 
         const unchangedBucket = {
-            name: `Unchanged (<${minDeviation}%)`,
+            name: `Unchanged (+-${minDeviation}%)`,
             type: 'inner',
             count: 0
 
         };
         const improvedBucket = {
-            name: `Improved (>${minDeviation}%)`,
+            name: `Improved (>+${minDeviation}%)`,
             type: 'inner',
             count: 0
         };

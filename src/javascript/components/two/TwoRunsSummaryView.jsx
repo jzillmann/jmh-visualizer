@@ -39,7 +39,7 @@ export default class TwoRunsSummaryView extends React.Component {
         };
     }
 
-    changeIgnoreLevelChange(number) {
+    changeMinDeviation(number) {
         if (number != this.state.minDeviation) {
             this.setState({
                 minDeviation: number
@@ -162,7 +162,7 @@ export default class TwoRunsSummaryView extends React.Component {
                              max={ 50 }
                              value={ minDeviation }
                              step={ 5 }
-                             onChange={ this.changeIgnoreLevelChange.bind(this) }
+                             onChange={ this.changeMinDeviation.bind(this) }
                              labels={ { 0: '0%', 5: '5%', 10: '10%', 20: '20%', 50: '50%' } }
                              format={ (value) => value + '%' } />
                      </Col>

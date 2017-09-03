@@ -114,3 +114,11 @@ a {
     display:inline;
     color: green;
 }
+
+.rangeslider__label-list .rangeslider__label {
+  position: absolute;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+  top: 23px;
+}

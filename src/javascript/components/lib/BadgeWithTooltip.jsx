@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
 import Badge from 'react-bootstrap/lib/Badge'
-import Tooltip from 'react-bootstrap/lib/Tooltip'
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
+import Tooltipped from 'components/lib/Tooltipped.jsx'
 
 export default class BadgeWithTooltip extends Component {
 
@@ -18,17 +17,13 @@ export default class BadgeWithTooltip extends Component {
 
     render() {
         const {name, tooltip} = this.props;
-        const tooltipComponent = <Tooltip id="tooltip">
-                                   { tooltip }
-                                 </Tooltip>;
-
         return (
-            <OverlayTrigger placement="top" overlay={ tooltipComponent }>
+            <Tooltipped tooltip={ tooltip } position='top'>
               <Badge bsStyle="default">
                 { name }
                 { this.props.children }
               </Badge>
-            </OverlayTrigger>
+            </Tooltipped>
         );
     }
 }

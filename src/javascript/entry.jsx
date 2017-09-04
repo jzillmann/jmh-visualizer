@@ -12,6 +12,7 @@ import App from 'components/App.jsx';
 
 import createHistory from 'history/createBrowserHistory'
 import 'bootstrap/dist/css/bootstrap.css';
+import '../css/common.css';
 import '../css/sidenavi.css';
 
 function render(appState) {

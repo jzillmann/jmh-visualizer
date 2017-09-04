@@ -1,14 +1,11 @@
 import React from 'react';
 
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
-import Tooltip from 'react-bootstrap/lib/Tooltip'
 import Badge from 'react-bootstrap/lib/Badge'
 
 import Toggle from 'react-toggle'
 import "react-toggle/style.css"
 
-import HelpIcon from 'react-icons/lib/md/help-outline'
-
+import Tooltipped from 'components/lib/Tooltipped.jsx'
 import TocElement from 'components/TocElement.jsx'
 import SingleRunBundle from 'components/single/SingleRunBundle.jsx'
 import { getUniqueBenchmarkModesAccrossBundles } from 'functions/parse.js'
@@ -47,18 +44,13 @@ export default class SingleRunView extends React.Component {
             const axisScalesSyncPossible = benchmarkModes.length == 1;
             const switchTooltip = axisScalesSyncPossible ? ' Sync Axis Scales' : `No Axis Scale syncing possible because of multiple benchmark modes: ${benchmarkModes}!`;
             synchronizeAxisScalesToggle = <div>
-                                            <Toggle
-                                                    id='scales-sync'
-                                                    checked={ axisScalesSyncPossible && axisScalesSync }
-                                                    disabled={ !axisScalesSyncPossible }
-                                                    onChange={ this.changeScalesSync.bind(this) } />
-                                            <OverlayTrigger placement="bottom" overlay={ <Tooltip id="switchTooltip">
-                                                                                           { switchTooltip }
-                                                                                         </Tooltip> }>
-                                              <label htmlFor='scales-sync'>
-                                                <HelpIcon/>
-                                              </label>
-                                            </OverlayTrigger>
+                                            <Tooltipped tooltip={ switchTooltip } position='bottom'>
+                                              <Toggle
+                                                      id='scales-sync'
+                                                      checked={ axisScalesSyncPossible && axisScalesSync }
+                                                      disabled={ !axisScalesSyncPossible }
+                                                      onChange={ this.changeScalesSync.bind(this) } />
+                                            </Tooltipped>
                                           </div>;
             if (axisScalesSync && axisScalesSyncPossible) {
                 dataMax = 0;

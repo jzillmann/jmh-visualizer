@@ -3,14 +3,12 @@ import React from 'react';
 import FormGroup from 'react-bootstrap/lib/FormGroup'
 import InputGroup from 'react-bootstrap/lib/InputGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
-import Tooltip from 'react-bootstrap/lib/Tooltip'
 
-import HelpIcon from 'react-icons/lib/md/help-outline'
 import DetailsIcon from 'react-icons/lib/fa/search-plus'
 import EyeIcon from 'react-icons/lib/fa/eye'
 
 import TocList from 'components/TocList.jsx'
+import Tooltipped from 'components/lib/Tooltipped.jsx'
 
 // Side bar for SingleRunView, TwoRunViews, etc...
 export default class RunSideBar extends React.Component {
@@ -50,23 +48,15 @@ export default class RunSideBar extends React.Component {
         return <div>
                  <FormGroup controlId="formControlsSelectMultiple" bsSize="small">
                    <InputGroup>
-                     <FormControl
-                                  componentClass="select"
-                                  onChange={ (event) => selectMetricFunction(event.target.value) }
-                                  value={ metricExtractor.metricKey }
-                                  disabled={ metrics.length < 2 }>
-                       { metricsOptions }
-                     </FormControl>
-                     { metrics.length == 1 &&
-                       <InputGroup.Addon>
-                         <OverlayTrigger placement="bottom" overlay={ <Tooltip id="tooltip">
-                                                                        No secondary metrics found!
-                                                                      </Tooltip> }>
-                           <div>
-                             <HelpIcon />
-                           </div>
-                         </OverlayTrigger>
-                       </InputGroup.Addon> }
+                     <Tooltipped tooltip="No secondary metrics found!!" position="bottom" disabled={ metrics.length > 1 }>
+                       <FormControl
+                                    componentClass="select"
+                                    onChange={ (event) => selectMetricFunction(event.target.value) }
+                                    value={ metricExtractor.metricKey }
+                                    disabled={ metrics.length < 2 }>
+                         { metricsOptions }
+                       </FormControl>
+                     </Tooltipped>
                    </InputGroup>
                  </FormGroup>
                  <hr />

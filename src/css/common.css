@@ -1,0 +1,27 @@
+html, body {
+   height: 100%;
+   width: 100%;
+   margin: 0;
+   padding: 0;
+}
+
+a {
+    cursor: pointer;
+}
+
+.clickable {
+    cursor: pointer;
+}
+.clickable:hover {
+    color: #337ab7;
+}
+
+.superscript { position: relative; top: -0.5em; font-size: 80%; }
+
+.rangeslider__label-list .rangeslider__label {
+  position: absolute;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+  top: 23px;
+}

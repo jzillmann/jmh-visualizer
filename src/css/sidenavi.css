@@ -1,32 +1,3 @@
-html, body {
-   height: 100%;
-   width: 100%;
-   margin: 0;
-   padding: 0;
-}
-
-a {
-    cursor: pointer;
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.group {
-    background: yellow;
-    width: 200px;
-    height: 500px;
-}
-.group .subgroup {
-    background: orange;
-    width: 150px;
-    height: 200px;
-}
-.fixed {
-    position: fixed;
-}
-
 .bs-docs-sidebar .nav>li>div>a {
     color: inherit;
 } 
@@ -113,12 +84,4 @@ a {
 .bs-docs-sidebar .nav .nav>li>div>span.focused {
     display:inline;
     color: green;
-}
-
-.rangeslider__label-list .rangeslider__label {
-  position: absolute;
-  font-size: 14px;
-  cursor: pointer;
-  display: inline-block;
-  top: 23px;
 }

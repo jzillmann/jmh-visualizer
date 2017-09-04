@@ -6,8 +6,6 @@ import Col from 'react-bootstrap/lib/Col'
 import Table from 'react-bootstrap/lib/Table'
 import Badge from 'react-bootstrap/lib/Badge'
 
-import Tooltip from 'react-tooltip'
-
 // import UpIcon from 'react-icons/lib/fa/thumbs-up'
 // import DownIcon from 'react-icons/lib/fa/thumbs-down'
 import UpIcon from 'react-icons/lib/fa/location-arrow'
@@ -15,6 +13,8 @@ import UpIcon from 'react-icons/lib/fa/location-arrow'
 
 import Slider from 'react-rangeslider'
 import 'react-rangeslider/lib/index.css'
+
+import Tooltipped from 'components/lib/Tooltipped.jsx'
 
 import TwoRunsSummaryChart from 'components/two/TwoRunsSummaryChart.jsx'
 import { getMetricType } from 'models/MetricType.js'
@@ -100,19 +100,9 @@ export default class TwoRunsSummaryView extends React.Component {
                        { i }
                      </td>
                      <td>
-                       <Tooltip
-                                id={ 'class' + i }
-                                place='top'
-                                globalEventOff='click'
-                                effect='float'>
-                         { benchmarkDiff.bundleKey + '#' + benchmarkDiff.benchmarkMethod.name + '()' }
-                       </Tooltip>
-                       <span
-                             data-tip
-                             data-for={ 'class' + i }
-                             style={ { cursor: 'pointer' } }
-                             onClick={ detailBenchmarkBundleFunction.bind(null, benchmarkDiff.bundleKey) }>{ benchmarkDiff.bundleName + ' - ' + benchmarkDiff.benchmarkMethod.name + ' ' }</span>
-                       <span style={ { color: color } }>{ icon } { benchmarkDiff.scoreDiff }%</span>
+                       <Tooltipped tooltip={ benchmarkDiff.bundleKey + '#' + benchmarkDiff.benchmarkMethod.name + '()' } position='right'>
+                         <span className='clickable' onClick={ detailBenchmarkBundleFunction.bind(null, benchmarkDiff.bundleKey) }>{ benchmarkDiff.bundleName + ' - ' + benchmarkDiff.benchmarkMethod.name + ' ' } <span style={ { color: color } }>{ icon } { benchmarkDiff.scoreDiff }%</span></span>
+                       </Tooltipped>
                      </td>
                      <td>
                        { benchmarkDiff.benchmarkMethod.params ? benchmarkDiff.benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') : '' }

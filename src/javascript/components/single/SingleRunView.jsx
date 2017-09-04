@@ -42,7 +42,7 @@ export default class SingleRunView extends React.Component {
         if (focusedBundles.size > 1) {
             const benchmarkModes = getUniqueBenchmarkModesAccrossBundles(benchmarkBundles, metricExtractor);
             const axisScalesSyncPossible = benchmarkModes.length == 1;
-            const switchTooltip = axisScalesSyncPossible ? ' Sync Axis Scales' : `No Axis Scale syncing possible because of multiple benchmark modes: ${benchmarkModes}!`;
+            const switchTooltip = axisScalesSyncPossible ? `Sync Axis Scales: ${axisScalesSync?'on':'off'}` : `No Axis Scale syncing possible because of multiple benchmark modes: ${benchmarkModes}!`;
             synchronizeAxisScalesToggle = <div>
                                             <Tooltipped tooltip={ switchTooltip } position='bottom'>
                                               <Toggle

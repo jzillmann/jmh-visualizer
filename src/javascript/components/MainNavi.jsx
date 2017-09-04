@@ -12,7 +12,7 @@ import LinkIcon from 'react-icons/lib/fa/external-link'
 
 import AppLogo from 'components/AppLogo.jsx';
 import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
-import TwoRunSelectionBar from 'components/TwoRunSelectionBar.jsx'
+import RunSelectionBar from 'components/RunSelectionBar.jsx'
 import { blue } from 'functions/colors.js'
 
 export default class MainNavi extends React.Component {
@@ -106,8 +106,16 @@ function createRunSelectionBar(runs, runSelection, selectRunsFunction) {
         return null;
     }
     if (runs.length == 2) {
-        return <TwoRunSelectionBar runs={ runs } runSelection={ runSelection } selectRunsFunction={ selectRunsFunction } />;
+        return <RunSelectionBar
+                                title="Compare View"
+                                runs={ runs }
+                                runSelection={ runSelection }
+                                selectRunsFunction={ selectRunsFunction } />;
     }
 
-    throw "Not Yet Implemented!"
+    return <RunSelectionBar
+                            title="All"
+                            runs={ runs }
+                            runSelection={ runSelection }
+                            selectRunsFunction={ selectRunsFunction } />;
 }

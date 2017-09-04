@@ -25,13 +25,13 @@ export default class SingleDetailView extends React.Component {
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
         const scoreMetricView = <TocElement name={ 'Score' } key={ 'Score' }>
-                                  <h4>Score <sup>{ benchmarkModeBadges }</sup></h4>
+                                  <h4>Score <span className='superscript'>{ benchmarkModeBadges }</span></h4>
                                   <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, primaryMetricExtractor) } />
                                   <br/>
                                   <br/>
                                 </TocElement>;
         const secondaryMetricViews = secondaryMetrics.map(secondaryMetric => <TocElement name={ secondaryMetric } key={ secondaryMetric }>
-                                                                               <h4>{ secondaryMetric + ' ' }<sup>{ createMetricBadge(secondaryMetric) }</sup></h4>
+                                                                               <h4>{ secondaryMetric + ' ' }<span className='superscript'>{ createMetricBadge(secondaryMetric) }</span></h4>
                                                                                <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, new SecondaryMetricExtractor(secondaryMetric)) } />
                                                                                <br/>
                                                                                <br/>

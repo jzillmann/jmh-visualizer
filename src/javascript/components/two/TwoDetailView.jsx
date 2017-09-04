@@ -25,7 +25,7 @@ export default class TwoDetailView extends React.Component {
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
         const scoreMetricView = <TocElement name={ 'Score' } key={ 'Score' }>
-                                  <h4>Score <sup>{ benchmarkModeBadges }</sup></h4>
+                                  <h4>Score <span className='superscript'>{ benchmarkModeBadges }</span></h4>
                                   <DiffBarChartView runNames={ runNames } metricExtractor={ primaryMetricExtractor } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, primaryMetricExtractor) } />
                                   <br/>
                                   <br/>
@@ -33,7 +33,7 @@ export default class TwoDetailView extends React.Component {
         const secondaryMetricViews = secondaryMetrics.map(secondaryMetric => {
             const metricExtractor = new SecondaryMetricExtractor(secondaryMetric);
             return <TocElement name={ secondaryMetric } key={ secondaryMetric }>
-                     <h4>{ secondaryMetric + ' ' }<sup>{ createMetricBadge(secondaryMetric) }</sup></h4>
+                     <h4>{ secondaryMetric + ' ' }<span className='superscript'>{ createMetricBadge(secondaryMetric) }</span></h4>
                      <DiffBarChartView runNames={ runNames } metricExtractor={ metricExtractor } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, metricExtractor) } />
                      <br/>
                      <br/>

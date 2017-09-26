@@ -6,6 +6,7 @@ import BenchmarkRun from 'models/BenchmarkRun.js';
 import Examples from 'models/Examples.js';
 import { exampleRun1 } from 'exampleBenchmark1.js';
 import { exampleRun2 } from 'exampleBenchmark2.js';
+import { exampleRun3 } from 'exampleBenchmark3.js';
 
 import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
 import App from 'components/App.jsx';
@@ -30,6 +31,10 @@ const examples = new Examples({
     run2: new BenchmarkRun({
         name: 'run2',
         benchmarks: exampleRun2
+    }),
+    run3: new BenchmarkRun({
+        name: 'run3',
+        benchmarks: exampleRun3
     })
 });
 
@@ -51,9 +56,9 @@ if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
         appState.initBenchmarkRuns(appState.examples.singleRunExample);
     } else if (urlHash === '#twoRunsExample') {
         appState.initBenchmarkRuns(appState.examples.twoRunsExample);
+    } else if (urlHash === '#multiRunExample') {
+        appState.initBenchmarkRuns(appState.examples.multiRunExample);
     } else {
         appState.initBenchmarkRuns([]);
     }
 }
-
-// appState.initBenchmarkRuns(examples.singleRunExample)

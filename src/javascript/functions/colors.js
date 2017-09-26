@@ -6,7 +6,7 @@ export const lightBlack = '#143049';
 export const brown = '#b77033';
 
 //taken from http://www.color-hex.com/color/337ab7 => 3 tints from related colors
-export const blues = [blue, '#22527b', '#63a0d4'];
+export const blues = ['#22527b', blue, '#63a0d4'];
 export const greens = ['#7ab733', '#a1cc70', '#c9e2ad'];
 export const browns = [brown, '#cc9a70', '#e2c5ad'];
 export const violets = ['#b7337a', '#cc70a1', '#e9c1d7'];
@@ -23,5 +23,15 @@ export const barColors = [
     ...yellows,
     ...reds,
 ];
+
+export const lineColors = [];
+
+for (var i = 0; i <= 3; i++) {
+    lineColors.push(blues[i]);
+    lineColors.push(greens[i]);
+    lineColors.push(browns[i]);
+    lineColors.push(violets[i]);
+    lineColors.push(yellows[i]);
+}
 
 export const tooltipBackground = '#efefef';

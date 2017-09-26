@@ -8,11 +8,12 @@ export default class UploadSideBar extends React.Component {
     static propTypes = {
         fileUploader: React.PropTypes.object.isRequired,
         loadSingleRunExampleFunction: React.PropTypes.func.isRequired,
-        loadTwoRunExampleFunction: React.PropTypes.func.isRequired,
+        loadTwoRunsExampleFunction: React.PropTypes.func.isRequired,
+        loadMultiRunExampleFunction: React.PropTypes.func.isRequired,
     };
 
     render() {
-        const {fileUploader, loadSingleRunExampleFunction, loadTwoRunExampleFunction} = this.props;
+        const {fileUploader, loadSingleRunExampleFunction, loadTwoRunsExampleFunction, loadMultiRunExampleFunction} = this.props;
         return <div style={ { whiteSpace: 'nowrap' } }>
                  <div>
                    <div className="btn btn-default" style={ { position: 'relative' } }>
@@ -34,7 +35,12 @@ export default class UploadSideBar extends React.Component {
                  <div>
                    <PointingHandIcon/>
                    { ' ' }
-                   <a onClick={ loadTwoRunExampleFunction }>Load Two Runs Example</a>
+                   <a onClick={ loadTwoRunsExampleFunction }>Load Two Runs Example</a>
+                 </div>
+                 <div>
+                   <PointingHandIcon/>
+                   { ' ' }
+                   <a onClick={ loadMultiRunExampleFunction }>Load Multi Run Example</a>
                  </div>
                  <br/>
                </div>

@@ -7,11 +7,6 @@ export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor:Met
 
     const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
     const data = benchmarkBundle.benchmarkMethods.map((benchmarkMethod, i) => {
-        let benchmarkKey = benchmarkMethod.name;
-        if (benchmarkMethod.params) {
-            benchmarkKey += ' [' + benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') + ']';
-        }
-
         const firstRunBenchmark = benchmarkMethod.benchmarks[0];
         const secondRunBenchmark = benchmarkMethod.benchmarks[1];
 
@@ -33,7 +28,7 @@ export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor:Met
 
             return {
                 index: i,
-                name: benchmarkKey,
+                name: benchmarkMethod.key,
                 scoreDiff: scoreDiff,
                 scoreUnit: scoreUnit,
                 score1stRun: score1stRun,

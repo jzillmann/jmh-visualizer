@@ -17,6 +17,7 @@ export default class AppState {
         this.focusedBundles = new Set(); // [] bundleKeys
         this.singleRunCategories = ['Benchmarks'];
         this.twoRunsCategories = ['Summary', 'Benchmarks'];
+        this.multiRunCategories = ['Benchmarks'];
         this.activeCategory = null;
         this.history = history;
 

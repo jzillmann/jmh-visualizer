@@ -16,6 +16,9 @@ import TwoRunsView from 'components/two/TwoRunsView.jsx';
 import TwoRunsSummaryView from 'components/two/TwoRunsSummaryView.jsx';
 import TwoDetailView from 'components/two/TwoDetailView.jsx';
 
+import MultiRunView from 'components/multi/MultiRunView.jsx';
+import MultiRunDetailView from 'components/multi/MultiRunDetailView.jsx';
+
 import PrimaryMetricExtractor from 'models/extractor/PrimaryMetricExtractor.js'
 import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.js'
 
@@ -42,9 +45,11 @@ export default class App extends React.Component {
         if (benchmarkSelection.runNames.length == 0) {
             const fileUploader = new FileUploader(appState.uploadBenchmarkRuns);
             mainView = <UploadMainView fileUploader={ fileUploader } />;
-            sideBar = <UploadSideBar fileUploader={ fileUploader } loadSingleRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) } loadTwoRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) } />;
-        } else if (benchmarkSelection.runNames.length > 2) {
-            alert("More then 2 runs not supported!");
+            sideBar = <UploadSideBar
+                                     fileUploader={ fileUploader }
+                                     loadSingleRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) }
+                                     loadTwoRunsExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) }
+                                     loadMultiRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.multiRunExample) } />;
         } else {
             if (appState.uploadedBenchmarks) {
                 window.onbeforeunload = function() {
@@ -64,6 +69,8 @@ export default class App extends React.Component {
                     mainView = <SingleDetailView runName={ benchmarkSelection.runNames[0] } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
                 } else if (benchmarkSelection.runNames.length == 2) {
                     mainView = <TwoDetailView runNames={ benchmarkSelection.runNames } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
+                } else {
+                    mainView = <MultiRunDetailView runNames={ benchmarkSelection.runNames } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
                 }
                 sideBar = <DetailSideBar
                                          benchmarkBundle={ detailBundle }
@@ -121,6 +128,17 @@ export default class App extends React.Component {
                                                 metricExtractor={ metricExtractor }
                                                 detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                     }
+                } else {
+                    categories = appState.multiRunCategories;
+                    activeCategory = appState.activeCategory;
+                    if (!activeCategory || !categories.includes(activeCategory)) {
+                        activeCategory = categories[0];
+                    }
+                    mainView = <MultiRunView
+                                             runNames={ benchmarkSelection.runNames }
+                                             benchmarkBundles={ filteredBenchmarkBundles }
+                                             metricExtractor={ metricExtractor }
+                                             detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                 }
                 sideBar = <RunSideBar
                                       benchmarkBundles={ sideBarBenchmarks }

@@ -10,10 +10,6 @@ export default class FileUploader {
     }
 
     upload(files) {
-        if (files.length > 2) {
-            alert(`Maximum 2 files allowed to upload, but not ${files.length}!`)
-            return
-        }
         DoingWorkSpinner.show();
 
         const benchmarkRuns = [];

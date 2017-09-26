@@ -8,7 +8,6 @@ const lineColors = scaleOrdinal(schemeCategory20).range();
 import { tooltipBackground, red } from 'functions/colors.js'
 
 import MultiRunChartTooltip from 'components/multi/MultiRunChartTooltip.jsx'
-import MultiRunChartLineTooltip from 'components/multi/MultiRunChartLineTooltip.jsx'
 import { shouldRound, round } from 'functions/util.js'
 import { formatNumber } from 'functions/util.js'
 
@@ -87,8 +86,7 @@ export default class LineChartView extends React.Component {
                          isAnimationActive={ false } />;
         });
 
-        const tooltipContent = activeLine ? <MultiRunChartLineTooltip dataSet={ dataSet } activeLine={ activeLine } roundScores={ shouldRoundScores } /> : <MultiRunChartTooltip roundScores={ shouldRoundScores } />;
-        // const tooltip = activeLine ? undefined: <Tooltip content={ <MultiRunChartTooltip roundScores={ shouldRoundScores } /> } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />;
+        const tooltip = activeLine ? undefined : <Tooltip content={ <MultiRunChartTooltip roundScores={ shouldRoundScores } /> } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />;
         const scoreErrorArea = activeLine ? <Area
                                                   type='monotone'
                                                   dataKey={ activeLine + '-scoreError' }
@@ -104,8 +102,8 @@ export default class LineChartView extends React.Component {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip content={ tooltipContent } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
                 <Legend onMouseEnter={ this.activateLineFromLegend.bind(this) } onMouseLeave={ this.deactivateLine.bind(this) } />
+                { tooltip }
                 { lines }
                 { scoreErrorArea }
               </ComposedChart>

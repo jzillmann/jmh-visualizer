@@ -36,7 +36,7 @@ export default class UploadMainView extends React.Component {
                       activeStyle={ { borderColor: green, borderWidth: 3, borderStyle: 'dotted' } }>
               <div>
                 <h1 style={ { marginBottom: 20 } }>Dropzone</h1>
-                <h5>Drop one or two of your JMH JSON report file(s) here!</h5>
+                <h5>Drop your JMH JSON report file(s) here!</h5>
               </div>
               <h2><UploadIcon width={ 100 } height={ 100 } /></h2>
               <br/>

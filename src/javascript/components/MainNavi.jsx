@@ -20,6 +20,7 @@ export default class MainNavi extends React.Component {
     static propTypes = {
         runs: React.PropTypes.array.isRequired,
         runSelection: React.PropTypes.array.isRequired,
+        runView: React.PropTypes.string.isRequired,
         selectRunsFunction: React.PropTypes.func.isRequired
     };
 
@@ -29,9 +30,9 @@ export default class MainNavi extends React.Component {
     }
 
     render() {
-        const {runs, runSelection, selectRunsFunction} = this.props;
+        const {runs, runSelection, runView, selectRunsFunction} = this.props;
 
-        const selectionBar = createRunSelectionBar(runs, runSelection, selectRunsFunction);
+        const selectionBar = createRunSelectionBar(runs, runSelection, runView, selectRunsFunction);
 
         const aboutPopover = (
         <Popover id="popover-trigger-click-root-close" title={ `About JMH Visualizer - ${ process.env.version }` }>
@@ -101,21 +102,23 @@ export default class MainNavi extends React.Component {
     }
 }
 
-function createRunSelectionBar(runs, runSelection, selectRunsFunction) {
+function createRunSelectionBar(runs, runSelection, runView, selectRunsFunction) {
     if (runs.length <= 1) {
         return null;
     }
     if (runs.length == 2) {
         return <RunSelectionBar
-                                title="Compare View"
                                 runs={ runs }
                                 runSelection={ runSelection }
+                                runViews={ ['Summary', 'Compare'] }
+                                runView={ runView }
                                 selectRunsFunction={ selectRunsFunction } />;
     }
 
     return <RunSelectionBar
-                            title="All"
                             runs={ runs }
                             runSelection={ runSelection }
+                            runViews={ ['Summary', 'Compare'] }
+                            runView={ runView }
                             selectRunsFunction={ selectRunsFunction } />;
 }

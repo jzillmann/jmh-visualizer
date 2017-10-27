@@ -10,15 +10,14 @@ export default class AppState {
         this.renderFunction = options.renderFunction;
         this.examples = options.examples;
         this.benchmarkRuns = [];
-        this.benchmarkRunSelection = [];
+        this.runSelection = [];
         this.uploadedBenchmarks = false;
         this.selectedMetric = 'Score';
         this.detailedBundle = null; // bundleKey
         this.focusedBundles = new Set(); // [] bundleKeys
-        this.singleRunCategories = ['Benchmarks'];
-        this.twoRunsCategories = ['Summary', 'Benchmarks'];
-        this.multiRunCategories = ['Benchmarks'];
-        this.activeCategory = null;
+        this.benchmarkCategories = ['Benchmarks'];
+        this.activeCategory = 'Benchmarks';
+        this.runView = 'Summary';
         this.history = history;
 
         //bind functions
@@ -49,14 +48,17 @@ export default class AppState {
     // Init original benchmarks
     initBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
         this.benchmarkRuns = benchmarkRuns;
-        this.benchmarkRunSelection = Array(benchmarkRuns.length).fill(true);
+        this.runSelection = Array(benchmarkRuns.length).fill(true);
         this.renderFunction(this);
     }
 
-    // expects array of boolean with length of total JMH runs
-    selectBenchmarkRuns(benchmarkRunSelection) {
-        this.benchmarkRunSelection = benchmarkRunSelection;
-        this.renderFunction(this);
+    // expects array of boolean with length of total JMH runs + the runView ('Summary', 'Compare')
+    selectBenchmarkRuns(runSelection, runView) {
+        if (this.runView != runView || !arraysAreIdentical(this.runSelection, runSelection)) {
+            this.runSelection = runSelection;
+            this.runView = runView;
+            this.renderFunction(this);
+        }
     }
 
     goBack() {
@@ -94,7 +96,7 @@ export default class AppState {
 
     // Return the BenchmarkSelection based on the selected runs
     benchmarkSelection() {
-        const selectedBenchmarkRuns = this.benchmarkRuns.filter((run, pos) => this.benchmarkRunSelection[pos]);
+        const selectedBenchmarkRuns = this.benchmarkRuns.filter((run, pos) => this.runSelection[pos]);
         return new BenchmarkSelection({
             runNames: selectedBenchmarkRuns.map(run => run.name),
             benchmarkBundles: parseBenchmarkBundles(selectedBenchmarkRuns)
@@ -107,4 +109,14 @@ export default class AppState {
         this.renderFunction(this);
     }
 
+}
+
+function arraysAreIdentical(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+    for (var i = 0, len = arr1.length; i < len; i++) {
+        if (arr1[i] !== arr2[i]) {
+            return false;
+        }
+    }
+    return true;
 }

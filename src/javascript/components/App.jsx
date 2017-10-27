@@ -84,6 +84,9 @@ export default class App extends React.Component {
                 const metricType = appState.selectedMetric;
                 const metricExtractor = createMetricExtractor(appState.selectedMetric);
                 const focusedBundles = appState.focusedBundles;
+                const runView = appState.runView;
+                const categories = appState.benchmarkCategories;
+                const activeCategory = appState.activeCategory;
 
                 let filteredBenchmarkBundles = metricType === 'Score' ? benchmarkBundles : benchmarkBundles.filter(benchmarkBundle => benchmarkBundle.allBenchmarks().find(benchmark => metricExtractor.hasMetric(benchmark)));
                 let sideBarBenchmarks = filteredBenchmarkBundles;
@@ -96,14 +99,8 @@ export default class App extends React.Component {
                 }));
                 const metrics = Array.from(metricsSet);
 
-                let categories;
-                let activeCategory;
+
                 if (benchmarkSelection.runNames.length == 1) {
-                    categories = appState.singleRunCategories;
-                    activeCategory = appState.activeCategory;
-                    if (!activeCategory || !categories.includes(activeCategory)) {
-                        activeCategory = categories[0];
-                    }
                     mainView = <SingleRunView
                                               runName={ benchmarkSelection.runNames[0] }
                                               benchmarkBundles={ filteredBenchmarkBundles }
@@ -111,12 +108,11 @@ export default class App extends React.Component {
                                               metricExtractor={ metricExtractor }
                                               detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                 } else if (benchmarkSelection.runNames.length == 2) {
-                    categories = appState.twoRunsCategories;
-                    activeCategory = appState.activeCategory ? appState.activeCategory : categories[0];
-                    if (activeCategory === 'Summary') {
+                    if (runView === 'Summary') {
                         sideBarBenchmarks = [];
                         mainView = <TwoRunsSummaryView
                                                        runNames={ benchmarkSelection.runNames }
+                                                       runIndex={ [0, 1] }
                                                        benchmarkBundles={ filteredBenchmarkBundles }
                                                        minDeviation={ 5 }
                                                        metricExtractor={ metricExtractor }
@@ -129,16 +125,24 @@ export default class App extends React.Component {
                                                 detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                     }
                 } else {
-                    categories = appState.multiRunCategories;
-                    activeCategory = appState.activeCategory;
-                    if (!activeCategory || !categories.includes(activeCategory)) {
-                        activeCategory = categories[0];
+                    if (runView === 'Summary') {
+                        sideBarBenchmarks = [];
+                        const firstBenchmark = benchmarkSelection.runNames.length - 2;
+                        const secondBenchmark = benchmarkSelection.runNames.length - 1;
+                        mainView = <TwoRunsSummaryView
+                                                       runNames={ benchmarkSelection.runNames }
+                                                       runIndex={ [firstBenchmark, secondBenchmark] }
+                                                       benchmarkBundles={ filteredBenchmarkBundles }
+                                                       minDeviation={ 5 }
+                                                       metricExtractor={ metricExtractor }
+                                                       detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                    } else {
+                        mainView = <MultiRunView
+                                                 runNames={ benchmarkSelection.runNames }
+                                                 benchmarkBundles={ filteredBenchmarkBundles }
+                                                 metricExtractor={ metricExtractor }
+                                                 detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                     }
-                    mainView = <MultiRunView
-                                             runNames={ benchmarkSelection.runNames }
-                                             benchmarkBundles={ filteredBenchmarkBundles }
-                                             metricExtractor={ metricExtractor }
-                                             detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                 }
                 sideBar = <RunSideBar
                                       benchmarkBundles={ sideBarBenchmarks }
@@ -156,7 +160,11 @@ export default class App extends React.Component {
 
         return (
             <div>
-              <MainNavi runs={ appState.benchmarkRuns } runSelection={ appState.benchmarkRunSelection } selectRunsFunction={ appState.selectBenchmarkRuns } />
+              <MainNavi
+                        runs={ appState.benchmarkRuns }
+                        runSelection={ appState.runSelection }
+                        runView={ appState.runView }
+                        selectRunsFunction={ appState.selectBenchmarkRuns } />
               <div style={ { paddingBottom: 20 + 'px' } }>
                 <SplitPane left={ mainView } right={ sideBar } />
               </div>

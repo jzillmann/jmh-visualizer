@@ -25,3 +25,11 @@ a {
   display: inline-block;
   top: 23px;
 }
+
+.btn:focus {
+  outline: none;
+}
+
+.btn.btn-primary:active {
+  background-color: #337ab7 !important;
+}

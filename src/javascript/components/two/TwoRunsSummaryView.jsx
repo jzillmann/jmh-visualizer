@@ -27,6 +27,7 @@ export default class TwoRunsSummaryView extends React.Component {
     static propTypes = {
         runNames: React.PropTypes.array.isRequired,
         benchmarkBundles: React.PropTypes.array.isRequired,
+        runIndex: React.PropTypes.array.isRequired,
         minDeviation: React.PropTypes.number.isRequired,
         metricExtractor: React.PropTypes.object.isRequired,
         detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
@@ -48,13 +49,13 @@ export default class TwoRunsSummaryView extends React.Component {
     }
 
     render() {
-        const {runNames, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction} = this.props;
+        const {runNames, runIndex, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction} = this.props;
         const {minDeviation} = this.state;
 
         const benchmarkDiffs = flatten(benchmarkBundles.map(benchmarkBundle => benchmarkBundle.benchmarkMethods.map(benchmarkMethod => {
             const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
-            const firstRunBenchmark = benchmarkMethod.benchmarks[0];
-            const secondRunBenchmark = benchmarkMethod.benchmarks[1];
+            const firstRunBenchmark = benchmarkMethod.benchmarks[runIndex[0]];
+            const secondRunBenchmark = benchmarkMethod.benchmarks[runIndex[1]];
 
             if (firstRunBenchmark && secondRunBenchmark && metricExtractor.hasMetric(firstRunBenchmark) && metricExtractor.hasMetric(secondRunBenchmark)) {
                 const metricType = getMetricType(metricExtractor.extractType(firstRunBenchmark));
@@ -137,8 +138,8 @@ export default class TwoRunsSummaryView extends React.Component {
                      <Badge>
                        { benchmarkBundles.length }
                      </Badge> benchmark classes for '
-                     { runNames[0] }' and '
-                     { runNames[1] }' on metric '
+                     { runNames[runIndex[0]] }' and '
+                     { runNames[runIndex[1]] }' on metric '
                      { metricExtractor.metricKey }'.
                      <TwoRunsSummaryChart benchmarkDiffs={ benchmarkDiffs } minDeviation={ minDeviation } />
                      </Col>

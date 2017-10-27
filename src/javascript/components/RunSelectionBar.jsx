@@ -1,12 +1,18 @@
 import React from 'react';
 
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
+import SplitButton from 'react-bootstrap/lib/SplitButton'
+import Button from 'react-bootstrap/lib/Button'
+import MenuItem from 'react-bootstrap/lib/MenuItem'
+
 // A selection bar for 2 or more runs, selecting either a single run or a compare view
 export default class RunSelectionBar extends React.Component {
 
     static propTypes = {
-        title: React.PropTypes.string.isRequired,
         runs: React.PropTypes.array.isRequired,
         runSelection: React.PropTypes.array.isRequired,
+        runViews: React.PropTypes.array.isRequired,
+        runView: React.PropTypes.string.isRequired,
         selectRunsFunction: React.PropTypes.func.isRequired,
     };
 
@@ -25,35 +31,49 @@ export default class RunSelectionBar extends React.Component {
                 return false;
             }
         });
-        this.props.selectRunsFunction(runSelection);
+        this.props.selectRunsFunction(runSelection, this.props.runView);
     }
 
-    selectAll() {
+    selectAll(runView) {
         const runSelection = this.props.runs.map(() => true);
-        this.props.selectRunsFunction(runSelection);
+        this.props.selectRunsFunction(runSelection, runView);
     }
 
     render() {
-        const {title, runs, runSelection} = this.props;
+        const {runs, runSelection, runViews, runView} = this.props;
         const showAll = runSelection.reduce((showIt, showRun) => showIt && showRun);
 
-        const runComponents = runSelection.map((run, index) => <li key={ index } className={ !showAll && runSelection[index] ? 'active' : '' }>
-                                                                 <a role='button' onClick={ this.selectSingleRun.bind(this, index) } title={ runs[index].name }>
-                                                                   { runs[index].name }
-                                                                 </a>
-                                                               </li>);
+        const runComponents = runSelection.map((run, index) => {
+            const isActive = !showAll && runSelection[index];
+            return <Button
+                           key={ index }
+                           bsStyle={ isActive ? 'primary' : 'default' }
+                           bsSize="small"
+                           onClick={ this.selectSingleRun.bind(this, index) }>
+                     { runs[index].name }
+                   </Button>
+        });
+
+        const runViewMenuItems = runViews.map(runViewLabel => <MenuItem key={ runViewLabel } onClick={ this.selectAll.bind(this, runViewLabel) }>
+                                                              { runViewLabel }
+                                                              </MenuItem>);
 
         return (
-            <div style={ { textAlign: 'center', marginTop: '-20px', marginBottom: '-10px' } }>
-              <ul className='pagination pagination-sm'>
+            <div style={ { textAlign: 'center', marginTop: '-9px', marginBottom: '15px' } }>
+              <ButtonGroup>
                 { runComponents }
-                { ' ' }
-                <li key={ 'showAll' } className={ showAll ? 'active' : '' }>
-                  <a role='button' onClick={ ::this.selectAll }>
-                    { title }
-                  </a>
-                </li>
-              </ul>
+              </ButtonGroup>
+              { ' ' }
+              <ButtonGroup>
+                <SplitButton
+                             id='all'
+                             title={ runView }
+                             bsStyle={ showAll ? 'primary' : 'default' }
+                             bsSize="small"
+                             onClick={ this.selectAll.bind(this, runView) }>
+                  { runViewMenuItems }
+                </SplitButton>
+              </ButtonGroup>
             </div>
         );
     }

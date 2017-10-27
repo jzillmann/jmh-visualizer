@@ -27,6 +27,7 @@ export default class BarChartView extends React.Component {
         const chartHeight = 100 + dataSet.data.length * dataSet.barGroups.length * 36;
         const maxMethodNameLength = dataSet.data.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current), 32);
 
+        const singleBar = dataSet.barGroups.length == 1;
         const bars = dataSet.barGroups.map((barGroup, i) => {
 
             const BarLabel = (props) => {
@@ -62,8 +63,8 @@ export default class BarChartView extends React.Component {
             return <Bar
                         key={ barGroup }
                         dataKey={ barGroup }
-                        stroke={ barColors[i] }
-                        fill={ barColors[i] }
+                        stroke={ singleBar ? blue : barColors[i] }
+                        fill={ singleBar ? blue : barColors[i] }
                         unit={ ` ${dataSet.scoreUnit}` }
                         isAnimationActive={ true }
                         animationDuration={ 540 }

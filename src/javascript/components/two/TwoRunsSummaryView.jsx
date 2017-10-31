@@ -109,7 +109,7 @@ export default class TwoRunsSummaryView extends React.Component {
                        { benchmarkDiff.benchmarkMethod.params ? benchmarkDiff.benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') : '' }
                      </td>
                      <td>
-                       { benchmarkDiff.benchmarkMethod.benchmarks[1].mode + ' in ' + benchmarkDiff.scoreUnit }
+                       { benchmarkDiff.benchmarkMethod.benchmarks[runIndex[1]].mode + ' in ' + benchmarkDiff.scoreUnit }
                      </td>
                      <td>
                        <div>

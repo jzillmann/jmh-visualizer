@@ -19,8 +19,7 @@ export default class MainNavi extends React.Component {
 
     static propTypes = {
         runs: React.PropTypes.array.isRequired,
-        runSelection: React.PropTypes.array.isRequired,
-        runView: React.PropTypes.string.isRequired,
+        viewSelection: React.PropTypes.object.isRequired,
         selectRunsFunction: React.PropTypes.func.isRequired
     };
 
@@ -30,9 +29,9 @@ export default class MainNavi extends React.Component {
     }
 
     render() {
-        const {runs, runSelection, runView, selectRunsFunction} = this.props;
+        const {runs, viewSelection, selectRunsFunction} = this.props;
 
-        const selectionBar = createRunSelectionBar(runs, runSelection, runView, selectRunsFunction);
+        const selectionBar = createRunSelectionBar(runs, viewSelection, selectRunsFunction);
 
         const aboutPopover = (
         <Popover id="popover-trigger-click-root-close" title={ `About JMH Visualizer - ${ process.env.version }` }>
@@ -102,23 +101,16 @@ export default class MainNavi extends React.Component {
     }
 }
 
-function createRunSelectionBar(runs, runSelection, runView, selectRunsFunction) {
+function createRunSelectionBar(runs, viewSelection, selectRunsFunction) {
     if (runs.length <= 1) {
         return null;
     }
-    if (runs.length == 2) {
-        return <RunSelectionBar
-                                runs={ runs }
-                                runSelection={ runSelection }
-                                runViews={ ['Summary', 'Compare'] }
-                                runView={ runView }
-                                selectRunsFunction={ selectRunsFunction } />;
-    }
+
 
     return <RunSelectionBar
                             runs={ runs }
-                            runSelection={ runSelection }
-                            runViews={ ['Summary', 'Compare'] }
-                            runView={ runView }
+                            runSelection={ viewSelection.runSelection }
+                            runViews={ viewSelection.getPossibleRunViews() }
+                            runView={ viewSelection.runView }
                             selectRunsFunction={ selectRunsFunction } />;
 }

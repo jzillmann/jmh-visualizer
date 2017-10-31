@@ -2,20 +2,20 @@
 export default class ViewSelection {
 
     constructor() {
-        this.hasBenchmarks = false;
+        this.numberOfBenchmarkRuns = 0;
         this.uploadedBenchmarks = false;
         this.detailedBenchmarkBundle = null; // bundleKey
         this.focusedBundles = new Set(); // bundleKeys[]
-        this.runView = 'Summary';
+        this.runView = null;
         this.runSelection = []; // boolean[runs]
     }
 
     showUploadView() {
-        return !this.hasBenchmarks;
+        return this.numberOfBenchmarkRuns == 0;
     }
 
     shouldPreventPageReload() {
-        return this.hasBenchmarks && this.uploadedBenchmarks;
+        return this.numberOfBenchmarkRuns > 0 && this.uploadedBenchmarks;
     }
 
     showDetailedView() {
@@ -23,10 +23,10 @@ export default class ViewSelection {
     }
 
     showSummaryView() {
-        if (this.runView !== 'Summary') {
+        if (this.numberOfBenchmarkRuns < 2) {
             return false;
         }
-        if (this.runSelection.length < 2) {
+        if (this.runView !== 'Summary') {
             return false;
         }
         for ( var runSelected of this.runSelection ) {
@@ -41,6 +41,14 @@ export default class ViewSelection {
         return this.focusedBundles.size > 0 && !this.showSummaryView();
     }
 
+    initBenchmarkRuns(numberOfBenchmarkRuns) {
+        this.numberOfBenchmarkRuns = numberOfBenchmarkRuns;
+        this.runSelection = Array(numberOfBenchmarkRuns).fill(true);
+        if (numberOfBenchmarkRuns > 1) {
+            this.runView = 'Summary';
+        }
+    }
+
     focusBundle(benchmarkBundleName) {
         const alreadyFocused = this.focusedBundles.has(benchmarkBundleName);
         if (alreadyFocused) {
@@ -48,5 +56,15 @@ export default class ViewSelection {
         } else {
             this.focusedBundles.add(benchmarkBundleName);
         }
+    }
+
+    getPossibleRunViews() {
+        if (this.numberOfBenchmarkRuns < 2) {
+            return [];
+        }
+        if (this.detailedBenchmarkBundle) {
+            return ['Compare']
+        }
+        return ['Summary', 'Compare'];
     }
 }

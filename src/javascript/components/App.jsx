@@ -162,11 +162,7 @@ export default class App extends React.Component {
 
         return (
             <div>
-              <MainNavi
-                        runs={ appState.benchmarkRuns }
-                        runSelection={ viewSelection.runSelection }
-                        runView={ viewSelection.runView }
-                        selectRunsFunction={ appState.selectBenchmarkRuns } />
+              <MainNavi runs={ appState.benchmarkRuns } viewSelection={ viewSelection } selectRunsFunction={ appState.selectBenchmarkRuns } />
               <div style={ { paddingBottom: 20 + 'px' } }>
                 <SplitPane left={ mainView } right={ sideBar } />
               </div>

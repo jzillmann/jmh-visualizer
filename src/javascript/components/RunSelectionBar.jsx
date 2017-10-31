@@ -53,10 +53,24 @@ export default class RunSelectionBar extends React.Component {
                      { runs[index].name }
                    </Button>
         });
-
-        const runViewMenuItems = runViews.map(runViewLabel => <MenuItem key={ runViewLabel } onClick={ this.selectAll.bind(this, runViewLabel) }>
-                                                              { runViewLabel }
-                                                              </MenuItem>);
+        let allButton;
+        if (runViews.length > 1) {
+            const runViewMenuItems = runViews.map(runViewLabel => <MenuItem key={ runViewLabel } onClick={ this.selectAll.bind(this, runViewLabel) }>
+                                                                  { runViewLabel }
+                                                                  </MenuItem>);
+            allButton = <SplitButton
+                                     id='all'
+                                     title={ runView }
+                                     bsStyle={ showAll ? 'primary' : 'default' }
+                                     bsSize="small"
+                                     onClick={ this.selectAll.bind(this, runView) }>
+                          { runViewMenuItems }
+                        </SplitButton>;
+        } else {
+            allButton = <Button bsStyle={ showAll ? 'primary' : 'default' } bsSize="small" onClick={ this.selectAll.bind(this, runView) }>
+                          { runViews[0] }
+                        </Button>
+        }
 
         return (
             <div style={ { textAlign: 'center', marginTop: '-9px', marginBottom: '15px' } }>
@@ -65,14 +79,7 @@ export default class RunSelectionBar extends React.Component {
               </ButtonGroup>
               { ' ' }
               <ButtonGroup>
-                <SplitButton
-                             id='all'
-                             title={ runView }
-                             bsStyle={ showAll ? 'primary' : 'default' }
-                             bsSize="small"
-                             onClick={ this.selectAll.bind(this, runView) }>
-                  { runViewMenuItems }
-                </SplitButton>
+                { allButton }
               </ButtonGroup>
             </div>
         );

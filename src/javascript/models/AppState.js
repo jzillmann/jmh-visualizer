@@ -44,11 +44,8 @@ export default class AppState {
 
     // Init original benchmarks
     initBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
-        if (benchmarkRuns.length > 0) {
-            this.viewSelection.hasBenchmarks = true;
-        }
+        this.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
         this.benchmarkRuns = benchmarkRuns;
-        this.viewSelection.runSelection = Array(benchmarkRuns.length).fill(true);
         this.renderFunction(this);
     }
 

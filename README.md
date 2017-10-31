@@ -9,20 +9,25 @@ Comes with 2 companion projects:
 ## Features
 
 - Serverless architecture - All happens locally in your browser
-- Vizualize the benchmarks of a single JSON result grouped by benchmark class
+- Visualize the benchmarks of a [single run](http://jmh.morethan.io/#singleRunExample) (one JSON file) grouped by benchmark class
   - Vertical bar-chart with score and score error 
   - Link to the original JSON
   - Show individual runs as tooltip
-- Compare the benchmarks of 2 runs (two JSON files) grouped by benchmark class
+- Compare the benchmarks of [2 runs](http://jmh.morethan.io/#twoRunsExample) (two JSON files) grouped by benchmark class
   - Summary of noteable changes
   - Vertical bar-chart from -100% to 100%
   - Link to the original JSON
   - Show score and error of both runs in tooltip
+- Compare the benchmarks of [multiple runs](http://jmh.morethan.io/#multiRunExample) (n JSON files) grouped by benchmark class
+  - Summary of noteable changes
+  - Line chart
+  - Show score and error on hover
 - Visualize secondary metrics like '·gc.alloc.rate'
 - Focus on individual charts with synced axis scales
 
 ## Major Changes
 
+- **Okt 2017** - 0.7 Multi-Run support
 - **Aug 2017** - 0.6 Layout change & Summary support
 - **Jul 2017** - 0.5 Focussing of benchmarks
 - **May 2017** - 0.4 Secondary Metrics support

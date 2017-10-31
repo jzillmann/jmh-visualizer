@@ -1,5 +1,6 @@
 import BenchmarkRun from 'models/BenchmarkRun.js';
 import BenchmarkSelection from 'models/BenchmarkSelection.js';
+import ViewSelection from 'models/ViewSelection.js';
 
 import { parseBenchmarkBundles } from 'functions/parse.js'
 
@@ -10,14 +11,10 @@ export default class AppState {
         this.renderFunction = options.renderFunction;
         this.examples = options.examples;
         this.benchmarkRuns = [];
-        this.runSelection = [];
-        this.uploadedBenchmarks = false;
         this.selectedMetric = 'Score';
-        this.detailedBundle = null; // bundleKey
-        this.focusedBundles = new Set(); // [] bundleKeys
         this.benchmarkCategories = ['Benchmarks'];
         this.activeCategory = 'Benchmarks';
-        this.runView = 'Summary';
+        this.viewSelection = new ViewSelection();
         this.history = history;
 
         //bind functions
@@ -41,22 +38,25 @@ export default class AppState {
 
     // Upload original benchmarks
     uploadBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
-        this.uploadedBenchmarks = true;
+        this.viewSelection.uploadedBenchmarks = true;
         this.initBenchmarkRuns(benchmarkRuns);
     }
 
     // Init original benchmarks
     initBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
+        if (benchmarkRuns.length > 0) {
+            this.viewSelection.hasBenchmarks = true;
+        }
         this.benchmarkRuns = benchmarkRuns;
-        this.runSelection = Array(benchmarkRuns.length).fill(true);
+        this.viewSelection.runSelection = Array(benchmarkRuns.length).fill(true);
         this.renderFunction(this);
     }
 
     // expects array of boolean with length of total JMH runs + the runView ('Summary', 'Compare')
     selectBenchmarkRuns(runSelection, runView) {
-        if (this.runView != runView || !arraysAreIdentical(this.runSelection, runSelection)) {
-            this.runSelection = runSelection;
-            this.runView = runView;
+        if (this.viewSelection.runView != runView || !arraysAreIdentical(this.viewSelection.runSelection, runSelection)) {
+            this.viewSelection.runSelection = runSelection;
+            this.viewSelection.runView = runView;
             this.renderFunction(this);
         }
     }
@@ -72,31 +72,26 @@ export default class AppState {
 
     // Select bundle for detail view
     detailBenchmarkBundle(benchmarkBundleKey) {
-        this.detailedBundle = benchmarkBundleKey;
+        this.viewSelection.detailedBenchmarkBundle = benchmarkBundleKey;
         this.renderFunction(this);
         this.history.push('#details');
     }
 
     // Unselect detail view bundle
     undetailBenchmarkBundle() {
-        this.detailedBundle = null;
+        this.viewSelection.detailedBenchmarkBundle = null;
         this.renderFunction(this);
     }
 
 
     focusBundle(benchmarkBundleName) {
-        const alreadyFocused = this.focusedBundles.has(benchmarkBundleName);
-        if (alreadyFocused) {
-            this.focusedBundles.delete(benchmarkBundleName);
-        } else {
-            this.focusedBundles.add(benchmarkBundleName);
-        }
+        this.viewSelection.focusBundle(benchmarkBundleName);
         this.renderFunction(this);
     }
 
     // Return the BenchmarkSelection based on the selected runs
     benchmarkSelection() {
-        const selectedBenchmarkRuns = this.benchmarkRuns.filter((run, pos) => this.runSelection[pos]);
+        const selectedBenchmarkRuns = this.benchmarkRuns.filter((run, pos) => this.viewSelection.runSelection[pos]);
         return new BenchmarkSelection({
             runNames: selectedBenchmarkRuns.map(run => run.name),
             benchmarkBundles: parseBenchmarkBundles(selectedBenchmarkRuns)
@@ -105,7 +100,7 @@ export default class AppState {
 
     selectCategory(category) {
         this.activeCategory = category;
-        this.focusedBundles.clear();
+        this.viewSelection.focusedBundles.clear();
         this.renderFunction(this);
     }
 

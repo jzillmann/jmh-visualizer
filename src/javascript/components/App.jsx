@@ -39,10 +39,12 @@ export default class App extends React.Component {
     render() {
         const {appState} = this.props;
         const benchmarkSelection = appState.benchmarkSelection();
+        const viewSelection = appState.viewSelection;
 
         let mainView;
         let sideBar;
-        if (benchmarkSelection.runNames.length == 0) {
+        if (viewSelection.showUploadView()) {
+            // Upload View
             const fileUploader = new FileUploader(appState.uploadBenchmarkRuns);
             mainView = <UploadMainView fileUploader={ fileUploader } />;
             sideBar = <UploadSideBar
@@ -51,7 +53,7 @@ export default class App extends React.Component {
                                      loadTwoRunsExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) }
                                      loadMultiRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.multiRunExample) } />;
         } else {
-            if (appState.uploadedBenchmarks) {
+            if (viewSelection.shouldPreventPageReload()) {
                 window.onbeforeunload = function() {
                     return "You will loose the current benchmarks.";
                 };
@@ -59,8 +61,8 @@ export default class App extends React.Component {
             const benchmarkBundles = benchmarkSelection.benchmarkBundles;
 
             // Details View
-            if (appState.detailedBundle) {
-                const detailBundle = benchmarkSelection.benchmarkBundles.find(bundle => bundle.key === appState.detailedBundle);
+            if (viewSelection.showDetailedView()) {
+                const detailBundle = benchmarkSelection.benchmarkBundles.find(bundle => bundle.key === viewSelection.detailedBenchmarkBundle);
                 const secondaryMetrics = Array.from(detailBundle.allBenchmarks().reduce((aggregate, benchmark) => {
                     Object.keys(benchmark.secondaryMetrics).forEach(metricKey => aggregate.add(metricKey));
                     return aggregate;
@@ -83,14 +85,14 @@ export default class App extends React.Component {
             } else {
                 const metricType = appState.selectedMetric;
                 const metricExtractor = createMetricExtractor(appState.selectedMetric);
-                const focusedBundles = appState.focusedBundles;
-                const runView = appState.runView;
+                const focusedBundles = viewSelection.focusedBundles;
+                const runView = viewSelection.runView;
                 const categories = appState.benchmarkCategories;
                 const activeCategory = appState.activeCategory;
 
                 let filteredBenchmarkBundles = metricType === 'Score' ? benchmarkBundles : benchmarkBundles.filter(benchmarkBundle => benchmarkBundle.allBenchmarks().find(benchmark => metricExtractor.hasMetric(benchmark)));
                 let sideBarBenchmarks = filteredBenchmarkBundles;
-                if (focusedBundles.size > 0) {
+                if (viewSelection.shouldFilterFocusedBenchmarks()) {
                     filteredBenchmarkBundles = filteredBenchmarkBundles.filter(benchmarkBundle => focusedBundles.has(benchmarkBundle.key));
                 }
                 const metricsSet = new Set(['Score']);
@@ -104,7 +106,7 @@ export default class App extends React.Component {
                     mainView = <SingleRunView
                                               runName={ benchmarkSelection.runNames[0] }
                                               benchmarkBundles={ filteredBenchmarkBundles }
-                                              focusedBundles={ appState.focusedBundles }
+                                              focusedBundles={ focusedBundles }
                                               metricExtractor={ metricExtractor }
                                               detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                 } else if (benchmarkSelection.runNames.length == 2) {
@@ -148,7 +150,7 @@ export default class App extends React.Component {
                                       benchmarkBundles={ sideBarBenchmarks }
                                       metrics={ metrics }
                                       metricExtractor={ metricExtractor }
-                                      focusedBenchmarkBundles={ appState.focusedBundles }
+                                      focusedBenchmarkBundles={ focusedBundles }
                                       categories={ categories }
                                       activeCategory={ activeCategory }
                                       selectMetricFunction={ appState.selectMetric }
@@ -162,8 +164,8 @@ export default class App extends React.Component {
             <div>
               <MainNavi
                         runs={ appState.benchmarkRuns }
-                        runSelection={ appState.runSelection }
-                        runView={ appState.runView }
+                        runSelection={ viewSelection.runSelection }
+                        runView={ viewSelection.runView }
                         selectRunsFunction={ appState.selectBenchmarkRuns } />
               <div style={ { paddingBottom: 20 + 'px' } }>
                 <SplitPane left={ mainView } right={ sideBar } />

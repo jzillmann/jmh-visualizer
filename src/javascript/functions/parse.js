@@ -101,14 +101,21 @@ function parseMultiRunBenchmarkMap(benchmarkRuns:BenchmarkRun[]) {
     const classToBenchmarksMap = new Map();
     benchmarkRuns.forEach((benchmarkRun, benchmarkRunIndex) => {
         benchmarkRun.benchmarks.forEach((benchmark) => {
-            const fullName = parseFullClassName(benchmark);
-            let methodMap:Map = classToBenchmarksMap.get(fullName);
+            const fullClassName = parseFullClassName(benchmark);
+            let methodMap:Map = classToBenchmarksMap.get(fullClassName);
             if (methodMap === undefined) {
                 methodMap = new Map();
-                classToBenchmarksMap.set(fullName, methodMap)
+                classToBenchmarksMap.set(fullClassName, methodMap)
             }
-            const methodName = parseBenchmarkName(benchmark);
-            let runArray = methodMap.get(methodName)
+            let methodName = parseBenchmarkName(benchmark);
+            let runArray = methodMap.get(methodName);
+
+            if (runArray && runArray.length == benchmarkRunIndex + 1) {
+                // Same benchmark executed with multiple execution modes
+                methodName = methodName + '_' + benchmark.mode;
+                runArray = methodMap.get(methodName);
+            }
+
             if (runArray === undefined) {
                 runArray = [];
                 methodMap.set(methodName, runArray)

@@ -52,7 +52,7 @@ export function shouldRound(benchmarkMethods, metricExtractor) {
 
 //Conditional round method
 export function round(number, shouldRound) {
-    if (!shouldRound) {
+    if (!shouldRound || number < 1) {
         return number;
     }
     return Math.round(number);
@@ -60,8 +60,8 @@ export function round(number, shouldRound) {
 
 //Conditional format number method
 export function formatNumber(number, roundScores) {
-    if (number) {
-        if (roundScores) {
+    if (number || number == 0) {
+        if (roundScores && number > 1) {
             return number.toLocaleString();
         } else {
             return number;

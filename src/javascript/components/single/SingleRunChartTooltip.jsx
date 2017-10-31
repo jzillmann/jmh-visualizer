@@ -134,7 +134,7 @@ export default class SingleRunChartTooltip extends Component {
                               y={ props.y - 1 }
                               width={ props.width }
                               height={ props.height }>
-                          { props['data'].toLocaleString() }
+                          { formatNumber(props['data'], roundScores) }
                         </text>
                     );
                 };

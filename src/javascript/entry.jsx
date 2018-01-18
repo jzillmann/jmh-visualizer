@@ -59,6 +59,34 @@ if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
     } else if (urlHash === '#multiRunExample') {
         appState.initBenchmarkRuns(appState.examples.multiRunExample);
     } else {
-        appState.initBenchmarkRuns([]);
+        const source = getParameterByName('source');
+        if (source) {
+            fetchFromUrl(source);
+        } else {
+            appState.initBenchmarkRuns([]);
+        }
     }
+}
+
+function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function fetchFromUrl(url) {
+    fetch(url).then((response) => {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response.json();
+    }).then((json) => {
+        const benchmarkRun = new BenchmarkRun({
+            name: url,
+            benchmarks: json
+        });
+        appState.initBenchmarkRuns([benchmarkRun]);
+    }).catch(function(error) {
+        alert(`Could not fetch data from ${url}: ${error}`);
+        appState.initBenchmarkRuns([]);
+    });
 }

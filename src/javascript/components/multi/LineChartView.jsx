@@ -75,7 +75,7 @@ export default class LineChartView extends React.Component {
             const label = isActive ? <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> : false;
             return <Line
                          key={ benchmarkMethod.key }
-                         type="natural"
+                         type="monotoneX"
                          dataKey={ benchmarkMethod.key }
                          stroke={ lineColors[i] }
                          strokeWidth={ strokeWidth }

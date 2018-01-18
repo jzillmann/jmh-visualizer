@@ -24,7 +24,7 @@ Comes with 2 companion projects:
   - Show score and error on hover
 - Visualize secondary metrics like '·gc.alloc.rate'
 - Focus on individual charts with synced axis scales
-- Load benchmark [from URL](http://jmh.morethan.io?soure=https://gist.githubusercontent.com/echeipesh/b555da8d12c79b65a5f58c98aed0be69/raw/9e71a0dfe0f0e8f5f35eed76041cfe6637c77289/jmh-raster-non-optimized.json)
+- Load benchmark [from URL](http://jmh.morethan.io?source=https://gist.githubusercontent.com/echeipesh/b555da8d12c79b65a5f58c98aed0be69/raw/9e71a0dfe0f0e8f5f35eed76041cfe6637c77289/jmh-raster-non-optimized.json)
 
 ## Major Changes
 

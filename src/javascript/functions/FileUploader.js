@@ -14,7 +14,7 @@ export default class FileUploader {
 
         const benchmarkRuns = [];
         const uploadFunction = this.uploadBenchmarksFunction;
-        files.forEach((file, i) => {
+        files.forEach((file) => {
             const reader = new FileReader();
             const runName = file.name.replace('.json', '');
             reader.onload = function(evt) {
@@ -25,7 +25,7 @@ export default class FileUploader {
                         benchmarks: parsedBenchmarks
                     });
                     benchmarkRuns.push(benchmarkRun);
-                    if (i == files.length - 1) {
+                    if (benchmarkRuns.length == files.length) {
                         benchmarkRuns.sort((a, b) => a.name.localeCompare(b.name));
                         uploadFunction(benchmarkRuns);
                     }

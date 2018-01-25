@@ -64,8 +64,12 @@ if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
     } else {
         const source = getParameterByName('source');
         if (source) {
-            fetchFromUrl(source);
+            fetchFromUrls([source]);
         } else {
+            const sources = getParameterByName('sources');
+            if (sources) {
+                fetchFromUrls(sources.split(','));
+            }
             appState.initBenchmarkRuns([]);
         }
     }
@@ -76,22 +80,29 @@ function getParameterByName(name) {
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
-function fetchFromUrl(url) {
-    fetch(url).then((response) => {
-        if (!response.ok) {
-            throw Error(response.statusText);
-        }
-        return response.json();
-    }).then((json) => {
-        const benchmarkRun = new BenchmarkRun({
-            name: url,
-            benchmarks: json
+function fetchFromUrls(urls) {
+    const benchmarkRuns = [];
+    urls.forEach(url => {
+        fetch(url).then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }).then((json) => {
+            const benchmarkRun = new BenchmarkRun({
+                name: url,
+                benchmarks: json
+            });
+            benchmarkRuns.push(benchmarkRun);
+            if (benchmarkRuns.length == urls.length) {
+                appState.initBenchmarkRuns(benchmarkRuns);
+            }
+        }).catch(function(error) {
+            alert(`Could not fetch data from ${url}: ${error}`);
+            appState.initBenchmarkRuns([]);
         });
-        appState.initBenchmarkRuns([benchmarkRun]);
-    }).catch(function(error) {
-        alert(`Could not fetch data from ${url}: ${error}`);
-        appState.initBenchmarkRuns([]);
     });
+
 }
 
 // backwards compatibility - Jan 2018

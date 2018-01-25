@@ -51,12 +51,15 @@ if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
         benchmarks: providedBenchmarkStore[runName] // eslint-disable-line no-undef
     })));
 } else {
-    const urlHash = window.location.hash;
-    if (urlHash === '#singleRunExample') {
+    var example = getParameterByName('example');
+    if (!example) {
+        example = getExampleFromHash();
+    }
+    if (example === 'single') {
         appState.initBenchmarkRuns(appState.examples.singleRunExample);
-    } else if (urlHash === '#twoRunsExample') {
+    } else if (example === 'two') {
         appState.initBenchmarkRuns(appState.examples.twoRunsExample);
-    } else if (urlHash === '#multiRunExample') {
+    } else if (example === 'multi') {
         appState.initBenchmarkRuns(appState.examples.multiRunExample);
     } else {
         const source = getParameterByName('source');
@@ -89,4 +92,16 @@ function fetchFromUrl(url) {
         alert(`Could not fetch data from ${url}: ${error}`);
         appState.initBenchmarkRuns([]);
     });
+}
+
+// backwards compatibility - Jan 2018
+function getExampleFromHash() {
+    const urlHash = window.location.hash;
+    if (urlHash === '#singleRunExample') {
+        return 'single';
+    } else if (urlHash === '#twoRunsExample') {
+        return 'two';
+    } else if (urlHash === '#multiRunExample') {
+        return 'multi';
+    }
 }

@@ -25,7 +25,7 @@ export default class MainNavi extends React.Component {
 
     onSelectUploadNewFiles() {
         window.onbeforeunload = null;
-        window.location = window.location.href.split('#')[0];
+        window.location = window.location.href.split('#')[0].split('?')[0];
     }
 
     render() {

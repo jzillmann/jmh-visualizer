@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { cartesianProduct, flatten, getMatchingEndIndex, getUniqueNames } from '../../src/javascript/functions/util.js'
+import { cartesianProduct, flatten, getUniqueNames } from '../../src/javascript/functions/util.js'
 
 
 describe('functions: cartesianProduct', () => {
@@ -34,7 +34,7 @@ describe('functions: getUniqueNames', () => {
         expect(getUniqueNames(["abc", "cdf"])).to.deep.equal(["abc", "cdf"]);
         expect(getUniqueNames(["abc", "adf"])).to.deep.equal(["bc", "df"]);
         expect(getUniqueNames(["abc", "abf"])).to.deep.equal(["c", "f"]);
-        expect(getUniqueNames(["abc", "abc"])).to.deep.equal(["", ""]);
+        expect(getUniqueNames(["abc", "abc"])).to.deep.equal(["abc", "abc"]);
 
         expect(getUniqueNames(["https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json"]))
             .to.deep.equal(["string-concatenation_jdk7.json"]);

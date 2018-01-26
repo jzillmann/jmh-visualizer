@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import AppState from 'models/AppState.js';
 import BenchmarkRun from 'models/BenchmarkRun.js';
 import Examples from 'models/Examples.js';
-import { getUniqueNames, extractAfterLastSlash } from 'functions/util.js'
+import { getUniqueNames } from 'functions/util.js'
 import { exampleRun1 } from 'exampleBenchmark1.js';
 import { exampleRun2 } from 'exampleBenchmark2.js';
 import { exampleRun3 } from 'exampleBenchmark3.js';

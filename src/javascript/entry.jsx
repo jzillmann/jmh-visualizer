@@ -70,8 +70,19 @@ if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
             const sources = getParameterByName('sources');
             if (sources) {
                 fetchFromUrls(sources.split(','));
+            } else {
+                const gist = getParameterByName('gist');
+                if (gist) {
+                    fetchFromUrls([`https://gist.githubusercontent.com/raw/${gist}`]);
+                } else {
+                    const gists = getParameterByName('gists');
+                    if (gists) {
+                        fetchFromUrls(gists.split(',').map(gist => `https://gist.githubusercontent.com/raw/${gist}`));
+                    } else {
+                        appState.initBenchmarkRuns([]);
+                    }
+                }
             }
-            appState.initBenchmarkRuns([]);
         }
     }
 }

@@ -9,25 +9,31 @@ Comes with 2 companion projects:
 ## Features
 
 - Serverless architecture - All happens locally in your browser
-- Visualize the benchmarks of a [single run](http://jmh.morethan.io/#singleRunExample) (one JSON file) grouped by benchmark class
+- Visualize the benchmarks of a [single run](http://jmh.morethan.io?example=single) (one JSON file) grouped by benchmark class
   - Vertical bar-chart with score and score error 
   - Link to the original JSON
   - Show individual runs as tooltip
-- Compare the benchmarks of [2 runs](http://jmh.morethan.io/#twoRunsExample) (two JSON files) grouped by benchmark class
+- Compare the benchmarks of [2 runs](http://jmh.morethan.io?example=two) (two JSON files) grouped by benchmark class
   - Summary of noteable changes
   - Vertical bar-chart from -100% to 100%
   - Link to the original JSON
   - Show score and error of both runs in tooltip
-- Compare the benchmarks of [multiple runs](http://jmh.morethan.io/#multiRunExample) (n JSON files) grouped by benchmark class
+- Compare the benchmarks of [multiple runs](http://jmh.morethan.io?example=multi) (n JSON files) grouped by benchmark class
   - Summary of noteable changes
   - Line chart
   - Show score and error on hover
 - Visualize secondary metrics like '·gc.alloc.rate'
 - Focus on individual charts with synced axis scales
-- Load benchmark [from URL](http://jmh.morethan.io?source=https://gist.githubusercontent.com/echeipesh/b555da8d12c79b65a5f58c98aed0be69/raw/9e71a0dfe0f0e8f5f35eed76041cfe6637c77289/jmh-raster-non-optimized.json)
+- Load benchmarks from external url
+  - [One source](http://jmh.morethan.io?source=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json)
+  - [Multiple sources](http://jmh.morethan.io?sources=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json,https://gist.githubusercontent.com/jzillmann/866d39d43b264f507a67368f2313baca/raw/d0ae1502e8c493e6814c83f2df345fecb763c078/string-concatenation_jdk8.json)
+  - [One gist](http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598)
+  - [Multiple gists](http://jmh.morethan.io?gists=7d23b2382911cc434754a23773b06598,866d39d43b264f507a67368f2313baca)
+
 
 ## Major Changes
 
+- **Jan 2018** - 0.7.3 External URL/Gist support
 - **Okt 2017** - 0.7 Multi-Run support
 - **Aug 2017** - 0.6 Layout change & Summary support
 - **Jul 2017** - 0.5 Focussing of benchmarks

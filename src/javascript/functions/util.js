@@ -79,12 +79,12 @@ export function getUniqueNames(strings) {
     }
 
     var minLength = Math.min(...strings.map(string => string.length));
-    const startIndex = getMatchingStartIndex(strings, minLength);
-    const endIndex = getMatchingEndIndex(strings, minLength);
-    if (startIndex > 0) {
+    const startIndex = getNotMatchingStartIndex(strings, minLength);
+    const endIndex = getNotMatchingEndIndex(strings, minLength);
+    if (startIndex > 0 && startIndex < minLength) {
         strings = strings.map(string => string.substring(startIndex));
     }
-    if (endIndex > 0) {
+    if (endIndex > 0 && endIndex < minLength) {
         strings = strings.map(string => string.substring(0, string.length - endIndex));
     }
     if (minLength - startIndex - endIndex > 20) {
@@ -102,7 +102,7 @@ function extractAfterLastSlash(string) {
     }
 }
 
-function getMatchingStartIndex(strings, minLength) {
+function getNotMatchingStartIndex(strings, minLength) {
     for (var i = 0; i < minLength; i++) {
         for (var j = 0; j < strings.length - 1; j++) {
             if (strings[j].charAt(i) != strings[j + 1].charAt(i)) {
@@ -113,6 +113,6 @@ function getMatchingStartIndex(strings, minLength) {
     return minLength;
 }
 
-function getMatchingEndIndex(strings, minLength) {
-    return getMatchingStartIndex(strings.map(string => string.split('').reverse().join('')), minLength);
+function getNotMatchingEndIndex(strings, minLength) {
+    return getNotMatchingStartIndex(strings.map(string => string.split('').reverse().join('')), minLength);
 }

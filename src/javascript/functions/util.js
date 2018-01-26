@@ -70,3 +70,49 @@ export function formatNumber(number, roundScores) {
         return "n/a";
     }
 }
+
+
+// Takes an array of strings and returns and array of strings. Common prefixes and suffixes will be removed.
+export function getUniqueNames(strings) {
+    if (strings.length == 1) {
+        return strings.map(string => extractAfterLastSlash(string));
+    }
+
+    var minLength = Math.min(...strings.map(string => string.length));
+    const startIndex = getMatchingStartIndex(strings, minLength);
+    const endIndex = getMatchingEndIndex(strings, minLength);
+    if (startIndex > 0) {
+        strings = strings.map(string => string.substring(startIndex));
+    }
+    if (endIndex > 0) {
+        strings = strings.map(string => string.substring(0, string.length - endIndex));
+    }
+    if (minLength - startIndex - endIndex > 20) {
+        strings = strings.map(string => extractAfterLastSlash(string));
+    }
+    return strings;
+}
+
+function extractAfterLastSlash(string) {
+    const lastSlash = string.lastIndexOf('/');
+    if (lastSlash > 0) {
+        return string.substring(lastSlash + 1);
+    } else {
+        return string;
+    }
+}
+
+function getMatchingStartIndex(strings, minLength) {
+    for (var i = 0; i < minLength; i++) {
+        for (var j = 0; j < strings.length - 1; j++) {
+            if (strings[j].charAt(i) != strings[j + 1].charAt(i)) {
+                return i;
+            }
+        }
+    }
+    return minLength;
+}
+
+function getMatchingEndIndex(strings, minLength) {
+    return getMatchingStartIndex(strings.map(string => string.split('').reverse().join('')), minLength);
+}

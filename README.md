@@ -6,6 +6,7 @@ Comes with 2 companion projects:
 - [Gradle plugin](https://github.com/jzillmann/gradle-jmh-report)
 - [Jenkins plugin](https://github.com/jenkinsci/jmh-report-plugin)
 
+
 ## Features
 
 - Serverless architecture - All happens locally in your browser
@@ -41,6 +42,7 @@ Comes with 2 companion projects:
 - **Apr 2017** - 0.3 Error Bars & Params support
 - **Nov 2016** - 0.2: Add 2 run compare view
 - **Okt 2016** - 0.1: Initial Release
+
 
 ## Tips & Tricks
 
@@ -78,6 +80,7 @@ Use the [issue tracker](https://github.com/jzillmann/jmh-visualizer/issues) and/
   - _git tag -a $releaseVersion -m "$releaseVersion release"_
   - _git push --tags_
 
+
 ## Credits
 
 http://recharts.org/ - The chart ground work
@@ -85,3 +88,10 @@ http://recharts.org/ - The chart ground work
 http://www.favicon.cc/ - Created the favicon with
 
 Babel, webpack, react,... and many more for an enjoyable webstack!
+
+
+## Donating
+
+_Support this project and other work from [me](https://github.com/jzillmann):_
+[![Support via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/JohannesZillmann/5.4)
+

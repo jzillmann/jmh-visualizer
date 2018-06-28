@@ -1,6 +1,6 @@
 {
   "name": "jmh-visualizer",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Visualize the  results of your JMH benchmarks execution",
   "main": "index.jsx",
   "scripts": {

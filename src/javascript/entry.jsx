@@ -93,8 +93,7 @@ function getParameterByName(name) {
 }
 
 function fetchFromUrls(urls) {
-    const benchmarkRuns = [];
-    const uniqueNames = getUniqueNames(urls);
+    const fetchedJsonByUrl = new Map();
     urls.forEach((url, i) => {
         fetch(url).then((response) => {
             if (!response.ok) {
@@ -102,13 +101,13 @@ function fetchFromUrls(urls) {
             }
             return response.json();
         }).then((json) => {
-            const benchmarkRun = new BenchmarkRun({
-                name: uniqueNames[i],
-                benchmarks: json
-            });
-            benchmarkRuns.push(benchmarkRun);
-            if (benchmarkRuns.length == urls.length) {
-                appState.initBenchmarkRuns(benchmarkRuns);
+            fetchedJsonByUrl.set(url, json);
+            if (fetchedJsonByUrl.size == urls.length) {
+                const uniqueNames = getUniqueNames(urls);
+                appState.initBenchmarkRuns(uniqueNames.map((name, i) => new BenchmarkRun({
+                    name: name,
+                    benchmarks: fetchedJsonByUrl.get(urls[i])
+                })));
             }
         }).catch(function(error) {
             alert(`Could not fetch data from ${url}: ${error}`);

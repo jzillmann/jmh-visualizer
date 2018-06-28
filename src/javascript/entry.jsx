@@ -94,7 +94,7 @@ function getParameterByName(name) {
 
 function fetchFromUrls(urls) {
     const fetchedJsonByUrl = new Map();
-    urls.forEach((url, i) => {
+    urls.forEach((url) => {
         fetch(url).then((response) => {
             if (!response.ok) {
                 throw Error(response.statusText);

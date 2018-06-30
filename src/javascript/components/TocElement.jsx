@@ -1,4 +1,5 @@
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
 var Scroll = require('react-scroll');
 var Element = Scroll.Element;
@@ -7,8 +8,8 @@ var Element = Scroll.Element;
 export default class TocElement extends React.Component {
 
     static propTypes = {
-        name: React.PropTypes.string.isRequired,
-        children: React.PropTypes.node.isRequired,
+        name: PropTypes.string.isRequired,
+        children: PropTypes.node.isRequired,
     };
 
     render() {

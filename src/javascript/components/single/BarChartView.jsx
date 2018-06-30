@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ErrorBar } from 'recharts';
 
@@ -10,8 +11,8 @@ import { blue, red, green, lightBlack, tooltipBackground, barColors } from 'func
 export default class BarChartView extends React.Component {
 
     static propTypes = {
-        dataSet: React.PropTypes.object.isRequired,
-        dataMax: React.PropTypes.number
+        dataSet: PropTypes.object.isRequired,
+        dataMax: PropTypes.number
     };
 
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import TocLink from 'components/TocLink.jsx'
 
@@ -10,12 +11,12 @@ var scroller = Scroll.scroller;
 export default class TocList extends React.PureComponent {
 
     static propTypes = {
-        categories: React.PropTypes.array.isRequired,
-        activeCategory: React.PropTypes.string.isRequired,
-        selectCategoryFunction: React.PropTypes.func.isRequired,
-        elementIds: React.PropTypes.array.isRequired,
-        elementNames: React.PropTypes.array.isRequired,
-        linkControlsCreators: React.PropTypes.array.isRequired,
+        categories: PropTypes.array.isRequired,
+        activeCategory: PropTypes.string.isRequired,
+        selectCategoryFunction: PropTypes.func.isRequired,
+        elementIds: PropTypes.array.isRequired,
+        elementNames: PropTypes.array.isRequired,
+        linkControlsCreators: PropTypes.array.isRequired,
     };
 
     componentDidMount() {

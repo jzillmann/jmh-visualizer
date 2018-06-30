@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import FaAlignLeft from 'react-icons/lib/fa/align-left'
 
 export default class MyLogo extends Component {
 
     static propTypes = {
-        onClick: React.PropTypes.func,
+        onClick: PropTypes.func,
     };
 
     constructor(props, context) {
@@ -23,6 +25,6 @@ export default class MyLogo extends Component {
         return (
             <a href="" onClick={ this.handleClick }>
               <FaAlignLeft/> JMH Visualizer</a>
-            );
+        );
     }
 }

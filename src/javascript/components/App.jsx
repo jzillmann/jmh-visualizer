@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import MainNavi from 'components/MainNavi.jsx';
 import SplitPane from 'components/lib/SplitPane.jsx'
@@ -28,7 +29,7 @@ import FileUploader from 'functions/FileUploader.js'
 export default class App extends React.Component {
 
     static propTypes = {
-        appState: React.PropTypes.object.isRequired,
+        appState: PropTypes.object.isRequired,
     };
 
     componentDidUpdate() {

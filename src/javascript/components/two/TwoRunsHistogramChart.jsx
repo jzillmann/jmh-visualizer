@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Bar, ReferenceLine } from 'recharts';
 
@@ -11,8 +12,8 @@ import { blue, green, yellow, tooltipBackground } from 'functions/colors.js'
 export default class TwoRunsHistogramChart extends React.Component {
 
     static propTypes = {
-        benchmarkBundles: React.PropTypes.array.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
+        benchmarkBundles: PropTypes.array.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
     };
 
     render() {
@@ -142,19 +143,19 @@ function BarLabel(props) {
 }
 
 BarLabel.PropTypes = {
-    payload: React.PropTypes.array.isRequired,
+    payload: PropTypes.array.isRequired,
 }
 
 
 class ChartTooltip extends React.Component {
 
     static propTypes = {
-        label: React.PropTypes.any,
-        payload: React.PropTypes.arrayOf(React.PropTypes.shape({
-            name: React.PropTypes.any,
-            payload: React.PropTypes.any,
-            value: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
-            unit: React.PropTypes.any,
+        label: PropTypes.any,
+        payload: PropTypes.arrayOf(PropTypes.shape({
+            name: PropTypes.any,
+            payload: PropTypes.any,
+            value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+            unit: PropTypes.any,
         })),
     };
 

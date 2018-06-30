@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import DeatailsIcon from 'react-icons/lib/fa/search-plus'
 import BadgeWithTooltip from 'components/lib/BadgeWithTooltip.jsx'
@@ -9,9 +10,9 @@ import { createMetricBadge } from 'components/commons.jsx';
 export default class BundleHeader extends React.Component {
 
     static propTypes = {
-        benchmarkBundle: React.PropTypes.object.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
-        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        benchmarkBundle: PropTypes.object.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
+        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
     };
 
     showDetails() {

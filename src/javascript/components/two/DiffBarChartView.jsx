@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, ReferenceLine, Cell } from 'recharts';
 
 import TwoRunsChartTooltip from 'components/two/TwoRunsChartTooltip.jsx';
@@ -8,9 +9,9 @@ import { red, green, yellow, tooltipBackground } from 'functions/colors.js'
 export default class DiffBarChartView extends React.Component {
 
     static propTypes = {
-        dataSet: React.PropTypes.object.isRequired,
-        runNames: React.PropTypes.array.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
+        dataSet: PropTypes.object.isRequired,
+        runNames: PropTypes.array.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
     };
 
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars

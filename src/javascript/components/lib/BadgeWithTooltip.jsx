@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Badge from 'react-bootstrap/lib/Badge'
 import Tooltipped from 'components/lib/Tooltipped.jsx'
@@ -6,9 +7,9 @@ import Tooltipped from 'components/lib/Tooltipped.jsx'
 export default class BadgeWithTooltip extends Component {
 
     static propTypes = {
-        name: React.PropTypes.string,
-        tooltip: React.PropTypes.string.isRequired,
-        children: React.PropTypes.array,
+        name: PropTypes.string,
+        tooltip: PropTypes.string.isRequired,
+        children: PropTypes.array,
     };
 
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars

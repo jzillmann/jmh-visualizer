@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { ResponsiveContainer, ComposedChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Line, Area } from 'recharts';
 
@@ -14,9 +15,9 @@ import { formatNumber } from 'functions/util.js'
 export default class LineChartView extends React.Component {
 
     static propTypes = {
-        runNames: React.PropTypes.array.isRequired,
-        benchmarkBundle: React.PropTypes.object.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
+        runNames: PropTypes.array.isRequired,
+        benchmarkBundle: PropTypes.object.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
     };
 
     constructor(props) {

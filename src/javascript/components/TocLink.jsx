@@ -1,4 +1,5 @@
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
 var Scroll = require('react-scroll');
 
@@ -6,7 +7,7 @@ var Scroll = require('react-scroll');
 class TocLink extends React.Component {
 
     static propTypes = {
-        children: React.PropTypes.node.isRequired,
+        children: PropTypes.node.isRequired,
     };
 
     render() {

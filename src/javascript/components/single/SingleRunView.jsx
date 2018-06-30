@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Badge from 'react-bootstrap/lib/Badge'
 
@@ -13,11 +14,11 @@ import { getUniqueBenchmarkModesAccrossBundles } from 'functions/parse.js'
 export default class SingleRunView extends React.Component {
 
     static propTypes = {
-        runName: React.PropTypes.string.isRequired,
-        benchmarkBundles: React.PropTypes.array.isRequired,
-        focusedBundles: React.PropTypes.object.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
-        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        runName: PropTypes.string.isRequired,
+        benchmarkBundles: PropTypes.array.isRequired,
+        focusedBundles: PropTypes.object.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
+        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
     };
 
     constructor(props) {

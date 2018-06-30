@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import TocElement from 'components/TocElement.jsx'
 import LineChartView from 'components/multi/LineChartView.jsx'
@@ -11,9 +12,9 @@ import { createMetricBadge } from 'components/commons.jsx';
 export default class MultiRunDetailView extends React.Component {
 
     static propTypes = {
-        runNames: React.PropTypes.array.isRequired,
-        benchmarkBundle: React.PropTypes.object.isRequired,
-        secondaryMetrics: React.PropTypes.array.isRequired,
+        runNames: PropTypes.array.isRequired,
+        benchmarkBundle: PropTypes.object.isRequired,
+        secondaryMetrics: PropTypes.array.isRequired,
     };
 
     render() {

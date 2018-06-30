@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Tooltip, Cell, PieChart, Pie, Text, Legend, Surface, Symbols } from 'recharts';
 
@@ -8,8 +9,8 @@ import { blue, green, yellow, red, tooltipBackground, greens, reds } from 'funct
 export default class TwoRunsSummaryChart extends React.Component {
 
     static propTypes = {
-        benchmarkDiffs: React.PropTypes.array.isRequired,
-        minDeviation: React.PropTypes.number.isRequired,
+        benchmarkDiffs: PropTypes.array.isRequired,
+        minDeviation: PropTypes.number.isRequired,
     };
 
     render() {
@@ -231,12 +232,12 @@ function customInnerPieLabel({cx, cy, midAngle, innerRadius, outerRadius, label,
 class ChartTooltip extends React.Component {
 
     static propTypes = {
-        label: React.PropTypes.any,
-        payload: React.PropTypes.arrayOf(React.PropTypes.shape({
-            name: React.PropTypes.any,
-            payload: React.PropTypes.any,
-            value: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
-            unit: React.PropTypes.any,
+        label: PropTypes.any,
+        payload: PropTypes.arrayOf(PropTypes.shape({
+            name: PropTypes.any,
+            payload: PropTypes.any,
+            value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+            unit: PropTypes.any,
         })),
     };
 

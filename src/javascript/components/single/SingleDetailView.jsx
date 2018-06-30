@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import TocElement from 'components/TocElement.jsx'
 import BarChartView from 'components/single/BarChartView.jsx'
@@ -12,9 +13,9 @@ import { createMetricBadge } from 'components/commons.jsx';
 export default class SingleDetailView extends React.Component {
 
     static propTypes = {
-        runName: React.PropTypes.string.isRequired,
-        benchmarkBundle: React.PropTypes.object.isRequired,
-        secondaryMetrics: React.PropTypes.array.isRequired,
+        runName: PropTypes.string.isRequired,
+        benchmarkBundle: PropTypes.object.isRequired,
+        secondaryMetrics: PropTypes.array.isRequired,
     };
 
     render() {

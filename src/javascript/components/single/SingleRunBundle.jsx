@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
@@ -13,11 +14,11 @@ import { createDataSetFromBenchmarks } from 'components/single/BarDataSet.js'
 export default class SingleRunBundle extends React.Component {
 
     static propTypes = {
-        runName: React.PropTypes.string.isRequired,
-        benchmarkBundle: React.PropTypes.object.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
-        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
-        dataMax: React.PropTypes.number
+        runName: PropTypes.string.isRequired,
+        benchmarkBundle: PropTypes.object.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
+        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
+        dataMax: PropTypes.number
     };
 
     state = {

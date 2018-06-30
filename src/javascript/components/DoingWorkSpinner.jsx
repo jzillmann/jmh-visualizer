@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 var Spinner = require('react-spinkit');
 
@@ -6,11 +7,11 @@ var Spinner = require('react-spinkit');
 class DoingWorkSpinner extends React.Component {
 
     static propTypes = {
-        color: React.PropTypes.string.isRequired
+        color: PropTypes.string.isRequired
     };
 
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         DoingWorkSpinner.instance = this
     }
 
@@ -33,14 +34,14 @@ class DoingWorkSpinner extends React.Component {
     render() {
         return (
             <div style={ { display: 'none' } } ref={ (input) => {
-                                             this.spinnerDiv = input;
-                                         } }>
-              <Spinner
-                       id='spinner'
-                       style={ { display: 'block' } }
-                       name='three-bounce'
-                       color={ this.props.color }
-                       fadeIn='none' />
+                this.spinnerDiv = input;
+            } }>
+                <Spinner
+                    id='spinner'
+                    style={ { display: 'block' } }
+                    name='three-bounce'
+                    color={ this.props.color }
+                    fadeIn='none' />
             </div>
         )
     }

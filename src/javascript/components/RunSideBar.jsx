@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import FormGroup from 'react-bootstrap/lib/FormGroup'
 import InputGroup from 'react-bootstrap/lib/InputGroup'
@@ -14,16 +15,16 @@ import Tooltipped from 'components/lib/Tooltipped.jsx'
 export default class RunSideBar extends React.Component {
 
     static propTypes = {
-        benchmarkBundles: React.PropTypes.array.isRequired,
-        metrics: React.PropTypes.array.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
-        selectMetricFunction: React.PropTypes.func.isRequired,
-        focusedBenchmarkBundles: React.PropTypes.object.isRequired,
-        categories: React.PropTypes.array.isRequired,
-        activeCategory: React.PropTypes.string.isRequired,
-        focusBenchmarkBundleFunction: React.PropTypes.func.isRequired,
-        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
-        selectCategoryFunction: React.PropTypes.func.isRequired,
+        benchmarkBundles: PropTypes.array.isRequired,
+        metrics: PropTypes.array.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
+        selectMetricFunction: PropTypes.func.isRequired,
+        focusedBenchmarkBundles: PropTypes.object.isRequired,
+        categories: PropTypes.array.isRequired,
+        activeCategory: PropTypes.string.isRequired,
+        focusBenchmarkBundleFunction: PropTypes.func.isRequired,
+        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
+        selectCategoryFunction: PropTypes.func.isRequired,
     };
 
     render() {

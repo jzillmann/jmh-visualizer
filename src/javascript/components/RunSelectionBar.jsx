@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import SplitButton from 'react-bootstrap/lib/SplitButton'
@@ -9,11 +10,11 @@ import MenuItem from 'react-bootstrap/lib/MenuItem'
 export default class RunSelectionBar extends React.Component {
 
     static propTypes = {
-        runs: React.PropTypes.array.isRequired,
-        runSelection: React.PropTypes.array.isRequired,
-        runViews: React.PropTypes.array.isRequired,
-        runView: React.PropTypes.string.isRequired,
-        selectRunsFunction: React.PropTypes.func.isRequired,
+        runs: PropTypes.array.isRequired,
+        runSelection: PropTypes.array.isRequired,
+        runViews: PropTypes.array.isRequired,
+        runView: PropTypes.string.isRequired,
+        selectRunsFunction: PropTypes.func.isRequired,
     };
 
     constructor(props) {

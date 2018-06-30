@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import FormGroup from 'react-bootstrap/lib/FormGroup'
 import InputGroup from 'react-bootstrap/lib/InputGroup'
@@ -11,11 +12,11 @@ import TocList from 'components/TocList.jsx'
 export default class DetailSideBar extends React.Component {
 
     static propTypes = {
-        benchmarkBundle: React.PropTypes.object.isRequired,
-        benchmarkBundles: React.PropTypes.array.isRequired,
-        secondaryMetrics: React.PropTypes.array.isRequired,
-        goBackFunction: React.PropTypes.func.isRequired,
-        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        benchmarkBundle: PropTypes.object.isRequired,
+        benchmarkBundles: PropTypes.array.isRequired,
+        secondaryMetrics: PropTypes.array.isRequired,
+        goBackFunction: PropTypes.func.isRequired,
+        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
     };
 
     render() {

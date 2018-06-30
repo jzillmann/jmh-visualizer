@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Modal from 'react-bootstrap/lib/Modal'
 import PointingHandIcon from 'react-icons/lib/fa/hand-o-right'
@@ -10,10 +11,10 @@ import LoadFromGistsDialog from 'components/LoadFromGistsDialog.jsx'
 export default class UploadSideBar extends React.Component {
 
     static propTypes = {
-        fileUploader: React.PropTypes.object.isRequired,
-        loadSingleRunExampleFunction: React.PropTypes.func.isRequired,
-        loadTwoRunsExampleFunction: React.PropTypes.func.isRequired,
-        loadMultiRunExampleFunction: React.PropTypes.func.isRequired,
+        fileUploader: PropTypes.object.isRequired,
+        loadSingleRunExampleFunction: PropTypes.func.isRequired,
+        loadTwoRunsExampleFunction: PropTypes.func.isRequired,
+        loadMultiRunExampleFunction: PropTypes.func.isRequired,
     };
 
     constructor(props, context) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Badge from 'react-bootstrap/lib/Badge'
 
@@ -8,42 +9,42 @@ import MultiRunBundle from 'components/multi/MultiRunBundle.jsx'
 export default class MultiRunView extends React.Component {
 
     static propTypes = {
-        runNames: React.PropTypes.array.isRequired,
-        benchmarkBundles: React.PropTypes.array.isRequired,
-        metricExtractor: React.PropTypes.object.isRequired,
-        detailBenchmarkBundleFunction: React.PropTypes.func.isRequired,
+        runNames: PropTypes.array.isRequired,
+        benchmarkBundles: PropTypes.array.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
+        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
     };
 
     render() {
-        const {runNames, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction} = this.props;
+        const { runNames, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction } = this.props;
 
         const elements = [];
         elements.push(
             <div key='summary'>
-              Comparing
+                Comparing
               { ' ' }
-              <Badge>
-                { benchmarkBundles.length }
-              </Badge> benchmark classes for
-              { ' ' + runNames.length } runs on metric '
-              { metricExtractor.metricKey }'.
+                <Badge>
+                    { benchmarkBundles.length }
+                </Badge> benchmark classes for
+              { ' ' + runNames.length } runs on metric &#39;
+              { metricExtractor.metricKey }&#39;.
             </div>
         );
 
         benchmarkBundles.forEach(benchmarkBundle => {
             elements.push(<TocElement key={ benchmarkBundle.key } name={ benchmarkBundle.key }>
-                            <MultiRunBundle
-                                            runNames={ runNames }
-                                            benchmarkBundle={ benchmarkBundle }
-                                            metricExtractor={ metricExtractor }
-                                            detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
-                          </TocElement>);
+                <MultiRunBundle
+                    runNames={ runNames }
+                    benchmarkBundle={ benchmarkBundle }
+                    metricExtractor={ metricExtractor }
+                    detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
+            </TocElement>);
         });
 
 
         return <div>
-                 { elements }
-               </div>
+            { elements }
+        </div>
     }
 
 }

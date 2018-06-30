@@ -14,8 +14,8 @@ export default class TocElement extends React.Component {
 
     render() {
         return (
-            <Element {...this.props}>
-              { this.props.children }
+            <Element { ...this.props }>
+                { this.props.children }
             </Element>
         );
     }

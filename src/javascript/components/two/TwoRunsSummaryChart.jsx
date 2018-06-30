@@ -14,7 +14,7 @@ export default class TwoRunsSummaryChart extends React.Component {
     };
 
     render() {
-        const {benchmarkDiffs, minDeviation} = this.props;
+        const { benchmarkDiffs, minDeviation } = this.props;
 
         const buckets = [
             {
@@ -24,13 +24,13 @@ export default class TwoRunsSummaryChart extends React.Component {
                 max: minDeviation + 10
             },
             {
-                name: `> ${minDeviation+10}% improvement`,
+                name: `> ${minDeviation + 10}% improvement`,
                 color: greens[1],
                 min: minDeviation + 10,
                 max: minDeviation + 20
             },
             {
-                name: `> ${minDeviation+20}% improvement`,
+                name: `> ${minDeviation + 20}% improvement`,
                 color: greens[0],
                 min: minDeviation + 20
             },
@@ -41,20 +41,20 @@ export default class TwoRunsSummaryChart extends React.Component {
                 max: -(minDeviation + 10)
             },
             {
-                name: `> ${minDeviation+10}% decline`,
+                name: `> ${minDeviation + 10}% decline`,
                 color: reds[1],
                 min: -(minDeviation + 10),
                 max: -(minDeviation + 20)
             },
             {
-                name: `> ${minDeviation+20}% decline`,
+                name: `> ${minDeviation + 20}% decline`,
                 color: reds[0],
                 min: -(minDeviation + 20)
             },
         ];
 
         const getBucketId = (number => {
-            return buckets.findIndex(function(bucket) {
+            return buckets.findIndex(function (bucket) {
                 if (bucket.min < 0) {
                     return number < bucket.min && (!bucket.max || number > bucket.max);
                 } else {
@@ -128,76 +128,76 @@ export default class TwoRunsSummaryChart extends React.Component {
 
         return (
             <div style={ { marginLeft: 18 } }>
-              <PieChart width={ 450 } height={ 270 }>
-                <Pie
-                     data={ [unchangedBucket, improvedBucket, worsenedBucket] }
-                     valueKey='count'
-                     cx={ cx }
-                     cy={ '50%' }
-                     outerRadius={ 70 }
-                     fill={ blue }
-                     labelLine={ false }
-                     stroke="none"
-                     label={ customInnerPieLabel }
-                     animationDuration={ 540 }>
-                  <Cell key='unchanged' fill={ blue } />
-                  <Cell key='improved' fill={ green } />
-                  <Cell key='improved' fill={ red } />
-                </Pie>
-                <Pie
-                     data={ bucketContents }
-                     nameKey='name'
-                     valueKey='count'
-                     cx={ cx }
-                     cy={ '50%' }
-                     startAngle={ 90 }
-                     endAngle={ -360 }
-                     innerRadius={ 80 }
-                     outerRadius={ 100 }
-                     fill={ yellow }
-                     label={ (elem) => elem.count }
-                     animationDuration={ 540 }>
-                  { bucketContents.map(entry => <Cell key={ entry.count } fill={ entry.color } />) }
-                </Pie>
-                <Tooltip
-                         content={ <ChartTooltip /> }
-                         offset={ 10 }
-                         position={ { x: 490, y: 54 } }
-                         cursor={ { stroke: green, strokeWidth: 2 } }
-                         wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
-                <Legend
+                <PieChart width={ 450 } height={ 270 }>
+                    <Pie
+                        data={ [unchangedBucket, improvedBucket, worsenedBucket] }
+                        valueKey='count'
+                        cx={ cx }
+                        cy={ '50%' }
+                        outerRadius={ 70 }
+                        fill={ blue }
+                        labelLine={ false }
+                        stroke="none"
+                        label={ customInnerPieLabel }
+                        animationDuration={ 540 }>
+                        <Cell key='unchanged' fill={ blue } />
+                        <Cell key='improved' fill={ green } />
+                        <Cell key='improved' fill={ red } />
+                    </Pie>
+                    <Pie
+                        data={ bucketContents }
+                        nameKey='name'
+                        valueKey='count'
+                        cx={ cx }
+                        cy={ '50%' }
+                        startAngle={ 90 }
+                        endAngle={ -360 }
+                        innerRadius={ 80 }
+                        outerRadius={ 100 }
+                        fill={ yellow }
+                        label={ (elem) => elem.count }
+                        animationDuration={ 540 }>
+                        { bucketContents.map(entry => <Cell key={ entry.count } fill={ entry.color } />) }
+                    </Pie>
+                    <Tooltip
+                        content={ <ChartTooltip /> }
+                        offset={ 10 }
+                        position={ { x: 490, y: 54 } }
+                        cursor={ { stroke: green, strokeWidth: 2 } }
+                        wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
+                    <Legend
                         content={ renderLegend }
                         verticalAlign='middle'
                         align='right'
                         layout='vertical' />
-              </PieChart>
+                </PieChart>
             </div>
         )
     }
 }
 
 function renderLegend(props) {
-    const {payload} = props; // eslint-disable-line react/prop-types
+    const { payload } = props; // eslint-disable-line react/prop-types
     let inner = true;
     return (
         <ul>
-          { payload.map((entry, index) => {
+            { payload.map((entry, index) => {
                 const showSeparator = inner && entry.payload.type !== 'inner';
                 if (showSeparator) {
                     inner = false;
                 }
                 return (
                     <div className="legend-item" key={ `item-${index}` }>
-                      { showSeparator &&
-                        <hr/> }
-                      <Surface width={ 10 } height={ 10 }>
-                        <Symbols
-                                 cx={ 5 }
-                                 cy={ 5 }
-                                 type="square"
-                                 size={ 54 }
-                                 fill={ entry.color } />
-                      </Surface> <span>{ entry.value }</span>
+                        { showSeparator &&
+                            <hr /> }
+                        <Surface width={ 10 } height={ 10 }>
+                            <Symbols
+                                cx={ 5 }
+                                cy={ 5 }
+                                type="square"
+                                size={ 54 }
+                                fill={ entry.color } />
+                        </Surface> <span>{ entry.value }</span>
                     </div>
                 )
             }) }
@@ -206,7 +206,7 @@ function renderLegend(props) {
 }
 
 const RADIAN = Math.PI / 180;
-function customInnerPieLabel({cx, cy, midAngle, innerRadius, outerRadius, label, value}) { // eslint-disable-line react/prop-types
+function customInnerPieLabel({ cx, cy, midAngle, innerRadius, outerRadius, label, value }) { // eslint-disable-line react/prop-types
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN) - 25;
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -217,14 +217,14 @@ function customInnerPieLabel({cx, cy, midAngle, innerRadius, outerRadius, label,
 
     return (
         <Text
-              width={ 145 }
-              textAnchor='start'
-              verticalAnchor='middle'
-              dominantBaseline="middle"
-              x={ x }
-              y={ y }
-              fill="white">
-          { `${label}` }
+            width={ 145 }
+            textAnchor='start'
+            verticalAnchor='middle'
+            dominantBaseline="middle"
+            x={ x }
+            y={ y }
+            fill="white">
+            { `${label}` }
         </Text>
     );
 }
@@ -242,7 +242,7 @@ class ChartTooltip extends React.Component {
     };
 
     render() {
-        const {payload} = this.props;
+        const { payload } = this.props;
         if (payload.length == 0) {
             return null;
         }
@@ -250,31 +250,31 @@ class ChartTooltip extends React.Component {
         let content;
         if (dataPiece.type === 'inner') {
             content = <ul>
-                        <li key='count'>
-                          Count:
+                <li key='count'>
+                    Count:
                           { ' ' + dataPiece.count }
-                        </li>
-                        <li key='percent'>
-                          Percent:
+                </li>
+                <li key='percent'>
+                    Percent:
                           { ' ' + Math.round(payload[0].percent * 100) + '%' }
-                        </li>
-                      </ul>
+                </li>
+            </ul>
         } else {
             const benchmarkComponents = dataPiece.benchmarks.map(benchmark => <li key={ benchmark.key }>
-                                                                                { `${benchmark.key} (` }
-                                                                                <b>{ `${benchmark.scoreDiff}%` }</b>)
+                { `${benchmark.key} (` }
+                <b>{ `${benchmark.scoreDiff}%` }</b>)
                                                                               </li>);
             content = <ul style={ { whiteSpace: 'nowrap' } }>
-                        { benchmarkComponents }
-                      </ul>;
+                { benchmarkComponents }
+            </ul>;
         }
 
         return (
             <div style={ { paddingRight: 18 } }>
-              <div style={ { textAlign: 'center' } }>
-                <h5 style={ { color: dataPiece.color } }><u>{ dataPiece.name }</u></h5>
-              </div>
-              { content }
+                <div style={ { textAlign: 'center' } }>
+                    <h5 style={ { color: dataPiece.color } }><u>{ dataPiece.name }</u></h5>
+                </div>
+                { content }
             </div>
         );
     }

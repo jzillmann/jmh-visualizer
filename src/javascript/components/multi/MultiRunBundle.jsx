@@ -15,13 +15,13 @@ export default class MultiRunBundle extends React.Component {
     };
 
     render() {
-        const {runNames, benchmarkBundle, metricExtractor, detailBenchmarkBundleFunction} = this.props;
+        const { runNames, benchmarkBundle, metricExtractor, detailBenchmarkBundleFunction } = this.props;
         return (
             <div>
-              <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
-              <div style={ { fontSize: '0.90em' } }>
-                <LineChartView runNames={ runNames } benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } />
-              </div>
+                <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
+                <div style={ { fontSize: '0.90em' } }>
+                    <LineChartView runNames={ runNames } benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } />
+                </div>
             </div>
         );
     }

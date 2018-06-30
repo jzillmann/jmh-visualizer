@@ -23,7 +23,7 @@ export default class SingleRunChartTooltip extends Component {
     };
 
     render() {
-        const {label, payload, scoreUnit, roundScores} = this.props;
+        const { label, payload, scoreUnit, roundScores } = this.props;
         if (!payload || payload.length == 0) {
             return null;
         }
@@ -32,20 +32,20 @@ export default class SingleRunChartTooltip extends Component {
         const tableHeaders = [];
         if (payload.length > 1) {
             tableHeaders.push(<th key='1'>
-                                Run
+                Run
                               </th>);
         }
         tableHeaders.push(<th key='2'>
-                            Score
+            Score
                           </th>);
         tableHeaders.push(<th key='3'>
-                            Error
+            Error
                           </th>);
         tableHeaders.push(<th key='4'>
-                            Confidence
+            Confidence
                           </th>);
         tableHeaders.push(<th key='5'>
-                            Unit
+            Unit
                           </th>);
 
         // Assemble table rows showing score, error, etc... per bar
@@ -54,24 +54,24 @@ export default class SingleRunChartTooltip extends Component {
             const columnValues = [];
             if (payload.length > 1) {
                 columnValues.push(<td key='run'>
-                                    { barPayload.dataKey }
-                                  </td>);
+                    { barPayload.dataKey }
+                </td>);
             }
             columnValues.push(<td key='score' style={ { color: blue } }>
-                                { formatNumber(barPayload.payload[barPayload.dataKey], roundScores) }
-                              </td>);
+                { formatNumber(barPayload.payload[barPayload.dataKey], roundScores) }
+            </td>);
             columnValues.push(<td key='error' style={ { color: red } }>
-                                { formatNumber(barPayload.payload[barPayload.dataKey + 'Error'], roundScores) }
-                              </td>);
+                { formatNumber(barPayload.payload[barPayload.dataKey + 'Error'], roundScores) }
+            </td>);
             columnValues.push(<td key='confidence'>
-                                { barPayload.payload[barPayload.dataKey] ? formatNumber(confidenceInterval[0], roundScores) + ' - ' + formatNumber(confidenceInterval[1], roundScores) : "n/a" }
-                              </td>);
+                { barPayload.payload[barPayload.dataKey] ? formatNumber(confidenceInterval[0], roundScores) + ' - ' + formatNumber(confidenceInterval[1], roundScores) : "n/a" }
+            </td>);
             columnValues.push(<td key='unit'>
-                                { scoreUnit }
-                              </td>);
+                { scoreUnit }
+            </td>);
             return <tr key={ barPayload.name }>
-                     { columnValues }
-                   </tr>
+                { columnValues }
+            </tr>
         });
 
         //Assemble iteration charts showing the raw iteration data per run 
@@ -90,28 +90,28 @@ export default class SingleRunChartTooltip extends Component {
                         }
                         );
                         return <BarChart
-                                         key={ 'chart' + forkIndex + '-' + runIndex }
-                                         width={ tooltipWidth }
-                                         height={ 63 }
-                                         data={ sampleRunData }
-                                         margin={ { top: 18 } }>
-                                 <XAxis dataKey='score' orientation='bottom' height={ 15 } />
-                                 <YAxis />
-                                 <Bar dataKey='occurence' fill={ barPayload.fill } isAnimationActive={ false } />
-                               </BarChart>
+                            key={ 'chart' + forkIndex + '-' + runIndex }
+                            width={ tooltipWidth }
+                            height={ 63 }
+                            data={ sampleRunData }
+                            margin={ { top: 18 } }>
+                            <XAxis dataKey='score' orientation='bottom' height={ 15 } />
+                            <YAxis />
+                            <Bar dataKey='occurence' fill={ barPayload.fill } isAnimationActive={ false } />
+                        </BarChart>
                     });
                     return <div key={ 'fork' + forkIndex }>
-                             <br/>
-                             <div>
-                               <b>{ `Fork ${forkIndex} / ${forkHistograms.length}` }</b>
-                             </div>
-                             <div>
-                               { histogramCharts }
-                             </div>
-                             <div>
-                               { `Showing ${histogramCharts.length}  runs from ${forkHistograms[forkIndex].length} ...` }
-                             </div>
-                           </div>
+                        <br />
+                        <div>
+                            <b>{ `Fork ${forkIndex} / ${forkHistograms.length}` }</b>
+                        </div>
+                        <div>
+                            { histogramCharts }
+                        </div>
+                        <div>
+                            { `Showing ${histogramCharts.length}  runs from ${forkHistograms[forkIndex].length} ...` }
+                        </div>
+                    </div>
                 });
             }
             if (forkScores) {
@@ -127,33 +127,33 @@ export default class SingleRunChartTooltip extends Component {
                 const BarLabel = (props) => {
                     return (
                         <text
-                              stroke={ blue }
-                              fontSize={ 9 }
-                              fontWeight='normal'
-                              textAnchor={ props.textAnchor }
-                              x={ props.x }
-                              y={ props.y - 1 }
-                              width={ props.width }
-                              height={ props.height }>
-                          { formatNumber(props['data'], roundScores) }
+                            stroke={ blue }
+                            fontSize={ 9 }
+                            fontWeight='normal'
+                            textAnchor={ props.textAnchor }
+                            x={ props.x }
+                            y={ props.y - 1 }
+                            width={ props.width }
+                            height={ props.height }>
+                            { formatNumber(props['data'], roundScores) }
                         </text>
                     );
                 };
 
 
                 return forkScoreDatas.map((data, index) => <div key={ 'iterations' + index }>
-                                                             <BarChart
-                                                                       width={ tooltipWidth }
-                                                                       height={ 36 }
-                                                                       data={ data }
-                                                                       margin={ { top: 18 } }>
-                                                               <Bar
-                                                                    dataKey='data'
-                                                                    fill={ barPayload.fill }
-                                                                    isAnimationActive={ false }
-                                                                    label={ <BarLabel/> } />
-                                                             </BarChart>
-                                                           </div>
+                    <BarChart
+                        width={ tooltipWidth }
+                        height={ 36 }
+                        data={ data }
+                        margin={ { top: 18 } }>
+                        <Bar
+                            dataKey='data'
+                            fill={ barPayload.fill }
+                            isAnimationActive={ false }
+                            label={ <BarLabel /> } />
+                    </BarChart>
+                </div>
                 )
             }
             return null;
@@ -161,30 +161,30 @@ export default class SingleRunChartTooltip extends Component {
 
         return (
             <div>
-              <div style={ { textAlign: 'center' } }>
-                <u><h4>{ label }</h4></u>
-              </div>
-              <Table
-                     striped
-                     bordered
-                     condensed
-                     hover>
-                <thead>
-                  <tr>
-                    { tableHeaders }
-                  </tr>
-                </thead>
-                <tbody>
-                  { tableRows }
-                </tbody>
-              </Table>
-              <div style={ { textAlign: 'center' } }>
-                <u><h5>Raw Data</h5></u>
-              </div>
-              <div style={ { fontSize: '0.72em' } }>
-                { iterationCharts }
-              </div>
-              <br/>
+                <div style={ { textAlign: 'center' } }>
+                    <u><h4>{ label }</h4></u>
+                </div>
+                <Table
+                    striped
+                    bordered
+                    condensed
+                    hover>
+                    <thead>
+                        <tr>
+                            { tableHeaders }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        { tableRows }
+                    </tbody>
+                </Table>
+                <div style={ { textAlign: 'center' } }>
+                    <u><h5>Raw Data</h5></u>
+                </div>
+                <div style={ { fontSize: '0.72em' } }>
+                    { iterationCharts }
+                </div>
+                <br />
             </div>
         );
     }

@@ -33,36 +33,36 @@ export default class TocList extends React.PureComponent {
     }
 
     render() {
-        const {categories, activeCategory, selectCategoryFunction, elementIds, elementNames, linkControlsCreators} = this.props;
+        const { categories, activeCategory, selectCategoryFunction, elementIds, elementNames, linkControlsCreators } = this.props;
 
         return (
             <ul className="nav">
-              { categories.map(category => <li key={ category } className={ category === activeCategory ? 'active' : '' }>
-                                             <div>
-                                               <a onClick={ selectCategoryFunction.bind(null, category) }>
-                                                 { category }
-                                               </a>
-                                             </div>
-                                             <ul className='nav'>
-                                               { category === activeCategory ? elementIds.map((elementId, i) => <TocLink
-                                                                                                                         key={ elementId }
-                                                                                                                         activeClass="active"
-                                                                                                                         to={ elementId }
-                                                                                                                         spy={ true }
-                                                                                                                         offset={ -200 }
-                                                                                                                         duration={ 720 }
-                                                                                                                         delay={ 50 }
-                                                                                                                         smooth='easeOutSine'>
-                                                                                                                  <div>
-                                                                                                                    { linkControlsCreators.map(linkControlCreator => linkControlCreator(elementId)) }
-                                                                                                                    <a onClick={ this.scrollTo.bind(this, elementId) }>
-                                                                                                                      { elementNames[i] }
-                                                                                                                    </a>
-                                                                                                                  </div>
-                                                                                                                </TocLink>)
-                                                 : '' }
-                                             </ul>
-                                           </li>) }
+                { categories.map(category => <li key={ category } className={ category === activeCategory ? 'active' : '' }>
+                    <div>
+                        <a onClick={ selectCategoryFunction.bind(null, category) }>
+                            { category }
+                        </a>
+                    </div>
+                    <ul className='nav'>
+                        { category === activeCategory ? elementIds.map((elementId, i) => <TocLink
+                            key={ elementId }
+                            activeClass="active"
+                            to={ elementId }
+                            spy={ true }
+                            offset={ -200 }
+                            duration={ 720 }
+                            delay={ 50 }
+                            smooth='easeOutSine'>
+                            <div>
+                                { linkControlsCreators.map(linkControlCreator => linkControlCreator(elementId)) }
+                                <a onClick={ this.scrollTo.bind(this, elementId) }>
+                                    { elementNames[i] }
+                                </a>
+                            </div>
+                        </TocLink>)
+                            : '' }
+                    </ul>
+                </li>) }
             </ul>
         );
     }

@@ -11,44 +11,44 @@ import TocList from 'components/TocList.jsx'
 
 export default class DetailSideBar extends React.Component {
 
-    static propTypes = {
-        benchmarkBundle: PropTypes.object.isRequired,
-        benchmarkBundles: PropTypes.array.isRequired,
-        secondaryMetrics: PropTypes.array.isRequired,
-        goBackFunction: PropTypes.func.isRequired,
-        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
-    };
+  static propTypes = {
+    benchmarkBundle: PropTypes.object.isRequired,
+    benchmarkBundles: PropTypes.array.isRequired,
+    secondaryMetrics: PropTypes.array.isRequired,
+    goBackFunction: PropTypes.func.isRequired,
+    detailBenchmarkBundleFunction: PropTypes.func.isRequired,
+  };
 
-    render() {
-        const {benchmarkBundle, benchmarkBundles, secondaryMetrics, goBackFunction, detailBenchmarkBundleFunction} = this.props;
-        const benchmarkBundleOptions = benchmarkBundles.map(bundle => <option key={ bundle.key } value={ bundle.key }>
-                                                                        { bundle.name }
-                                                                      </option>);
+  render() {
+    const { benchmarkBundle, benchmarkBundles, secondaryMetrics, goBackFunction, detailBenchmarkBundleFunction } = this.props;
+    const benchmarkBundleOptions = benchmarkBundles.map(bundle => <option key={ bundle.key } value={ bundle.key }>
+      { bundle.name }
+    </option>);
 
-        const metrics = ['Score'].concat(secondaryMetrics);
+    const metrics = ['Score'].concat(secondaryMetrics);
 
-        return <div>
-                 <a onClick={ goBackFunction }>
-                   <BackIcon /> Back..</a>
-                 <br />
-                 <br />
-                 <FormGroup bsSize="small" controlId="theForm">
-                   <InputGroup>
-                     <FormControl componentClass="select" onChange={ (event) => detailBenchmarkBundleFunction(event.target.value) } defaultValue={ benchmarkBundle.key }>
-                       { benchmarkBundleOptions }
-                     </FormControl>
-                   </InputGroup>
-                 </FormGroup>
-                 <hr />
-                 <TocList
-                          categories={ ['Metrics'] }
-                          activeCategory={ 'Metrics' }
-                          selectCategoryFunction={ (category) => alert(category) }
-                          elementIds={ metrics }
-                          elementNames={ metrics }
-                          linkControlsCreators={ [] } />
-               </div>
-    }
+    return <div>
+      <a onClick={ goBackFunction }>
+        <BackIcon /> Back..</a>
+      <br />
+      <br />
+      <FormGroup bsSize="small" controlId="theForm">
+        <InputGroup>
+          <FormControl componentClass="select" onChange={ (event) => detailBenchmarkBundleFunction(event.target.value) } defaultValue={ benchmarkBundle.key }>
+            { benchmarkBundleOptions }
+          </FormControl>
+        </InputGroup>
+      </FormGroup>
+      <hr />
+      <TocList
+        categories={ ['Metrics'] }
+        activeCategory={ 'Metrics' }
+        selectCategoryFunction={ (category) => alert(category) }
+        elementIds={ metrics }
+        elementNames={ metrics }
+        linkControlsCreators={ [] } />
+    </div>
+  }
 
 
 }

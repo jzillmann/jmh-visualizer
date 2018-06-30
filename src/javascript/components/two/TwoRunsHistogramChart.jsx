@@ -17,7 +17,7 @@ export default class TwoRunsHistogramChart extends React.Component {
     };
 
     render() {
-        const {benchmarkBundles, metricExtractor} = this.props;
+        const { benchmarkBundles, metricExtractor } = this.props;
 
         const benchmarkDiffs = flatten(benchmarkBundles.map(benchmarkBundle => benchmarkBundle.benchmarkMethods.map((benchmarkMethod, i) => {
             const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
@@ -94,47 +94,47 @@ export default class TwoRunsHistogramChart extends React.Component {
 
         return (
             <div>
-              <ResponsiveContainer width='100%' height={ chartHeight }>
-                <BarChart height={ chartHeight } data={ data } margin={ { top: 20, right: 45, left: 25, bottom: 5 } }>
-                  <XAxis
-                         domain={ [-100, 100] }
-                         dataKey="scoreDiff"
-                         type="number"
-                         tick={ { transform: 'translate(0, 5)' } }
-                         ticks={ [-100, -90, -80, -70, -60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] }
-                         tickFormatter={ tickFormatter } />
-                  <YAxis />
-                  <ReferenceLine x={ 0 } stroke={ yellow } label={ `(${percentFrequencies[0].count})` } />
-                  <Tooltip content={ <ChartTooltip /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
-                  <Bar
-                       dataKey="count"
-                       unit=" %"
-                       isAnimationActive={ true }
-                       animationDuration={ 900 }
-                       fill={ blue }
-                       label={ <BarLabel/> }>
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+                <ResponsiveContainer width='100%' height={ chartHeight }>
+                    <BarChart height={ chartHeight } data={ data } margin={ { top: 20, right: 45, left: 25, bottom: 5 } }>
+                        <XAxis
+                            domain={ [-100, 100] }
+                            dataKey="scoreDiff"
+                            type="number"
+                            tick={ { transform: 'translate(0, 5)' } }
+                            ticks={ [-100, -90, -80, -70, -60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] }
+                            tickFormatter={ tickFormatter } />
+                        <YAxis />
+                        <ReferenceLine x={ 0 } stroke={ yellow } label={ `(${percentFrequencies[0].count})` } />
+                        <Tooltip content={ <ChartTooltip /> } cursor={ { stroke: green, strokeWidth: 2 } } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />
+                        <Bar
+                            dataKey="count"
+                            unit=" %"
+                            isAnimationActive={ true }
+                            animationDuration={ 900 }
+                            fill={ blue }
+                            label={ <BarLabel /> }>
+                        </Bar>
+                    </BarChart>
+                </ResponsiveContainer>
             </div>
         )
     }
 }
 
 function BarLabel(props) {
-    const {payload, textAnchor, x, y, width, height} = props; // eslint-disable-line react/prop-types
+    const { payload, textAnchor, x, y, width, height } = props; // eslint-disable-line react/prop-types
 
     if (payload.count > 0) {
         return (
             <text
-                  textAnchor={ textAnchor }
-                  fill={ yellow }
-                  x={ x }
-                  y={ y }
-                  width={ width }
-                  height={ height }
-                  className="recharts-bar-label">
-              { payload.count }
+                textAnchor={ textAnchor }
+                fill={ yellow }
+                x={ x }
+                y={ y }
+                width={ width }
+                height={ height }
+                className="recharts-bar-label">
+                { payload.count }
             </text>
         );
     } else {
@@ -160,23 +160,23 @@ class ChartTooltip extends React.Component {
     };
 
     render() {
-        const {payload} = this.props;
+        const { payload } = this.props;
         if (payload.length == 0) {
             return null;
         }
         const benchmarks = payload[0].payload.benchmarks;
         const benchmarksComponents = benchmarks.map(benchmark => <div key={ benchmark }>
-                                                                   { benchmark }
-                                                                 </div>);
+            { benchmark }
+        </div>);
 
         return (
             <div>
-              <div style={ { textAlign: 'center' } }>
-                <h5 style={ { color: payload[0].color } }><u>{ payload[0].name }</u></h5>
-              </div>
-              <div style={ { textAlign: 'center' } }>
-                { benchmarksComponents }
-              </div>
+                <div style={ { textAlign: 'center' } }>
+                    <h5 style={ { color: payload[0].color } }><u>{ payload[0].name }</u></h5>
+                </div>
+                <div style={ { textAlign: 'center' } }>
+                    { benchmarksComponents }
+                </div>
             </div>
         );
     }

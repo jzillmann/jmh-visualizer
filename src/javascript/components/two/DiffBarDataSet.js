@@ -1,9 +1,8 @@
-import MetricExtractor from 'models/MetricExtractor.js'
 import { getMetricType } from 'models/MetricType.js'
 
 import { shouldRound, round } from 'functions/util.js'
 
-export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor:MetricExtractor) {
+export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor) {
 
     const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
     const data = benchmarkBundle.benchmarkMethods.map((benchmarkMethod, i) => {

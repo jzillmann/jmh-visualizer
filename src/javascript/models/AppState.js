@@ -1,4 +1,3 @@
-import BenchmarkRun from 'models/BenchmarkRun.js';
 import BenchmarkSelection from 'models/BenchmarkSelection.js';
 import ViewSelection from 'models/ViewSelection.js';
 
@@ -37,13 +36,13 @@ export default class AppState {
     }
 
     // Upload original benchmarks
-    uploadBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
+    uploadBenchmarkRuns(benchmarkRuns) {
         this.viewSelection.uploadedBenchmarks = true;
         this.initBenchmarkRuns(benchmarkRuns);
     }
 
     // Init original benchmarks
-    initBenchmarkRuns(benchmarkRuns: BenchmarkRun[]) {
+    initBenchmarkRuns(benchmarkRuns) {
         this.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
         this.benchmarkRuns = benchmarkRuns;
         this.renderFunction(this);

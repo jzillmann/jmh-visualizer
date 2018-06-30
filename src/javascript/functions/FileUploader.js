@@ -17,7 +17,7 @@ export default class FileUploader {
         files.forEach((file) => {
             const reader = new FileReader();
             const runName = file.name.replace('.json', '');
-            reader.onload = function(evt) {
+            reader.onload = function (evt) {
                 try {
                     var parsedBenchmarks = JSON.parse(evt.target.result);
                     const benchmarkRun = new BenchmarkRun({
@@ -29,7 +29,7 @@ export default class FileUploader {
                         benchmarkRuns.sort((a, b) => a.name.localeCompare(b.name));
                         uploadFunction(benchmarkRuns);
                     }
-                } catch ( e ) {
+                } catch (e) {
                     alert(e); //error in the above string(in this case,yes)!
                     DoingWorkSpinner.hide();
                 }

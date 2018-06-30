@@ -1,32 +1,31 @@
-import BenchmarkRun from 'models/BenchmarkRun.js';
 import BenchmarkBundle from 'models/BenchmarkBundle.js';
 import BenchmarkMethod from 'models/BenchmarkMethod.js';
 
 //TODO cleanup
 
 // Extracts the benchmarks class name
-export function parseClassName(benchmark:Object) {
+export function parseClassName(benchmark) {
     return parseClassNameFromFullName(benchmark.benchmark);
 }
 
-export function parseFullClassName(benchmark:Object) {
+export function parseFullClassName(benchmark) {
     const nameParts = benchmark.benchmark.split('.');
     nameParts.pop(); //remove the method part
     return nameParts.join('.');
 }
 
-function parseClassNameFromFullName(fullName:String) {
+function parseClassNameFromFullName(fullName) {
     return fullName.split('.').reverse()[0];
 }
 
 // Extracts the benchmarks method name
-export function parseMethodName(benchmark:Object) {
+export function parseMethodName(benchmark) {
     const splitted = benchmark.benchmark.split('.');
     return splitted[splitted.length - 1];
 }
 
 // Extracts the benchmarks method name
-export function parseBenchmarkName(benchmark:Object) {
+export function parseBenchmarkName(benchmark) {
     var benchmarkName = parseMethodName(benchmark);
     if (benchmark.params) {
         const keys = Object.keys(benchmark.params);
@@ -46,7 +45,7 @@ export function getUniqueParamValues(benchmarks, paramName) {
 }
 
 
-export function getUniqueBenchmarkModes(benchmarkBundle:BenchmarkBundle, metricExtractor) {
+export function getUniqueBenchmarkModes(benchmarkBundle, metricExtractor) {
     const modes = new Set();
     benchmarkBundle.allBenchmarks().forEach(benchmark => {
         modes.add(metricExtractor.extractType(benchmark));
@@ -54,7 +53,7 @@ export function getUniqueBenchmarkModes(benchmarkBundle:BenchmarkBundle, metricE
     return Array.from(modes);
 }
 
-export function getUniqueBenchmarkModesAccrossBundles(benchmarkBundles:BenchmarkBundle[], metricExtractor) {
+export function getUniqueBenchmarkModesAccrossBundles(benchmarkBundles, metricExtractor) {
     const modes = new Set();
     benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.allBenchmarks().forEach(benchmark => {
         modes.add(metricExtractor.extractType(benchmark));
@@ -65,13 +64,13 @@ export function getUniqueBenchmarkModesAccrossBundles(benchmarkBundles:Benchmark
 /*
  * 
  */
-export function parseBenchmarkBundles(benchmarkRuns:BenchmarkRun[]) {
+export function parseBenchmarkBundles(benchmarkRuns) {
     const classToBenchmarksMap = parseMultiRunBenchmarkMap(benchmarkRuns);
     const benchmarkBundles = [];
-    for ( let [fullName, benchmarkRunMap] of classToBenchmarksMap ) {
+    for (let [fullName, benchmarkRunMap] of classToBenchmarksMap) {
         const benchmarkMethods = [];
         const methodNames = new Set();
-        for ( let [key, benchmarks] of benchmarkRunMap ) {
+        for (let [key, benchmarks] of benchmarkRunMap) {
             const keyParts = key.split(' ');
             const methodName = keyParts.shift();
             const params = keyParts.length > 0 ? keyParts.map(paramString => paramString.split('=')) : null;
@@ -97,12 +96,12 @@ export function parseBenchmarkBundles(benchmarkRuns:BenchmarkRun[]) {
  *     Map<className, Map<methodName, benchmarks[]>>
  * Where the benchmarks array has a null if the particular run didn't included the benchmark.
  */
-function parseMultiRunBenchmarkMap(benchmarkRuns:BenchmarkRun[]) {
+function parseMultiRunBenchmarkMap(benchmarkRuns) {
     const classToBenchmarksMap = new Map();
     benchmarkRuns.forEach((benchmarkRun, benchmarkRunIndex) => {
         benchmarkRun.benchmarks.forEach((benchmark) => {
             const fullClassName = parseFullClassName(benchmark);
-            let methodMap:Map = classToBenchmarksMap.get(fullClassName);
+            let methodMap = classToBenchmarksMap.get(fullClassName);
             if (methodMap === undefined) {
                 methodMap = new Map();
                 classToBenchmarksMap.set(fullClassName, methodMap)
@@ -127,8 +126,8 @@ function parseMultiRunBenchmarkMap(benchmarkRuns:BenchmarkRun[]) {
             runArray.push(benchmark)
         })
         // fill up what didn't exist in this run
-        for ( let methodMap of classToBenchmarksMap.values() ) {
-            for ( let runArray of methodMap.values() ) {
+        for (let methodMap of classToBenchmarksMap.values()) {
+            for (let runArray of methodMap.values()) {
                 if (runArray.length < benchmarkRunIndex + 1) {
                     runArray.push(null);
                 }

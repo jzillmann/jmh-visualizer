@@ -51,27 +51,27 @@ export default class LoadFromUrlsDialog extends React.Component {
     render() {
         return (
             <Form horizontal>
-              <FormGroup controlId="url1">
-                <Col componentClass={ ControlLabel } sm={ 2 }> URL 1
+                <FormGroup controlId="url1">
+                    <Col componentClass={ ControlLabel } sm={ 2 }> URL 1
                 </Col>
-                <Col sm={ 10 }>
-                <FormControl type="text" onChange={ this.handleUrl1Change } />
+                    <Col sm={ 10 }>
+                        <FormControl type="text" onChange={ this.handleUrl1Change } />
+                    </Col>
+                </FormGroup>
+                <FormGroup controlId="url2">
+                    <Col componentClass={ ControlLabel } sm={ 2 }> URL 2 (optional)
                 </Col>
-              </FormGroup>
-              <FormGroup controlId="url2">
-                <Col componentClass={ ControlLabel } sm={ 2 }> URL 2 (optional)
-                </Col>
-                <Col sm={ 10 }>
-                <FormControl type="text" onChange={ this.handleUrl2Change } />
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col smOffset={ 2 } sm={ 10 }>
-                <Button onClick={ this.handleSubmit } disabled={ !this.state.url1 }>
-                  Load
+                    <Col sm={ 10 }>
+                        <FormControl type="text" onChange={ this.handleUrl2Change } />
+                    </Col>
+                </FormGroup>
+                <FormGroup>
+                    <Col smOffset={ 2 } sm={ 10 }>
+                        <Button onClick={ this.handleSubmit } disabled={ !this.state.url1 }>
+                            Load
                 </Button>
-                </Col>
-              </FormGroup>
+                    </Col>
+                </FormGroup>
             </Form>
         );
     }

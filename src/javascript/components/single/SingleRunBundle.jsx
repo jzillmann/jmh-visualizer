@@ -32,29 +32,29 @@ export default class SingleRunBundle extends React.Component {
     }
 
     render() {
-        const {runName, benchmarkBundle, metricExtractor, detailBenchmarkBundleFunction, dataMax} = this.props;
+        const { runName, benchmarkBundle, metricExtractor, detailBenchmarkBundleFunction, dataMax } = this.props;
 
         const benchmarks = benchmarkBundle.allBenchmarks();
         const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, metricExtractor) } dataMax={ dataMax } />;
 
         return (
             <div>
-              <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
-              <div style={ { fontSize: '0.90em' } }>
-                { scoresChart }
-              </div>
-              <Button bsSize="small" onClick={ ::this.toggleShowJson }>
-                Show JSON
-              </Button>
-              <Collapse in={ this.state.showJson }>
-                <div>
-                  <pre>{ JSON.stringify(benchmarks, null, '\t') }</pre>
-                  <Button bsStyle="primary" onClick={ ::this.toggleShowJson }>
-                    Collapse
-                  </Button>
+                <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
+                <div style={ { fontSize: '0.90em' } }>
+                    { scoresChart }
                 </div>
-              </Collapse>
-            </div>
+                <Button bsSize="small" onClick={ this.toggleShowJson.bind(this) }>
+                    Show JSON
+              </Button>
+                <Collapse in={ this.state.showJson }>
+                    <div>
+                        <pre>{ JSON.stringify(benchmarks, null, '\t') }</pre>
+                        <Button bsStyle="primary" onClick={ this.toggleShowJson.bind(this) }>
+                            Collapse
+                  </Button>
+                    </div>
+                </Collapse >
+            </div >
         );
     }
 }

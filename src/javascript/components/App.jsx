@@ -38,7 +38,7 @@ export default class App extends React.Component {
     }
 
     render() {
-        const {appState} = this.props;
+        const { appState } = this.props;
         const benchmarkSelection = appState.benchmarkSelection();
         const viewSelection = appState.viewSelection;
 
@@ -49,13 +49,13 @@ export default class App extends React.Component {
             const fileUploader = new FileUploader(appState.uploadBenchmarkRuns);
             mainView = <UploadMainView fileUploader={ fileUploader } />;
             sideBar = <UploadSideBar
-                                     fileUploader={ fileUploader }
-                                     loadSingleRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) }
-                                     loadTwoRunsExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) }
-                                     loadMultiRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.multiRunExample) } />;
+                fileUploader={ fileUploader }
+                loadSingleRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) }
+                loadTwoRunsExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) }
+                loadMultiRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.multiRunExample) } />;
         } else {
             if (viewSelection.shouldPreventPageReload()) {
-                window.onbeforeunload = function() {
+                window.onbeforeunload = function () {
                     return "You will loose the current benchmarks.";
                 };
             }
@@ -76,13 +76,13 @@ export default class App extends React.Component {
                     mainView = <MultiRunDetailView runNames={ benchmarkSelection.runNames } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
                 }
                 sideBar = <DetailSideBar
-                                         benchmarkBundle={ detailBundle }
-                                         benchmarkBundles={ benchmarkBundles }
-                                         secondaryMetrics={ secondaryMetrics }
-                                         goBackFunction={ appState.goBack }
-                                         detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                    benchmarkBundle={ detailBundle }
+                    benchmarkBundles={ benchmarkBundles }
+                    secondaryMetrics={ secondaryMetrics }
+                    goBackFunction={ appState.goBack }
+                    detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
 
-            // Run View
+                // Run View
             } else {
                 const metricType = appState.selectedMetric;
                 const metricExtractor = createMetricExtractor(appState.selectedMetric);
@@ -105,27 +105,27 @@ export default class App extends React.Component {
 
                 if (benchmarkSelection.runNames.length == 1) {
                     mainView = <SingleRunView
-                                              runName={ benchmarkSelection.runNames[0] }
-                                              benchmarkBundles={ filteredBenchmarkBundles }
-                                              focusedBundles={ focusedBundles }
-                                              metricExtractor={ metricExtractor }
-                                              detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                        runName={ benchmarkSelection.runNames[0] }
+                        benchmarkBundles={ filteredBenchmarkBundles }
+                        focusedBundles={ focusedBundles }
+                        metricExtractor={ metricExtractor }
+                        detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                 } else if (benchmarkSelection.runNames.length == 2) {
                     if (runView === 'Summary') {
                         sideBarBenchmarks = [];
                         mainView = <TwoRunsSummaryView
-                                                       runNames={ benchmarkSelection.runNames }
-                                                       runIndex={ [0, 1] }
-                                                       benchmarkBundles={ filteredBenchmarkBundles }
-                                                       minDeviation={ 5 }
-                                                       metricExtractor={ metricExtractor }
-                                                       detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                            runNames={ benchmarkSelection.runNames }
+                            runIndex={ [0, 1] }
+                            benchmarkBundles={ filteredBenchmarkBundles }
+                            minDeviation={ 5 }
+                            metricExtractor={ metricExtractor }
+                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                     } else {
                         mainView = <TwoRunsView
-                                                runNames={ benchmarkSelection.runNames }
-                                                benchmarkBundles={ filteredBenchmarkBundles }
-                                                metricExtractor={ metricExtractor }
-                                                detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                            runNames={ benchmarkSelection.runNames }
+                            benchmarkBundles={ filteredBenchmarkBundles }
+                            metricExtractor={ metricExtractor }
+                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                     }
                 } else {
                     if (runView === 'Summary') {
@@ -133,40 +133,40 @@ export default class App extends React.Component {
                         const firstBenchmark = benchmarkSelection.runNames.length - 2;
                         const secondBenchmark = benchmarkSelection.runNames.length - 1;
                         mainView = <TwoRunsSummaryView
-                                                       runNames={ benchmarkSelection.runNames }
-                                                       runIndex={ [firstBenchmark, secondBenchmark] }
-                                                       benchmarkBundles={ filteredBenchmarkBundles }
-                                                       minDeviation={ 5 }
-                                                       metricExtractor={ metricExtractor }
-                                                       detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                            runNames={ benchmarkSelection.runNames }
+                            runIndex={ [firstBenchmark, secondBenchmark] }
+                            benchmarkBundles={ filteredBenchmarkBundles }
+                            minDeviation={ 5 }
+                            metricExtractor={ metricExtractor }
+                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                     } else {
                         mainView = <MultiRunView
-                                                 runNames={ benchmarkSelection.runNames }
-                                                 benchmarkBundles={ filteredBenchmarkBundles }
-                                                 metricExtractor={ metricExtractor }
-                                                 detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                            runNames={ benchmarkSelection.runNames }
+                            benchmarkBundles={ filteredBenchmarkBundles }
+                            metricExtractor={ metricExtractor }
+                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
                     }
                 }
                 sideBar = <RunSideBar
-                                      benchmarkBundles={ sideBarBenchmarks }
-                                      metrics={ metrics }
-                                      metricExtractor={ metricExtractor }
-                                      focusedBenchmarkBundles={ focusedBundles }
-                                      categories={ categories }
-                                      activeCategory={ activeCategory }
-                                      selectMetricFunction={ appState.selectMetric }
-                                      focusBenchmarkBundleFunction={ appState.focusBundle }
-                                      detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle }
-                                      selectCategoryFunction={ appState.selectCategory } />
+                    benchmarkBundles={ sideBarBenchmarks }
+                    metrics={ metrics }
+                    metricExtractor={ metricExtractor }
+                    focusedBenchmarkBundles={ focusedBundles }
+                    categories={ categories }
+                    activeCategory={ activeCategory }
+                    selectMetricFunction={ appState.selectMetric }
+                    focusBenchmarkBundleFunction={ appState.focusBundle }
+                    detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle }
+                    selectCategoryFunction={ appState.selectCategory } />
             }
         }
 
         return (
             <div>
-              <MainNavi runs={ appState.benchmarkRuns } viewSelection={ viewSelection } selectRunsFunction={ appState.selectBenchmarkRuns } />
-              <div style={ { paddingBottom: 20 + 'px' } }>
-                <SplitPane left={ mainView } right={ sideBar } />
-              </div>
+                <MainNavi runs={ appState.benchmarkRuns } viewSelection={ viewSelection } selectRunsFunction={ appState.selectBenchmarkRuns } />
+                <div style={ { paddingBottom: 20 + 'px' } }>
+                    <SplitPane left={ mainView } right={ sideBar } />
+                </div>
             </div>
         );
     }

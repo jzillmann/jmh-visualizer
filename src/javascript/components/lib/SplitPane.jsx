@@ -9,23 +9,23 @@ import AutoAffix from 'react-overlays/lib/AutoAffix';
 
 export default function SplitPane(props) {
 
-    return <Grid fluid={ true }>
-             <Row>
-               <Col xs={ 14 } md={ 10 }>
-               { props.left }
-               </Col>
-               <Col xs={ 4 } md={ 2 }>
-               <AutoAffix viewportOffsetTop={ 15 } container={ this }>
-                 <div className='bs-docs-sidebar'>
-                   { props.right }
-                 </div>
-               </AutoAffix>
-               </Col>
-             </Row>
-           </Grid>;
+  return <Grid fluid={ true }>
+    <Row>
+      <Col xs={ 14 } md={ 10 }>
+        { props.left }
+      </Col>
+      <Col xs={ 4 } md={ 2 }>
+        <AutoAffix viewportOffsetTop={ 15 } container={ this }>
+          <div className='bs-docs-sidebar'>
+            { props.right }
+          </div>
+        </AutoAffix>
+      </Col>
+    </Row>
+  </Grid>;
 }
 
 SplitPane.propTypes = {
-    left: PropTypes.object.isRequired,
-    right: PropTypes.object.isRequired,
+  left: PropTypes.object.isRequired,
+  right: PropTypes.object.isRequired,
 };

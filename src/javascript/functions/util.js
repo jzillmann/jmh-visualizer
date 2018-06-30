@@ -1,5 +1,5 @@
 export function groupBy(xs, key) {
-    return xs.reduce(function(rv, x) {
+    return xs.reduce(function (rv, x) {
         let v = key instanceof Function ? key(x) : x[key];
         let el = rv.find((r) => r && r.key === v);
         if (el) {
@@ -40,8 +40,8 @@ export function flatten(arr, result = []) {
 
 //If there is any score above 5, we do round
 export function shouldRound(benchmarkMethods, metricExtractor) {
-    for ( let benchmarkMethod of benchmarkMethods ) {
-        for ( let benchmark of benchmarkMethod.benchmarks ) {
+    for (let benchmarkMethod of benchmarkMethods) {
+        for (let benchmark of benchmarkMethod.benchmarks) {
             if (benchmark && metricExtractor.hasMetric(benchmark) && metricExtractor.extractScore(benchmark) > 5) {
                 return true;
             }

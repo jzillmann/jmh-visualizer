@@ -24,7 +24,7 @@ export default class MyLogo extends Component {
     render() {
         return (
             <a href="" onClick={ this.handleClick }>
-              <FaAlignLeft/> JMH Visualizer</a>
+                <FaAlignLeft /> JMH Visualizer</a>
         );
     }
 }

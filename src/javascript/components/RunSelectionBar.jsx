@@ -41,47 +41,47 @@ export default class RunSelectionBar extends React.Component {
     }
 
     render() {
-        const {runs, runSelection, runViews, runView} = this.props;
+        const { runs, runSelection, runViews, runView } = this.props;
         const showAll = runSelection.reduce((showIt, showRun) => showIt && showRun);
 
         const runComponents = runSelection.map((run, index) => {
             const isActive = !showAll && runSelection[index];
             return <Button
-                           key={ index }
-                           bsStyle={ isActive ? 'primary' : 'default' }
-                           bsSize="small"
-                           onClick={ this.selectSingleRun.bind(this, index) }>
-                     { runs[index].name }
-                   </Button>
+                key={ index }
+                bsStyle={ isActive ? 'primary' : 'default' }
+                bsSize="small"
+                onClick={ this.selectSingleRun.bind(this, index) }>
+                { runs[index].name }
+            </Button>
         });
         let allButton;
         if (runViews.length > 1) {
             const runViewMenuItems = runViews.map(runViewLabel => <MenuItem key={ runViewLabel } onClick={ this.selectAll.bind(this, runViewLabel) }>
-                                                                  { runViewLabel }
-                                                                  </MenuItem>);
+                { runViewLabel }
+            </MenuItem>);
             allButton = <SplitButton
-                                     id='all'
-                                     title={ runView }
-                                     bsStyle={ showAll ? 'primary' : 'default' }
-                                     bsSize="small"
-                                     onClick={ this.selectAll.bind(this, runView) }>
-                          { runViewMenuItems }
-                        </SplitButton>;
+                id='all'
+                title={ runView }
+                bsStyle={ showAll ? 'primary' : 'default' }
+                bsSize="small"
+                onClick={ this.selectAll.bind(this, runView) }>
+                { runViewMenuItems }
+            </SplitButton>;
         } else {
             allButton = <Button bsStyle={ showAll ? 'primary' : 'default' } bsSize="small" onClick={ this.selectAll.bind(this, runView) }>
-                          { runViews[0] }
-                        </Button>
+                { runViews[0] }
+            </Button>
         }
 
         return (
             <div style={ { textAlign: 'center', marginTop: '-9px', marginBottom: '15px' } }>
-              <ButtonGroup>
-                { runComponents }
-              </ButtonGroup>
-              { ' ' }
-              <ButtonGroup>
-                { allButton }
-              </ButtonGroup>
+                <ButtonGroup>
+                    { runComponents }
+                </ButtonGroup>
+                { ' ' }
+                <ButtonGroup>
+                    { allButton }
+                </ButtonGroup>
             </div>
         );
     }

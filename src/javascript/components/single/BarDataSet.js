@@ -13,7 +13,6 @@ export default class BarDataSet {
     }
 }
 
-import MetricExtractor from 'models/MetricExtractor.js'
 import { groupBy, shouldRound, round } from 'functions/util.js'
 
 // The datasets will differ in case the benchmark-class uses params or not:
@@ -23,7 +22,7 @@ import { groupBy, shouldRound, round } from 'functions/util.js'
 // 3 - 2 params, single methods => convert to (2)
 // 4 - 2+ params, multi methods => combine params & convert to (2)
 // 5 - 3+ params, single methods => combine params & convert to (0)
-export function createDataSetFromBenchmarks(runName, benchmarkBundle, metricExtractor:MetricExtractor) {
+export function createDataSetFromBenchmarks(runName, benchmarkBundle, metricExtractor) {
     const id = `${runName}:${benchmarkBundle.key}#${metricExtractor.metricKey}`;
     const benchmarkMethods = benchmarkBundle.benchmarkMethods;
     const methodCount = benchmarkBundle.methodNames.length;

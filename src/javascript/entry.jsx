@@ -109,7 +109,7 @@ function fetchFromUrls(urls) {
                     benchmarks: fetchedJsonByUrl.get(urls[i])
                 })));
             }
-        }).catch(function(error) {
+        }).catch(function (error) {
             alert(`Could not fetch data from ${url}: ${error}`);
             appState.initBenchmarkRuns([]);
         });

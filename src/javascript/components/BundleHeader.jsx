@@ -20,7 +20,7 @@ export default class BundleHeader extends React.Component {
     }
 
     render() {
-        const {benchmarkBundle, metricExtractor} = this.props;
+        const { benchmarkBundle, metricExtractor } = this.props;
         const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, metricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
         const secondaryMetrics = new Set();
@@ -30,7 +30,7 @@ export default class BundleHeader extends React.Component {
             })
         });
 
-        const detailsIcon = secondaryMetrics.size > 0 ? <span className='superscript'><BadgeWithTooltip tooltip={ secondaryMetrics.size + ' secondary metrics results' }> <DeatailsIcon/> { ' ' + secondaryMetrics.size } </BadgeWithTooltip> { ' | ' }</span> : undefined;
+        const detailsIcon = secondaryMetrics.size > 0 ? <span className='superscript'><BadgeWithTooltip tooltip={ secondaryMetrics.size + ' secondary metrics results' }> <DeatailsIcon /> { ' ' + secondaryMetrics.size } </BadgeWithTooltip> { ' | ' }</span> : undefined;
         return (<h3 id={ benchmarkBundle.key }><span className='clickable' onClick={ this.showDetails.bind(this) }>{ benchmarkBundle.name + ' ' } { detailsIcon }</span><span className='superscript'>{ benchmarkModeBadges }</span></h3>);
     }
 

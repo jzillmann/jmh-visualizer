@@ -14,61 +14,61 @@ import Tooltipped from 'components/lib/Tooltipped.jsx'
 // Side bar for SingleRunView, TwoRunViews, etc...
 export default class RunSideBar extends React.Component {
 
-    static propTypes = {
-        benchmarkBundles: PropTypes.array.isRequired,
-        metrics: PropTypes.array.isRequired,
-        metricExtractor: PropTypes.object.isRequired,
-        selectMetricFunction: PropTypes.func.isRequired,
-        focusedBenchmarkBundles: PropTypes.object.isRequired,
-        categories: PropTypes.array.isRequired,
-        activeCategory: PropTypes.string.isRequired,
-        focusBenchmarkBundleFunction: PropTypes.func.isRequired,
-        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
-        selectCategoryFunction: PropTypes.func.isRequired,
-    };
+  static propTypes = {
+    benchmarkBundles: PropTypes.array.isRequired,
+    metrics: PropTypes.array.isRequired,
+    metricExtractor: PropTypes.object.isRequired,
+    selectMetricFunction: PropTypes.func.isRequired,
+    focusedBenchmarkBundles: PropTypes.object.isRequired,
+    categories: PropTypes.array.isRequired,
+    activeCategory: PropTypes.string.isRequired,
+    focusBenchmarkBundleFunction: PropTypes.func.isRequired,
+    detailBenchmarkBundleFunction: PropTypes.func.isRequired,
+    selectCategoryFunction: PropTypes.func.isRequired,
+  };
 
-    render() {
-        const {benchmarkBundles, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, categories, activeCategory, selectCategoryFunction, focusBenchmarkBundleFunction, detailBenchmarkBundleFunction} = this.props;
+  render() {
+    const { benchmarkBundles, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, categories, activeCategory, selectCategoryFunction, focusBenchmarkBundleFunction, detailBenchmarkBundleFunction } = this.props;
 
-        const metricsOptions = metrics.filter(aMetric => aMetric.startsWith('·') || aMetric === 'Score').map(metric => <option key={ metric } value={ metric }>
-                                                                                                                         { metric }
-                                                                                                                       </option>);
+    const metricsOptions = metrics.filter(aMetric => aMetric.startsWith('·') || aMetric === 'Score').map(metric => <option key={ metric } value={ metric }>
+      { metric }
+    </option>);
 
-        const elementIds = benchmarkBundles.map(bundle => bundle.key);
-        const elementNames = benchmarkBundles.map(bundle => bundle.name);
+    const elementIds = benchmarkBundles.map(bundle => bundle.key);
+    const elementNames = benchmarkBundles.map(bundle => bundle.name);
 
-        const focusControlCreator = (elementId) => <span key={ `focus-${elementId}` } onClick={ (e) => {
-                                                 e.stopPropagation();
-                                                 focusBenchmarkBundleFunction(elementId)
-                                             } } className={ focusedBenchmarkBundles.has(elementId) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>;
-        const detailsControlCreator = (elementId) => (<span key={ `detail-${elementId}` } onClick={ (e) => {
-                                                  e.stopPropagation();
-                                                  detailBenchmarkBundleFunction(elementId)
-                                              } } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
+    const focusControlCreator = (elementId) => <span key={ `focus-${elementId}` } onClick={ (e) => {
+      e.stopPropagation();
+      focusBenchmarkBundleFunction(elementId)
+    } } className={ focusedBenchmarkBundles.has(elementId) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>;
+    const detailsControlCreator = (elementId) => (<span key={ `detail-${elementId}` } onClick={ (e) => {
+      e.stopPropagation();
+      detailBenchmarkBundleFunction(elementId)
+    } } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
 
-        return <div>
-                 <FormGroup controlId="formControlsSelectMultiple" bsSize="small">
-                   <InputGroup>
-                     <Tooltipped tooltip="No secondary metrics found!!" position="bottom" disabled={ metrics.length > 1 }>
-                       <FormControl
-                                    componentClass="select"
-                                    onChange={ (event) => selectMetricFunction(event.target.value) }
-                                    value={ metricExtractor.metricKey }
-                                    disabled={ metrics.length < 2 }>
-                         { metricsOptions }
-                       </FormControl>
-                     </Tooltipped>
-                   </InputGroup>
-                 </FormGroup>
-                 <hr />
-                 <TocList
-                          categories={ categories }
-                          activeCategory={ activeCategory }
-                          selectCategoryFunction={ selectCategoryFunction }
-                          elementIds={ elementIds }
-                          elementNames={ elementNames }
-                          linkControlsCreators={ [focusControlCreator, detailsControlCreator] } />
-               </div>
-    }
+    return <div>
+      <FormGroup controlId="formControlsSelectMultiple" bsSize="small">
+        <InputGroup>
+          <Tooltipped tooltip="No secondary metrics found!!" position="bottom" disabled={ metrics.length > 1 }>
+            <FormControl
+              componentClass="select"
+              onChange={ (event) => selectMetricFunction(event.target.value) }
+              value={ metricExtractor.metricKey }
+              disabled={ metrics.length < 2 }>
+              { metricsOptions }
+            </FormControl>
+          </Tooltipped>
+        </InputGroup>
+      </FormGroup>
+      <hr />
+      <TocList
+        categories={ categories }
+        activeCategory={ activeCategory }
+        selectCategoryFunction={ selectCategoryFunction }
+        elementIds={ elementIds }
+        elementNames={ elementNames }
+        linkControlsCreators={ [focusControlCreator, detailsControlCreator] } />
+    </div>
+  }
 
 }

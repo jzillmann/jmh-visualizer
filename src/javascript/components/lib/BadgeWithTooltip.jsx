@@ -17,13 +17,13 @@ export default class BadgeWithTooltip extends Component {
     }
 
     render() {
-        const {name, tooltip} = this.props;
+        const { name, tooltip } = this.props;
         return (
             <Tooltipped tooltip={ tooltip } position='top'>
-              <Badge bsStyle="default">
-                { name }
-                { this.props.children }
-              </Badge>
+                <Badge bsStyle="default">
+                    { name }
+                    { this.props.children }
+                </Badge>
             </Tooltipped>
         );
     }

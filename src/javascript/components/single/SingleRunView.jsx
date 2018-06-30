@@ -35,24 +35,24 @@ export default class SingleRunView extends React.Component {
     }
 
     render() {
-        const {runName, focusedBundles, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction} = this.props;
-        const {axisScalesSync} = this.state;
+        const { runName, focusedBundles, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction } = this.props;
+        const { axisScalesSync } = this.state;
 
         let synchronizeAxisScalesToggle;
         let dataMax;
         if (focusedBundles.size > 1) {
             const benchmarkModes = getUniqueBenchmarkModesAccrossBundles(benchmarkBundles, metricExtractor);
             const axisScalesSyncPossible = benchmarkModes.length == 1;
-            const switchTooltip = axisScalesSyncPossible ? `Sync Axis Scales: ${axisScalesSync?'on':'off'}` : `No Axis Scale syncing possible because of multiple benchmark modes: ${benchmarkModes}!`;
+            const switchTooltip = axisScalesSyncPossible ? `Sync Axis Scales: ${axisScalesSync ? 'on' : 'off'}` : `No Axis Scale syncing possible because of multiple benchmark modes: ${benchmarkModes}!`;
             synchronizeAxisScalesToggle = <div>
-                                            <Tooltipped tooltip={ switchTooltip } position='bottom'>
-                                              <Toggle
-                                                      id='scales-sync'
-                                                      checked={ axisScalesSyncPossible && axisScalesSync }
-                                                      disabled={ !axisScalesSyncPossible }
-                                                      onChange={ this.changeScalesSync.bind(this) } />
-                                            </Tooltipped>
-                                          </div>;
+                <Tooltipped tooltip={ switchTooltip } position='bottom'>
+                    <Toggle
+                        id='scales-sync'
+                        checked={ axisScalesSyncPossible && axisScalesSync }
+                        disabled={ !axisScalesSyncPossible }
+                        onChange={ this.changeScalesSync.bind(this) } />
+                </Tooltipped>
+            </div>;
             if (axisScalesSync && axisScalesSyncPossible) {
                 dataMax = 0;
                 benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.allBenchmarks().forEach(benchmark => {
@@ -65,29 +65,29 @@ export default class SingleRunView extends React.Component {
         const elements = [];
         elements.push(
             <div key='summary'>
-              <Badge>
-                { benchmarkBundles.length }
-              </Badge>
-              { ` different benchmark classes for single run '${ runName }' and metric '${metricExtractor.metricKey}' detected!` }
-              <span style={ { position: 'absolute', right: 20 } }>{ synchronizeAxisScalesToggle }</span>
+                <Badge>
+                    { benchmarkBundles.length }
+                </Badge>
+                { ` different benchmark classes for single run '${runName}' and metric '${metricExtractor.metricKey}' detected!` }
+                <span style={ { position: 'absolute', right: 20 } }>{ synchronizeAxisScalesToggle }</span>
             </div>
         );
 
         benchmarkBundles.forEach(bundle => {
             elements.push(<TocElement key={ bundle.key } name={ bundle.key }>
-                            <SingleRunBundle
-                                             runName={ runName }
-                                             benchmarkBundle={ bundle }
-                                             metricExtractor={ metricExtractor }
-                                             detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction }
-                                             dataMax={ dataMax } />
-                          </TocElement>);
+                <SingleRunBundle
+                    runName={ runName }
+                    benchmarkBundle={ bundle }
+                    metricExtractor={ metricExtractor }
+                    detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction }
+                    dataMax={ dataMax } />
+            </TocElement>);
         });
 
 
         return <div>
-                 { elements }
-               </div>
+            { elements }
+        </div>
     }
 
 }

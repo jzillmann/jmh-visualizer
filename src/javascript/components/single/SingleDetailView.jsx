@@ -19,28 +19,28 @@ export default class SingleDetailView extends React.Component {
     };
 
     render() {
-        const {runName, benchmarkBundle, secondaryMetrics} = this.props;
+        const { runName, benchmarkBundle, secondaryMetrics } = this.props;
 
         const primaryMetricExtractor = new PrimaryMetricExtractor();
         const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, primaryMetricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));
 
         const scoreMetricView = <TocElement name={ 'Score' } key={ 'Score' }>
-                                  <h4>Score <span className='superscript'>{ benchmarkModeBadges }</span></h4>
-                                  <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, primaryMetricExtractor) } />
-                                  <br/>
-                                  <br/>
-                                </TocElement>;
+            <h4>Score <span className='superscript'>{ benchmarkModeBadges }</span></h4>
+            <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, primaryMetricExtractor) } />
+            <br />
+            <br />
+        </TocElement>;
         const secondaryMetricViews = secondaryMetrics.map(secondaryMetric => <TocElement name={ secondaryMetric } key={ secondaryMetric }>
-                                                                               <h4>{ secondaryMetric + ' ' }<span className='superscript'>{ createMetricBadge(secondaryMetric) }</span></h4>
-                                                                               <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, new SecondaryMetricExtractor(secondaryMetric)) } />
-                                                                               <br/>
-                                                                               <br/>
-                                                                             </TocElement>);
+            <h4>{ secondaryMetric + ' ' }<span className='superscript'>{ createMetricBadge(secondaryMetric) }</span></h4>
+            <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, new SecondaryMetricExtractor(secondaryMetric)) } />
+            <br />
+            <br />
+        </TocElement>);
         return <div>
-                 <h3>{ benchmarkBundle.key }</h3>
-                 <br/>
-                 { [scoreMetricView, ...secondaryMetricViews] }
-               </div>
+            <h3>{ benchmarkBundle.key }</h3>
+            <br />
+            { [scoreMetricView, ...secondaryMetricViews] }
+        </div>
     }
 }

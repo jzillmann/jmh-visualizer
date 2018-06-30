@@ -48,8 +48,8 @@ export default class LineChartView extends React.Component {
     }
 
     render() {
-        const {runNames, benchmarkBundle, metricExtractor} = this.props;
-        const {activeLine} = this.state;
+        const { runNames, benchmarkBundle, metricExtractor } = this.props;
+        const { activeLine } = this.state;
         const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
 
         const dataSet = runNames.map((runName, runIndex) => {
@@ -75,39 +75,39 @@ export default class LineChartView extends React.Component {
             const strokeOpacity = !activeLine || isActive ? 1 : 0.1;
             const label = isActive ? <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> : false;
             return <Line
-                         key={ benchmarkMethod.key }
-                         type="monotoneX"
-                         dataKey={ benchmarkMethod.key }
-                         stroke={ lineColors[i] }
-                         strokeWidth={ strokeWidth }
-                         strokeOpacity={ strokeOpacity }
-                         label={ label }
-                         onMouseEnter={ this.activateLine.bind(this, benchmarkMethod.key) }
-                         onMouseLeave={ this.deactivateLine.bind(this) }
-                         isAnimationActive={ false } />;
+                key={ benchmarkMethod.key }
+                type="monotoneX"
+                dataKey={ benchmarkMethod.key }
+                stroke={ lineColors[i] }
+                strokeWidth={ strokeWidth }
+                strokeOpacity={ strokeOpacity }
+                label={ label }
+                onMouseEnter={ this.activateLine.bind(this, benchmarkMethod.key) }
+                onMouseLeave={ this.deactivateLine.bind(this) }
+                isAnimationActive={ false } />;
         });
 
         const tooltip = activeLine ? undefined : <Tooltip content={ <MultiRunChartTooltip roundScores={ shouldRoundScores } /> } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />;
         const scoreErrorArea = activeLine ? <Area
-                                                  type='monotone'
-                                                  dataKey={ activeLine + '-scoreError' }
-                                                  stroke={ red }
-                                                  fill={ red }
-                                                  label={ <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> }
-                                                  legendType='none'
-                                                  isAnimationActive={ false } /> : undefined;
+            type='monotone'
+            dataKey={ activeLine + '-scoreError' }
+            stroke={ red }
+            fill={ red }
+            label={ <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> }
+            legendType='none'
+            isAnimationActive={ false } /> : undefined;
 
         return (
             <ResponsiveContainer width='100%' height={ 450 }>
-              <ComposedChart data={ dataSet }>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <CartesianGrid strokeDasharray="3 3" />
-                <Legend onMouseEnter={ this.activateLineFromLegend.bind(this) } onMouseLeave={ this.deactivateLine.bind(this) } />
-                { tooltip }
-                { lines }
-                { scoreErrorArea }
-              </ComposedChart>
+                <ComposedChart data={ dataSet }>
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <Legend onMouseEnter={ this.activateLineFromLegend.bind(this) } onMouseLeave={ this.deactivateLine.bind(this) } />
+                    { tooltip }
+                    { lines }
+                    { scoreErrorArea }
+                </ComposedChart>
             </ResponsiveContainer>
         );
     }
@@ -127,14 +127,14 @@ function Label(params) {
     }
     const value = params.value && params.value.constructor === Array ? params.value[1] : params.value;
     return <text
-                 key={ params.index }
-                 x={ params.x }
-                 y={ params.y - 20 }
-                 width={ params.width }
-                 height={ params.height }
-                 textAnchor={ textAnchor }
-                 fontSize='11'
-                 stroke={ params.stroke }>
-             { formatNumber(value, params.shouldRoundScores) + ' ' + params.payload.scoreUnit }
-           </text>
+        key={ params.index }
+        x={ params.x }
+        y={ params.y - 20 }
+        width={ params.width }
+        height={ params.height }
+        textAnchor={ textAnchor }
+        fontSize='11'
+        stroke={ params.stroke }>
+        { formatNumber(value, params.shouldRoundScores) + ' ' + params.payload.scoreUnit }
+    </text>
 }

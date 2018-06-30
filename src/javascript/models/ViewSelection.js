@@ -29,7 +29,7 @@ export default class ViewSelection {
         if (this.runView !== 'Summary') {
             return false;
         }
-        for ( var runSelected of this.runSelection ) {
+        for (var runSelected of this.runSelection) {
             if (!runSelected) {
                 return false;
             }

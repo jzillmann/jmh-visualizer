@@ -42,7 +42,7 @@ export function flatten(arr, result = []) {
 export function shouldRound(benchmarkMethods, metricExtractor) {
     for (let benchmarkMethod of benchmarkMethods) {
         for (let benchmark of benchmarkMethod.benchmarks) {
-            if (benchmark && metricExtractor.hasMetric(benchmark) && metricExtractor.extractScore(benchmark) > 5) {
+            if (benchmark && metricExtractor.hasMetric(benchmark) && (metricExtractor.extractScore(benchmark) > 5)) {
                 return true;
             }
         }
@@ -52,7 +52,7 @@ export function shouldRound(benchmarkMethods, metricExtractor) {
 
 //Conditional round method
 export function round(number, shouldRound) {
-    if (!shouldRound || number < 1) {
+    if (!shouldRound || (number < 1 && number > -1)) {
         return number;
     }
     return Math.round(number);
@@ -61,7 +61,7 @@ export function round(number, shouldRound) {
 //Conditional format number method
 export function formatNumber(number, roundScores) {
     if (number || number == 0) {
-        if (roundScores && number > 1) {
+        if (roundScores && (number > 1 || number < -1)) {
             return number.toLocaleString();
         } else {
             return number;

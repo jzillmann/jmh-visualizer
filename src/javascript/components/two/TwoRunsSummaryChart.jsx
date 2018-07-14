@@ -124,14 +124,14 @@ export default class TwoRunsSummaryChart extends React.Component {
         improvedBucket.label = `${improvedBucket.count}/${bucketedBenchmarkDiffs.length}`;
         worsenedBucket.label = `${worsenedBucket.count}/${bucketedBenchmarkDiffs.length}`;
         const bucketContents = buckets.map((bucket, i) => bucketContentsObject[i]).filter(bucketContent => bucketContent);
-        const cx = '28%';
+        const cx = '48%';
 
         return (
             <div style={ { marginLeft: 18 } }>
                 <PieChart width={ 450 } height={ 270 }>
                     <Pie
                         data={ [unchangedBucket, improvedBucket, worsenedBucket] }
-                        valueKey='count'
+                        dataKey='count'
                         cx={ cx }
                         cy={ '50%' }
                         outerRadius={ 70 }
@@ -147,7 +147,7 @@ export default class TwoRunsSummaryChart extends React.Component {
                     <Pie
                         data={ bucketContents }
                         nameKey='name'
-                        valueKey='count'
+                        dataKey='count'
                         cx={ cx }
                         cy={ '50%' }
                         startAngle={ 90 }

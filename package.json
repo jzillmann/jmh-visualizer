@@ -41,7 +41,7 @@
     "react-spinkit": "^3.0.0",
     "react-toggle": "^4.0.2",
     "react-tooltip": "^3.6.1",
-    "recharts": "^0.22.5"
+    "recharts": "^1.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

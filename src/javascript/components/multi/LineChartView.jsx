@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { ResponsiveContainer, ComposedChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Line, Area } from 'recharts';
+import { ResponsiveContainer, ComposedChart, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend, Line, Area } from 'recharts';
 
 import { scaleOrdinal, schemeCategory20 } from 'd3-scale';
 const lineColors = scaleOrdinal(schemeCategory20).range();
@@ -61,9 +61,12 @@ export default class LineChartView extends React.Component {
                 if (benchmark && metricExtractor.hasMetric(benchmark)) {
                     const score = round(metricExtractor.extractScore(benchmark), shouldRoundScores);
                     const scoreError = round(metricExtractor.extractScoreError(benchmark), shouldRoundScores);
+                    const scoreUnit = metricExtractor.extractScoreUnit(benchmark);
                     runObject[benchmarkMethod.key] = score;
-                    runObject.scoreUnit = metricExtractor.extractScoreUnit(benchmark);
+                    runObject.scoreUnit = scoreUnit;
                     runObject[benchmarkMethod.key + '-scoreError'] = scoreError;
+                    runObject[benchmarkMethod.key + '-label'] = score.toLocaleString() + ' ' + scoreUnit;
+                    runObject[benchmarkMethod.key + '-errorLabel'] = scoreError.toLocaleString() + ' ' + scoreUnit;
                 }
             });
             return runObject;
@@ -73,7 +76,8 @@ export default class LineChartView extends React.Component {
             const isActive = activeLine === benchmarkMethod.key;
             const strokeWidth = isActive ? 9 : 3;
             const strokeOpacity = !activeLine || isActive ? 1 : 0.1;
-            const label = isActive ? <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> : false;
+            const label = isActive ? <LabelList dataKey={ benchmarkMethod.key + '-label' } content={ <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> } /> : undefined;
+
             return <Line
                 key={ benchmarkMethod.key }
                 type="monotoneX"
@@ -81,10 +85,11 @@ export default class LineChartView extends React.Component {
                 stroke={ lineColors[i] }
                 strokeWidth={ strokeWidth }
                 strokeOpacity={ strokeOpacity }
-                label={ label }
                 onMouseEnter={ this.activateLine.bind(this, benchmarkMethod.key) }
                 onMouseLeave={ this.deactivateLine.bind(this) }
-                isAnimationActive={ false } />;
+                isAnimationActive={ false } >
+                { label }
+            </Line>;
         });
 
         const tooltip = activeLine ? undefined : <Tooltip content={ <MultiRunChartTooltip roundScores={ shouldRoundScores } /> } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />;
@@ -93,9 +98,10 @@ export default class LineChartView extends React.Component {
             dataKey={ activeLine + '-scoreError' }
             stroke={ red }
             fill={ red }
-            label={ <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> }
             legendType='none'
-            isAnimationActive={ false } /> : undefined;
+            isAnimationActive={ false } >
+            <LabelList dataKey={ activeLine + '-errorLabel' } content={ <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> } />
+        </Area> : undefined;
 
         return (
             <ResponsiveContainer width='100%' height={ 450 }>
@@ -114,7 +120,7 @@ export default class LineChartView extends React.Component {
 }
 
 function Label(params) {
-    if (!params.payload.scoreUnit) {
+    if (!params.value) {
         return null;
     }
     let textAnchor;
@@ -135,6 +141,6 @@ function Label(params) {
         textAnchor={ textAnchor }
         fontSize='11'
         stroke={ params.stroke }>
-        { formatNumber(value, params.shouldRoundScores) + ' ' + params.payload.scoreUnit }
+        { formatNumber(value, params.shouldRoundScores) }
     </text>
 }

@@ -13,7 +13,7 @@ export default class BarDataSet {
     }
 }
 
-import { groupBy, shouldRound, round } from 'functions/util.js'
+import { groupBy, shouldRound, round, formatNumber } from 'functions/util.js'
 
 // The datasets will differ in case the benchmark-class uses params or not:
 // 0 - no param => standard
@@ -99,6 +99,7 @@ function createBarDataSet(id, benchmarkMethods, metricExtractor, groupFunction, 
                 } else {
                     dataObject[barGroup + 'SubScores'] = metricExtractor.extractRawData(benchmark);
                 }
+                dataObject[barGroup + 'Label'] = formatNumber(score, shouldRoundScores) + ' ' + scoreUnit;
             }
         });
         return dataObject;

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { BarChart, Bar, XAxis, YAxis } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, LabelList } from 'recharts';
 import Table from 'react-bootstrap/lib/Table'
 
+import BarTooltipLabel from 'components/single/BarTooltipLabel.jsx';
 import { round, formatNumber } from 'functions/util.js'
 import { blue, red } from 'functions/colors.js'
 
@@ -124,23 +125,6 @@ export default class SingleRunChartTooltip extends Component {
                 });
                 const tooltipWidth = forkScores[0].length * 54
 
-                const BarLabel = (props) => {
-                    return (
-                        <text
-                            stroke={ blue }
-                            fontSize={ 9 }
-                            fontWeight='normal'
-                            textAnchor={ props.textAnchor }
-                            x={ props.x }
-                            y={ props.y - 1 }
-                            width={ props.width }
-                            height={ props.height }>
-                            { formatNumber(props['data'], roundScores) }
-                        </text>
-                    );
-                };
-
-
                 return forkScoreDatas.map((data, index) => <div key={ 'iterations' + index }>
                     <BarChart
                         width={ tooltipWidth }
@@ -150,8 +134,9 @@ export default class SingleRunChartTooltip extends Component {
                         <Bar
                             dataKey='data'
                             fill={ barPayload.fill }
-                            isAnimationActive={ false }
-                            label={ <BarLabel /> } />
+                            isAnimationActive={ false } >
+                            <LabelList dataKey="data" content={ BarTooltipLabel } />
+                        </Bar>
                     </BarChart>
                 </div>
                 )

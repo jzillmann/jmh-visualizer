@@ -23,15 +23,24 @@ function selectAll(benchmarkRuns, runView) {
     actions.selectBenchmarkRuns(runSelection, runView);
 }
 
+function getPossibleRunViews(benchmarkRuns, detailedBenchmarkBundle) {
+    if (benchmarkRuns.length < 2) {
+        return [];
+    }
+    if (detailedBenchmarkBundle) {
+        return ['Compare']
+    }
+    return ['Summary', 'Compare'];
+}
+
 /* eslint react/prop-types: 0 */
 // A selection bar for 2 or more runs, selecting either a single run or a compare view
-const RunSelectionBar = ({ benchmarkRuns, viewSelection }) => {
+const RunSelectionBar = ({ benchmarkRuns, runSelection, runView, detailedBenchmarkBundle }) => {
     if (benchmarkRuns.length <= 1) {
         return null;
     }
 
-    const { runSelection, runView } = viewSelection;
-    const runViews = viewSelection.getPossibleRunViews();
+    const runViews = getPossibleRunViews(benchmarkRuns, detailedBenchmarkBundle);
     const showAll = runSelection.reduce((showIt, showRun) => showIt && showRun);
 
     const runComponents = runSelection.map((run, index) => {
@@ -77,4 +86,4 @@ const RunSelectionBar = ({ benchmarkRuns, viewSelection }) => {
 
 }
 
-export default connect(({ benchmarkRuns, viewSelection }) => ({ benchmarkRuns, viewSelection }))(RunSelectionBar)
+export default connect(({ benchmarkRuns, runSelection, runView, detailedBenchmarkBundle }) => ({ benchmarkRuns, runSelection, runView, detailedBenchmarkBundle }))(RunSelectionBar)

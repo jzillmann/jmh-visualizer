@@ -39,7 +39,7 @@ class App extends React.Component {
     }
 
     render() {
-        const { initialLoading, benchmarkRuns, viewSelection, selectedMetric, stateSelector } = this.props;
+        const { initialLoading, benchmarkRuns, runView, selectedMetric, detailedBenchmarkBundle, focusedBundles, stateSelector } = this.props;
 
         console.log("App...");
         console.log(benchmarkRuns);
@@ -50,16 +50,14 @@ class App extends React.Component {
         let sideBar;
         if (initialLoading) {
             return (<div style={ { position: 'fixed', top: '50%', left: '50%' } }><DoingWorkSpinner /></div>);
-        } else if (viewSelection.showUploadView()) {
-            // Upload View
+        } else if (benchmarkRuns.length == 0) {
             mainView = <UploadMainView />;
             sideBar = <UploadSideBar />;
         } else {
             const benchmarkBundles = benchmarkSelection.benchmarkBundles;
 
-            // Details View
-            if (viewSelection.showDetailedView()) {
-                const detailBundle = benchmarkSelection.benchmarkBundles.find(bundle => bundle.key === viewSelection.detailedBenchmarkBundle);
+            if (detailedBenchmarkBundle) { // Details View
+                const detailBundle = benchmarkSelection.benchmarkBundles.find(bundle => bundle.key === detailedBenchmarkBundle);
                 const secondaryMetrics = Array.from(detailBundle.allBenchmarks().reduce((aggregate, benchmark) => {
                     Object.keys(benchmark.secondaryMetrics).forEach(metricKey => aggregate.add(metricKey));
                     return aggregate;
@@ -76,19 +74,15 @@ class App extends React.Component {
                     benchmarkBundles={ benchmarkBundles }
                     secondaryMetrics={ secondaryMetrics }
                 />
-
-                // Run View
-            } else {
+            } else { // Run View
                 const metricType = selectedMetric;
                 const metricExtractor = createMetricExtractor(selectedMetric);
-                const focusedBundles = viewSelection.focusedBundles;
-                const runView = viewSelection.runView;
                 const categories = ['Benchmarks'];
                 const activeCategory = 'Benchmarks';
 
                 let filteredBenchmarkBundles = metricType === 'Score' ? benchmarkBundles : benchmarkBundles.filter(benchmarkBundle => benchmarkBundle.allBenchmarks().find(benchmark => metricExtractor.hasMetric(benchmark)));
                 let sideBarBenchmarks = filteredBenchmarkBundles;
-                if (viewSelection.shouldFilterFocusedBenchmarks()) {
+                if (stateSelector.shouldFilterFocusedBenchmarks()) {
                     filteredBenchmarkBundles = filteredBenchmarkBundles.filter(benchmarkBundle => focusedBundles.has(benchmarkBundle.key));
                 }
                 const metricsSet = new Set(['Score']);
@@ -174,8 +168,10 @@ class App extends React.Component {
 export default connect(state => ({
     initialLoading: state.initialLoading,
     benchmarkRuns: state.benchmarkRuns,
-    viewSelection: state.viewSelection,
+    runView: state.runView,
     selectedMetric: state.selectedMetric,
+    detailedBenchmarkBundle: state.detailedBenchmarkBundle,
+    focusedBundles: state.focusedBundles,
     stateSelector: new StateSelector(state),
 }))(App)
 

@@ -7,8 +7,6 @@ import { exampleRun1 } from 'exampleBenchmark1.js';
 import { exampleRun2 } from 'exampleBenchmark2.js';
 import { exampleRun3 } from 'exampleBenchmark3.js';
 import BenchmarkRun from 'models/BenchmarkRun.js';
-import ViewSelection from 'models/ViewSelection.js';
-import { arraysAreIdentical } from 'functions/util.js';
 
 const history = createHistory();
 
@@ -41,59 +39,63 @@ if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
 }
 
 
-//TODO progress indicatoes for examples as well !? Switch loading of on componentDidMout, e.g. in App ?
 const config = {
     initialState: {
         initialLoading: benchmarkLoadFunction != null,
         loading: false,
         benchmarkRuns: [],
-        viewSelection: new ViewSelection(),
+        runSelection: [], // boolean[runs]
+        runView: null, // null || Summary || Compare
         selectedMetric: 'Score',
         detailedBenchmarkBundle: null,
-        activeCategory: 'Benchmarks'
+        activeCategory: 'Benchmarks',
+        focusedBundles: new Set(),
+        mainView: 'upload'
     },
     actionsCreators: {
         uploadFiles: async (state, actions, files, trigger) => loadBenchmarksAsync(state, trigger, () => actions.uploadFiles(files, true), () => parseBenchmarks(files)),
         initBenchmarks: (state, actions, benchmarkRuns) => {
-            state.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
-            return { initialLoading: false, loading: false, benchmarkRuns: benchmarkRuns };
+            return stateForBenchmarks(benchmarkRuns);
         },
         loadSingleRunExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadSingleRunExample(null, true), () => getExamples(examples.singleRunExample)),
         loadTwoRunsExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadTwoRunsExample(null, true), () => getExamples(examples.twoRunsExample)),
         loadMultiRunExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadMultiRunExample(null, true), () => getExamples(examples.multiRunExample)),
         selectMetric: (state, actions, newSelectedMetric) => ({ selectedMetric: forward(state, newSelectedMetric) }),// eslint-disable-line no-unused-vars
         focusBundle: (state, actions, benchmarkBundleName) => {
-            state.viewSelection.focusBundle(benchmarkBundleName);
-            return {};
+            const clonedFocusedBundles = new Set(state.focusedBundles)
+            const alreadyFocused = clonedFocusedBundles.has(benchmarkBundleName);
+            if (alreadyFocused) {
+                clonedFocusedBundles.delete(benchmarkBundleName);
+            } else {
+                clonedFocusedBundles.add(benchmarkBundleName);
+            }
+            return { focusedBundles: clonedFocusedBundles };
         },
         selectCategory: (state, actions, category) => {
-            state.viewSelection.focusedBundles.clear();
-            return { activeCategory: category }
+            return { activeCategory: category, focusedBundles: new Set() }
         },
         detailBenchmarkBundle: (state, actions, benchmarkBundleKey) => {
             history.push('#details');
-            //TODO uuh
-            state.viewSelection.detailedBenchmarkBundle = benchmarkBundleKey;
             return { detailedBenchmarkBundle: benchmarkBundleKey };
         },
-        undetailBenchmarkBundle: (state) => {
-            //TODO uuh
-            state.viewSelection.detailedBenchmarkBundle = null;
+        undetailBenchmarkBundle: () => {
             return { detailedBenchmarkBundle: null };
         },
         // expects array of boolean with length of total JMH runs + the runView ('Summary', 'Compare')
         selectBenchmarkRuns: (state, action, runSelection, runView) => {
-            if (state.viewSelection.runView != runView || !arraysAreIdentical(state.viewSelection.runSelection, runSelection)) {
-                state.viewSelection.runSelection = runSelection;
-                state.viewSelection.runView = runView;
-            }
-            return {};
+            return { runSelection: runSelection, runView: runView };
         },
         goBack: () => {
             history.goBack();
             return {};
         }
     },
+}
+
+function stateForBenchmarks(benchmarkRuns) {
+    const runView = benchmarkRuns.length > 1 ? 'Summary' : null;
+    const runSelection = Array(benchmarkRuns.length).fill(true)
+    return { initialLoading: false, loading: false, benchmarkRuns: benchmarkRuns, runSelection: runSelection, runView: runView };
 }
 
 async function loadBenchmarksAsync(state, trigger, triggerFunction, getBenchmarksFunction) {
@@ -104,8 +106,7 @@ async function loadBenchmarksAsync(state, trigger, triggerFunction, getBenchmark
     }
 
     const benchmarkRuns = await getBenchmarksFunction();
-    state.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
-    return { initialLoading: false, loading: false, benchmarkRuns: benchmarkRuns };
+    return stateForBenchmarks(benchmarkRuns);
 }
 
 export const { Provider, connect, actions } = createStore(config);

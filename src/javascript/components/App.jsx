@@ -55,11 +55,6 @@ class App extends React.Component {
             mainView = <UploadMainView />;
             sideBar = <UploadSideBar />;
         } else {
-            if (viewSelection.shouldPreventPageReload()) {
-                window.onbeforeunload = function () {
-                    return "You will loose the current benchmarks.";
-                };
-            }
             const benchmarkBundles = benchmarkSelection.benchmarkBundles;
 
             // Details View

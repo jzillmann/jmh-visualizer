@@ -105,7 +105,7 @@ async function loadBenchmarksAsync(state, trigger, triggerFunction, getBenchmark
 
     const benchmarkRuns = await getBenchmarksFunction();
     state.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
-    return { loading: false, benchmarkRuns: benchmarkRuns };
+    return { initialLoading: false, loading: false, benchmarkRuns: benchmarkRuns };
 }
 
 export const { Provider, connect, actions } = createStore(config);
@@ -149,6 +149,9 @@ function parseBenchmarks(files) {
                     benchmarkRuns.push(benchmarkRun);
                     if (benchmarkRuns.length == files.length) {
                         benchmarkRuns.sort((a, b) => a.name.localeCompare(b.name));
+                        window.onbeforeunload = function () {
+                            return "You will loose the current benchmarks.";
+                        };
                         resolve(benchmarkRuns);
                     }
                 } catch (e) {

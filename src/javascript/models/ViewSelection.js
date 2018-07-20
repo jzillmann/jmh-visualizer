@@ -14,10 +14,6 @@ export default class ViewSelection {
         return this.numberOfBenchmarkRuns == 0;
     }
 
-    shouldPreventPageReload() {
-        return this.numberOfBenchmarkRuns > 0 && this.uploadedBenchmarks;
-    }
-
     showDetailedView() {
         return this.detailedBenchmarkBundle ? true : false;
     }

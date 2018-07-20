@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Navbar from 'react-bootstrap/lib/Navbar'
 import Nav from 'react-bootstrap/lib/Nav'
@@ -14,15 +13,8 @@ import LinkIcon from 'react-icons/lib/fa/external-link'
 import AppLogo from 'components/AppLogo.jsx';
 import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
 import RunSelectionBar from 'components/RunSelectionBar.jsx'
-import { blue } from 'functions/colors.js'
 
 export default class MainNavi extends React.Component {
-
-  static propTypes = {
-    runs: PropTypes.array.isRequired,
-    viewSelection: PropTypes.object.isRequired,
-    selectRunsFunction: PropTypes.func.isRequired
-  };
 
   onSelectUploadNewFiles() {
     window.onbeforeunload = null;
@@ -30,10 +22,6 @@ export default class MainNavi extends React.Component {
   }
 
   render() {
-    const { runs, viewSelection, selectRunsFunction } = this.props;
-
-    const selectionBar = createRunSelectionBar(runs, viewSelection, selectRunsFunction);
-
     const aboutPopover = (
       <Popover id="popover-trigger-click-root-close" title={ `About JMH Visualizer - ${process.env.version}` }>
         <p>
@@ -88,7 +76,7 @@ export default class MainNavi extends React.Component {
         </Navbar.Header>
         <Nav>
           <NavItem>
-            <DoingWorkSpinner.Component color={ blue } />
+            <DoingWorkSpinner />
           </NavItem>
         </Nav>
       </Navbar> : null;
@@ -96,22 +84,8 @@ export default class MainNavi extends React.Component {
     return (
       <div>
         { navBar }
-        { selectionBar }
+        <RunSelectionBar />
       </div>
     );
   }
-}
-
-function createRunSelectionBar(runs, viewSelection, selectRunsFunction) {
-  if (runs.length <= 1) {
-    return null;
-  }
-
-
-  return <RunSelectionBar
-    runs={ runs }
-    runSelection={ viewSelection.runSelection }
-    runViews={ viewSelection.getPossibleRunViews() }
-    runView={ viewSelection.runView }
-    selectRunsFunction={ selectRunsFunction } />;
 }

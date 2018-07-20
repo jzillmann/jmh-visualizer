@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { connect } from 'store/store.js'
+import StateSelector from 'store/StateSelector.js';
+
 import MainNavi from 'components/MainNavi.jsx';
 import SplitPane from 'components/lib/SplitPane.jsx'
 
@@ -23,10 +26,12 @@ import MultiRunDetailView from 'components/multi/MultiRunDetailView.jsx';
 import PrimaryMetricExtractor from 'models/extractor/PrimaryMetricExtractor.js'
 import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.js'
 
-import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
-import FileUploader from 'functions/FileUploader.js'
+import Test from 'components/Test.jsx';
+import Test2 from 'components/Test2.jsx';
 
-export default class App extends React.Component {
+/* eslint react/prop-types: 0 */
+// export default class App extends React.Component {
+class App extends React.Component {
 
     static propTypes = {
         appState: PropTypes.object.isRequired,
@@ -34,25 +39,23 @@ export default class App extends React.Component {
 
     componentDidUpdate() {
         // spinner will be shown on react.render(..), see entry.jsx
-        DoingWorkSpinner.hide();
+        // DoingWorkSpinner.hide();
     }
 
     render() {
-        const { appState } = this.props;
-        const benchmarkSelection = appState.benchmarkSelection();
-        const viewSelection = appState.viewSelection;
+        const { benchmarkRuns, viewSelection, selectedMetric, stateSelector } = this.props;
+
+        console.log("App...");
+        console.log(benchmarkRuns);
+
+        const benchmarkSelection = stateSelector.benchmarkSelection();
 
         let mainView;
         let sideBar;
         if (viewSelection.showUploadView()) {
             // Upload View
-            const fileUploader = new FileUploader(appState.uploadBenchmarkRuns);
-            mainView = <UploadMainView fileUploader={ fileUploader } />;
-            sideBar = <UploadSideBar
-                fileUploader={ fileUploader }
-                loadSingleRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.singleRunExample) }
-                loadTwoRunsExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.twoRunsExample) }
-                loadMultiRunExampleFunction={ () => appState.initBenchmarkRuns(appState.examples.multiRunExample) } />;
+            mainView = <UploadMainView />;
+            sideBar = <UploadSideBar />;
         } else {
             if (viewSelection.shouldPreventPageReload()) {
                 window.onbeforeunload = function () {
@@ -79,17 +82,16 @@ export default class App extends React.Component {
                     benchmarkBundle={ detailBundle }
                     benchmarkBundles={ benchmarkBundles }
                     secondaryMetrics={ secondaryMetrics }
-                    goBackFunction={ appState.goBack }
-                    detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                />
 
                 // Run View
             } else {
-                const metricType = appState.selectedMetric;
-                const metricExtractor = createMetricExtractor(appState.selectedMetric);
+                const metricType = selectedMetric;
+                const metricExtractor = createMetricExtractor(selectedMetric);
                 const focusedBundles = viewSelection.focusedBundles;
                 const runView = viewSelection.runView;
-                const categories = appState.benchmarkCategories;
-                const activeCategory = appState.activeCategory;
+                const categories = ['Benchmarks'];
+                const activeCategory = 'Benchmarks';
 
                 let filteredBenchmarkBundles = metricType === 'Score' ? benchmarkBundles : benchmarkBundles.filter(benchmarkBundle => benchmarkBundle.allBenchmarks().find(benchmark => metricExtractor.hasMetric(benchmark)));
                 let sideBarBenchmarks = filteredBenchmarkBundles;
@@ -109,7 +111,7 @@ export default class App extends React.Component {
                         benchmarkBundles={ filteredBenchmarkBundles }
                         focusedBundles={ focusedBundles }
                         metricExtractor={ metricExtractor }
-                        detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                    />
                 } else if (benchmarkSelection.runNames.length == 2) {
                     if (runView === 'Summary') {
                         sideBarBenchmarks = [];
@@ -119,13 +121,13 @@ export default class App extends React.Component {
                             benchmarkBundles={ filteredBenchmarkBundles }
                             minDeviation={ 5 }
                             metricExtractor={ metricExtractor }
-                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                        />
                     } else {
                         mainView = <TwoRunsView
                             runNames={ benchmarkSelection.runNames }
                             benchmarkBundles={ filteredBenchmarkBundles }
                             metricExtractor={ metricExtractor }
-                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                        />
                     }
                 } else {
                     if (runView === 'Summary') {
@@ -138,13 +140,13 @@ export default class App extends React.Component {
                             benchmarkBundles={ filteredBenchmarkBundles }
                             minDeviation={ 5 }
                             metricExtractor={ metricExtractor }
-                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                        />
                     } else {
                         mainView = <MultiRunView
                             runNames={ benchmarkSelection.runNames }
                             benchmarkBundles={ filteredBenchmarkBundles }
                             metricExtractor={ metricExtractor }
-                            detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle } />
+                        />
                     }
                 }
                 sideBar = <RunSideBar
@@ -154,24 +156,34 @@ export default class App extends React.Component {
                     focusedBenchmarkBundles={ focusedBundles }
                     categories={ categories }
                     activeCategory={ activeCategory }
-                    selectMetricFunction={ appState.selectMetric }
-                    focusBenchmarkBundleFunction={ appState.focusBundle }
-                    detailBenchmarkBundleFunction={ appState.detailBenchmarkBundle }
-                    selectCategoryFunction={ appState.selectCategory } />
+                />
             }
         }
 
         return (
             <div>
-                <MainNavi runs={ appState.benchmarkRuns } viewSelection={ viewSelection } selectRunsFunction={ appState.selectBenchmarkRuns } />
+                <MainNavi />
                 <div style={ { paddingBottom: 20 + 'px' } }>
                     <SplitPane left={ mainView } right={ sideBar } />
+                </div>
+                <div>
+                    <Test />
+                    <Test2 />
                 </div>
             </div>
         );
     }
 
 }
+
+// export default connect((appState2) => ({ appState2 }))(App)
+//TODO don't change on any state change!!
+export default connect(state => ({
+    benchmarkRuns: state.benchmarkRuns,
+    viewSelection: state.viewSelection,
+    selectedMetric: state.selectedMetric,
+    stateSelector: new StateSelector(state),
+}))(App)
 
 function createMetricExtractor(metricType) {
     return metricType === 'Score' ? new PrimaryMetricExtractor() : new SecondaryMetricExtractor(metricType);

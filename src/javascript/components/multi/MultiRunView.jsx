@@ -12,11 +12,10 @@ export default class MultiRunView extends React.Component {
         runNames: PropTypes.array.isRequired,
         benchmarkBundles: PropTypes.array.isRequired,
         metricExtractor: PropTypes.object.isRequired,
-        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
     };
 
     render() {
-        const { runNames, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction } = this.props;
+        const { runNames, benchmarkBundles, metricExtractor } = this.props;
 
         const elements = [];
         elements.push(
@@ -37,7 +36,7 @@ export default class MultiRunView extends React.Component {
                     runNames={ runNames }
                     benchmarkBundle={ benchmarkBundle }
                     metricExtractor={ metricExtractor }
-                    detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
+                />
             </TocElement>);
         });
 

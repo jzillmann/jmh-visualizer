@@ -17,7 +17,6 @@ export default class SingleRunBundle extends React.Component {
         runName: PropTypes.string.isRequired,
         benchmarkBundle: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
-        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
         dataMax: PropTypes.number
     };
 
@@ -32,14 +31,14 @@ export default class SingleRunBundle extends React.Component {
     }
 
     render() {
-        const { runName, benchmarkBundle, metricExtractor, detailBenchmarkBundleFunction, dataMax } = this.props;
+        const { runName, benchmarkBundle, metricExtractor, dataMax } = this.props;
 
         const benchmarks = benchmarkBundle.allBenchmarks();
         const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, metricExtractor) } dataMax={ dataMax } />;
 
         return (
             <div>
-                <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
+                <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } />
                 <div style={ { fontSize: '0.90em' } }>
                     { scoresChart }
                 </div>

@@ -1,49 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Provider } from 'store/store.js'
 import AppState from 'models/AppState.js';
 import BenchmarkRun from 'models/BenchmarkRun.js';
-import Examples from 'models/Examples.js';
 import { getUniqueNames } from 'functions/util.js'
-import { exampleRun1 } from 'exampleBenchmark1.js';
-import { exampleRun2 } from 'exampleBenchmark2.js';
-import { exampleRun3 } from 'exampleBenchmark3.js';
 
-import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
 import App from 'components/App.jsx';
 
-import createHistory from 'history/createBrowserHistory'
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/common.css';
 import '../css/sidenavi.css';
 
 function render(appState) {
-    DoingWorkSpinner.show(); //App.componentDidUpdate() will hide again
+    // DoingWorkSpinner.show(); //App.componentDidUpdate() will hide again
     setTimeout(() => {
-        ReactDOM.render(<App appState={ appState } />, document.getElementById('main'));
+        ReactDOM.render(
+            <Provider>
+                <App appState={ appState } />
+            </Provider>
+            , document.getElementById('main'));
     }, 0);
 }
 
-const examples = new Examples({
-    run1: new BenchmarkRun({
-        name: 'run1',
-        benchmarks: exampleRun1
-    }),
-    run2: new BenchmarkRun({
-        name: 'run2',
-        benchmarks: exampleRun2
-    }),
-    run3: new BenchmarkRun({
-        name: 'run3',
-        benchmarks: exampleRun3
-    })
-});
 
-const history = createHistory();
 const appState = new AppState({
     renderFunction: render,
-    examples: examples,
-}, history);
+});
 
 
 if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef

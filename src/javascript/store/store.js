@@ -53,32 +53,14 @@ const config = {
         activeCategory: 'Benchmarks'
     },
     actionsCreators: {
-        uploadFiles: async (state, actions, files, trigger) => {
-            if (!trigger) {
-                await actions.uploadFiles(files, true)
-            } else {
-                return { loading: true }
-            }
-
-            try {
-                const benchmarkRuns = await parseBenchmarks(files);
-                //TODO modification of state, thats bad
-                state.viewSelection.uploadedBenchmarks = true;
-                state.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
-                return { loading: false, benchmarkRuns: benchmarkRuns };
-            } catch (e) {
-                return { loading: false };
-            }
-        },
+        uploadFiles: async (state, actions, files, trigger) => loadBenchmarksAsync(state, trigger, () => actions.uploadFiles(files, true), () => parseBenchmarks(files)),
         initBenchmarks: (state, actions, benchmarkRuns) => {
-            console.log('init benchmarks...' + benchmarkRuns.length);
-
             state.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
             return { initialLoading: false, loading: false, benchmarkRuns: benchmarkRuns };
         },
-        loadSingleRunExampleFunction: (state, actions) => { actions.initBenchmarks(examples.singleRunExample); return { loading: false } },
-        loadTwoRunsExampleFunction: (state, actions) => { actions.initBenchmarks(examples.twoRunsExample); return { loading: false } },
-        loadMultiRunExampleFunction: (state, actions) => { actions.initBenchmarks(examples.multiRunExample); return { loading: false } },
+        loadSingleRunExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadSingleRunExample(null, true), () => getExamples(examples.singleRunExample)),
+        loadTwoRunsExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadTwoRunsExample(null, true), () => getExamples(examples.twoRunsExample)),
+        loadMultiRunExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadMultiRunExample(null, true), () => getExamples(examples.multiRunExample)),
         selectMetric: (state, actions, newSelectedMetric) => ({ selectedMetric: forward(state, newSelectedMetric) }),// eslint-disable-line no-unused-vars
         focusBundle: (state, actions, benchmarkBundleName) => {
             state.viewSelection.focusBundle(benchmarkBundleName);
@@ -114,6 +96,17 @@ const config = {
     },
 }
 
+async function loadBenchmarksAsync(state, trigger, triggerFunction, getBenchmarksFunction) {
+    if (trigger) {
+        return { loading: true }
+    } else {
+        await triggerFunction();
+    }
+
+    const benchmarkRuns = await getBenchmarksFunction();
+    state.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
+    return { loading: false, benchmarkRuns: benchmarkRuns };
+}
 
 export const { Provider, connect, actions } = createStore(config);
 
@@ -134,8 +127,10 @@ function forward(state, param) {
     return param;
 }
 
-// const fakeFetch = () =>
-//   new Promise(resolve => setTimeout(() => resolve(movies), 1000))
+
+function getExamples(benchmarkRuns) {
+    return new Promise((resolve) => setTimeout(() => resolve(benchmarkRuns), 0));
+}
 
 function parseBenchmarks(files) {
     return new Promise((resolve, reject) => {
@@ -164,5 +159,4 @@ function parseBenchmarks(files) {
             reader.readAsText(file);
         });
     });
-
 }

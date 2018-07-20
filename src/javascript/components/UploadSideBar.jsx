@@ -67,17 +67,17 @@ export default class UploadSideBar extends React.Component {
       <div>
         <PointingHandIcon />
         { ' ' }
-        <a onClick={ actions.loadSingleRunExampleFunction }>Load Single Run Example</a>
+        <a onClick={ actions.loadSingleRunExample }>Load Single Run Example</a>
       </div>
       <div>
         <PointingHandIcon />
         { ' ' }
-        <a onClick={ actions.loadTwoRunsExampleFunction }>Load Two Runs Example</a>
+        <a onClick={ actions.loadTwoRunsExample }>Load Two Runs Example</a>
       </div>
       <div>
         <PointingHandIcon />
         { ' ' }
-        <a onClick={ actions.loadMultiRunExampleFunction }>Load Multi Run Example</a>
+        <a onClick={ actions.loadMultiRunExample }>Load Multi Run Example</a>
       </div>
       <hr />
       <div>

@@ -5,10 +5,10 @@ import { blue } from 'functions/colors.js'
 var Spinner = require('react-spinkit');
 
 /* eslint react/prop-types: 0 */
-const DoingWorkSpinner = ({ loading }) => {
-    console.log('spinner: ' + loading);
+const DoingWorkSpinner = ({ initialLoading, loading }) => {
+    console.log('spinner: ' + initialLoading + '|' + loading);
 
-    if (!loading) {
+    if (!initialLoading && !loading) {
         return null;
     }
     return (
@@ -20,5 +20,5 @@ const DoingWorkSpinner = ({ loading }) => {
     );
 }
 
-export default connect(({ loading }) => ({ loading }))(DoingWorkSpinner)
+export default connect(({ initialLoading, loading }) => ({ initialLoading, loading }))(DoingWorkSpinner)
 

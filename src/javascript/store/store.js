@@ -1,6 +1,7 @@
 import createStore from 'react-waterfall'
 import createHistory from 'history/createBrowserHistory'
 
+import { getBenchmarksLoadFunctionFromExamples, processSourceParameters } from 'processParameters.js';
 import Examples from 'models/Examples.js';
 import { exampleRun1 } from 'exampleBenchmark1.js';
 import { exampleRun2 } from 'exampleBenchmark2.js';
@@ -26,9 +27,24 @@ const examples = new Examples({
     })
 });
 
+let benchmarkLoadFunction = null;
+if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
+    benchmarkLoadFunction = (initBenchmarksFunction) => initBenchmarksFunction(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef
+        name: runName,
+        benchmarks: providedBenchmarkStore[runName] // eslint-disable-line no-undef
+    })));
+} else {
+    benchmarkLoadFunction = getBenchmarksLoadFunctionFromExamples(examples);
+    if (!benchmarkLoadFunction) {
+        benchmarkLoadFunction = processSourceParameters();
+    }
+}
+
+
 //TODO progress indicatoes for examples as well !? Switch loading of on componentDidMout, e.g. in App ?
 const config = {
     initialState: {
+        initialLoading: benchmarkLoadFunction != null,
         loading: false,
         benchmarkRuns: [],
         viewSelection: new ViewSelection(),
@@ -55,10 +71,10 @@ const config = {
             }
         },
         initBenchmarks: (state, actions, benchmarkRuns) => {
-            console.log('init');
+            console.log('init benchmarks...' + benchmarkRuns.length);
 
             state.viewSelection.initBenchmarkRuns(benchmarkRuns.length);
-            return { loading: false, benchmarkRuns: benchmarkRuns };
+            return { initialLoading: false, loading: false, benchmarkRuns: benchmarkRuns };
         },
         loadSingleRunExampleFunction: (state, actions) => { actions.initBenchmarks(examples.singleRunExample); return { loading: false } },
         loadTwoRunsExampleFunction: (state, actions) => { actions.initBenchmarks(examples.twoRunsExample); return { loading: false } },
@@ -106,6 +122,10 @@ history.listen((location, action) => {
         actions.undetailBenchmarkBundle();
     }
 });
+
+if (benchmarkLoadFunction) {
+    setTimeout(() => benchmarkLoadFunction(actions.initBenchmarks), 0);
+}
 
 function forward(state, param) {
     console.log(state);

@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { connect } from 'store/store.js'
 import StateSelector from 'store/StateSelector.js';
 
+import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
 import MainNavi from 'components/MainNavi.jsx';
 import SplitPane from 'components/lib/SplitPane.jsx'
 
@@ -33,17 +33,13 @@ import Test2 from 'components/Test2.jsx';
 // export default class App extends React.Component {
 class App extends React.Component {
 
-    static propTypes = {
-        appState: PropTypes.object.isRequired,
-    };
-
     componentDidUpdate() {
         // spinner will be shown on react.render(..), see entry.jsx
         // DoingWorkSpinner.hide();
     }
 
     render() {
-        const { benchmarkRuns, viewSelection, selectedMetric, stateSelector } = this.props;
+        const { initialLoading, benchmarkRuns, viewSelection, selectedMetric, stateSelector } = this.props;
 
         console.log("App...");
         console.log(benchmarkRuns);
@@ -52,7 +48,9 @@ class App extends React.Component {
 
         let mainView;
         let sideBar;
-        if (viewSelection.showUploadView()) {
+        if (initialLoading) {
+            return (<div style={ { position: 'fixed', top: '50%', left: '50%' } }><DoingWorkSpinner /></div>);
+        } else if (viewSelection.showUploadView()) {
             // Upload View
             mainView = <UploadMainView />;
             sideBar = <UploadSideBar />;
@@ -179,6 +177,7 @@ class App extends React.Component {
 // export default connect((appState2) => ({ appState2 }))(App)
 //TODO don't change on any state change!!
 export default connect(state => ({
+    initialLoading: state.initialLoading,
     benchmarkRuns: state.benchmarkRuns,
     viewSelection: state.viewSelection,
     selectedMetric: state.selectedMetric,

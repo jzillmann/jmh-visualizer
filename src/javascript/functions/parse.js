@@ -61,9 +61,6 @@ export function getUniqueBenchmarkModesAccrossBundles(benchmarkBundles, metricEx
     return Array.from(modes);
 }
 
-/*
- * 
- */
 export function parseBenchmarkBundles(benchmarkRuns) {
     const classToBenchmarksMap = parseMultiRunBenchmarkMap(benchmarkRuns);
     const benchmarkBundles = [];

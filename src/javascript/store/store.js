@@ -105,8 +105,12 @@ async function loadBenchmarksAsync(state, trigger, triggerFunction, getBenchmark
         await triggerFunction();
     }
 
-    const benchmarkRuns = await getBenchmarksFunction();
-    return stateForBenchmarks(benchmarkRuns);
+    try {
+        const benchmarkRuns = await getBenchmarksFunction();
+        return stateForBenchmarks(benchmarkRuns);
+    } catch (error) {
+        return stateForBenchmarks([]);
+    }
 }
 
 export const { Provider, connect, actions } = createStore(config);

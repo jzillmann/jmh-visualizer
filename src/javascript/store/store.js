@@ -1,7 +1,7 @@
 import createStore from 'react-waterfall'
 import createHistory from 'history/createBrowserHistory'
 
-import { getBenchmarksLoadFunctionFromExamples, processSourceParameters } from 'processParameters.js';
+import { getBenchmarksLoadFunctionForDefinedExamples, getBenchmarksLoadFunctionForSourceExamples } from 'processParameters.js';
 import Examples from 'models/Examples.js';
 import { exampleRun1 } from 'exampleBenchmark1.js';
 import { exampleRun2 } from 'exampleBenchmark2.js';
@@ -25,6 +25,7 @@ const examples = new Examples({
     })
 });
 
+// Load benchmarks from defined source (provided || example || remote source)
 let benchmarkLoadFunction = null;
 if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
     benchmarkLoadFunction = (initBenchmarksFunction) => initBenchmarksFunction(providedBenchmarks.map(runName => new BenchmarkRun({ // eslint-disable-line no-undef
@@ -32,13 +33,13 @@ if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
         benchmarks: providedBenchmarkStore[runName] // eslint-disable-line no-undef
     })));
 } else {
-    benchmarkLoadFunction = getBenchmarksLoadFunctionFromExamples(examples);
+    benchmarkLoadFunction = getBenchmarksLoadFunctionForDefinedExamples(examples);
     if (!benchmarkLoadFunction) {
-        benchmarkLoadFunction = processSourceParameters();
+        benchmarkLoadFunction = getBenchmarksLoadFunctionForSourceExamples();
     }
 }
 
-
+// Setup store
 const config = {
     initialState: {
         initialLoading: benchmarkLoadFunction != null,
@@ -60,7 +61,7 @@ const config = {
         loadSingleRunExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadSingleRunExample(null, true), () => getExamples(examples.singleRunExample)),
         loadTwoRunsExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadTwoRunsExample(null, true), () => getExamples(examples.twoRunsExample)),
         loadMultiRunExample: (state, actions, param, trigger) => loadBenchmarksAsync(state, trigger, () => actions.loadMultiRunExample(null, true), () => getExamples(examples.multiRunExample)),
-        selectMetric: (state, actions, newSelectedMetric) => ({ selectedMetric: forward(state, newSelectedMetric) }),// eslint-disable-line no-unused-vars
+        selectMetric: (state, actions, newSelectedMetric) => ({ selectedMetric: newSelectedMetric }),
         focusBundle: (state, actions, benchmarkBundleName) => {
             const clonedFocusedBundles = new Set(state.focusedBundles)
             const alreadyFocused = clonedFocusedBundles.has(benchmarkBundleName);
@@ -124,14 +125,6 @@ history.listen((location, action) => {
 if (benchmarkLoadFunction) {
     setTimeout(() => benchmarkLoadFunction(actions.initBenchmarks), 0);
 }
-
-function forward(state, param) {
-    console.log(state);
-    console.log(param);
-
-    return param;
-}
-
 
 function getExamples(benchmarkRuns) {
     return new Promise((resolve) => setTimeout(() => resolve(benchmarkRuns), 0));

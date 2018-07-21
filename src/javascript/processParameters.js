@@ -1,7 +1,7 @@
 import { getUniqueNames } from 'functions/util.js'
 import BenchmarkRun from 'models/BenchmarkRun.js';
 
-export function getBenchmarksLoadFunctionFromExamples(examples) {
+export function getBenchmarksLoadFunctionForDefinedExamples(examples) {
     var example = getParameterByName('example');
     if (!example) {
         example = getExampleFromHash();
@@ -15,7 +15,7 @@ export function getBenchmarksLoadFunctionFromExamples(examples) {
     }
 }
 
-export function processSourceParameters() {
+export function getBenchmarksLoadFunctionForSourceExamples() {
     const source = getParameterByName('source');
     if (source) {
         return (benchmarkLoadFunction) => fetchFromUrls(benchmarkLoadFunction, [source]);

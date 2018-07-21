@@ -25,6 +25,8 @@ import MultiRunDetailView from 'components/multi/MultiRunDetailView.jsx';
 
 import PrimaryMetricExtractor from 'models/extractor/PrimaryMetricExtractor.js'
 import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.js'
+import BenchmarkBundle from 'models/BenchmarkBundle.js';
+import { parseClassNameFromFullName } from 'functions/parse.js';
 
 import Test from 'components/Test.jsx';
 import Test2 from 'components/Test2.jsx';
@@ -57,7 +59,12 @@ class App extends React.Component {
             const benchmarkBundles = benchmarkSelection.benchmarkBundles;
 
             if (detailedBenchmarkBundle) { // Details View
-                const detailBundle = benchmarkSelection.benchmarkBundles.find(bundle => bundle.key === detailedBenchmarkBundle);
+                const detailBundle = benchmarkSelection.benchmarkBundles.find(bundle => bundle.key === detailedBenchmarkBundle) || new BenchmarkBundle({
+                    key: detailedBenchmarkBundle,
+                    name: parseClassNameFromFullName(detailedBenchmarkBundle),
+                    methodNames: [],
+                    benchmarkMethods: []
+                });
                 const secondaryMetrics = Array.from(detailBundle.allBenchmarks().reduce((aggregate, benchmark) => {
                     Object.keys(benchmark.secondaryMetrics).forEach(metricKey => aggregate.add(metricKey));
                     return aggregate;

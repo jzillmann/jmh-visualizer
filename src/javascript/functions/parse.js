@@ -14,7 +14,7 @@ export function parseFullClassName(benchmark) {
     return nameParts.join('.');
 }
 
-function parseClassNameFromFullName(fullName) {
+export function parseClassNameFromFullName(fullName) {
     return fullName.split('.').reverse()[0];
 }
 

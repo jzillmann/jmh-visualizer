@@ -21,6 +21,10 @@ export default class SingleDetailView extends React.Component {
     render() {
         const { runName, benchmarkBundle, secondaryMetrics } = this.props;
 
+        if (benchmarkBundle.methodNames.length == 0) {
+            return (<div>No benchmark results for run { runName }</div>);
+        }
+
         const primaryMetricExtractor = new PrimaryMetricExtractor();
         const benchmarkModes = getUniqueBenchmarkModes(benchmarkBundle, primaryMetricExtractor);
         const benchmarkModeBadges = benchmarkModes.map(mode => createMetricBadge(mode));

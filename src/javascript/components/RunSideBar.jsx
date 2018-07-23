@@ -8,6 +8,7 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 import DetailsIcon from 'react-icons/lib/fa/search-plus'
 import EyeIcon from 'react-icons/lib/fa/eye'
 
+import { actions } from 'store/store.js'
 import TocList from 'components/TocList.jsx'
 import Tooltipped from 'components/lib/Tooltipped.jsx'
 
@@ -18,17 +19,13 @@ export default class RunSideBar extends React.Component {
     benchmarkBundles: PropTypes.array.isRequired,
     metrics: PropTypes.array.isRequired,
     metricExtractor: PropTypes.object.isRequired,
-    selectMetricFunction: PropTypes.func.isRequired,
     focusedBenchmarkBundles: PropTypes.object.isRequired,
     categories: PropTypes.array.isRequired,
     activeCategory: PropTypes.string.isRequired,
-    focusBenchmarkBundleFunction: PropTypes.func.isRequired,
-    detailBenchmarkBundleFunction: PropTypes.func.isRequired,
-    selectCategoryFunction: PropTypes.func.isRequired,
   };
 
   render() {
-    const { benchmarkBundles, metrics, metricExtractor, selectMetricFunction, focusedBenchmarkBundles, categories, activeCategory, selectCategoryFunction, focusBenchmarkBundleFunction, detailBenchmarkBundleFunction } = this.props;
+    const { benchmarkBundles, metrics, metricExtractor, focusedBenchmarkBundles, categories, activeCategory } = this.props;
 
     const metricsOptions = metrics.filter(aMetric => aMetric.startsWith('·') || aMetric === 'Score').map(metric => <option key={ metric } value={ metric }>
       { metric }
@@ -39,11 +36,11 @@ export default class RunSideBar extends React.Component {
 
     const focusControlCreator = (elementId) => <span key={ `focus-${elementId}` } onClick={ (e) => {
       e.stopPropagation();
-      focusBenchmarkBundleFunction(elementId)
+      actions.focusBundle(elementId)
     } } className={ focusedBenchmarkBundles.has(elementId) ? ' focused' : '' + ' clickable' }><sup><EyeIcon /></sup>{ ' ' }</span>;
     const detailsControlCreator = (elementId) => (<span key={ `detail-${elementId}` } onClick={ (e) => {
       e.stopPropagation();
-      detailBenchmarkBundleFunction(elementId)
+      actions.detailBenchmarkBundle(elementId);
     } } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
 
     return <div>
@@ -52,7 +49,9 @@ export default class RunSideBar extends React.Component {
           <Tooltipped tooltip="No secondary metrics found!!" position="bottom" disabled={ metrics.length > 1 }>
             <FormControl
               componentClass="select"
-              onChange={ (event) => selectMetricFunction(event.target.value) }
+              onChange={ (event) => {
+                actions.selectMetric(event.target.value);
+              } }
               value={ metricExtractor.metricKey }
               disabled={ metrics.length < 2 }>
               { metricsOptions }
@@ -64,7 +63,6 @@ export default class RunSideBar extends React.Component {
       <TocList
         categories={ categories }
         activeCategory={ activeCategory }
-        selectCategoryFunction={ selectCategoryFunction }
         elementIds={ elementIds }
         elementNames={ elementNames }
         linkControlsCreators={ [focusControlCreator, detailsControlCreator] } />

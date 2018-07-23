@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import DeatailsIcon from 'react-icons/lib/fa/search-plus'
+
+import { actions } from 'store/store.js'
 import BadgeWithTooltip from 'components/lib/BadgeWithTooltip.jsx'
 import { getUniqueBenchmarkModes } from 'functions/parse.js'
 import { createMetricBadge } from 'components/commons.jsx';
@@ -12,11 +14,10 @@ export default class BundleHeader extends React.Component {
     static propTypes = {
         benchmarkBundle: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
-        detailBenchmarkBundleFunction: PropTypes.func.isRequired,
     };
 
     showDetails() {
-        this.props.detailBenchmarkBundleFunction(this.props.benchmarkBundle.key);
+        actions.detailBenchmarkBundle(this.props.benchmarkBundle.key);
     }
 
     render() {

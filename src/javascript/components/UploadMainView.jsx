@@ -5,21 +5,18 @@ import Dropzone from 'react-dropzone'
 import UploadIcon from 'react-icons/lib/fa/cloud-upload'
 import Alert from 'react-bootstrap/lib/Alert'
 
+import { actions } from 'store/store.js'
 import { blue, green } from 'functions/colors.js'
 
 // Dopzone for JSON files to upload
 export default class UploadMainView extends React.Component {
-
-  static propTypes = {
-    fileUploader: PropTypes.object.isRequired,
-  };
 
   constructor(props) {
     super(props);
   }
 
   onDrop(files) {
-    this.props.fileUploader.upload(files);
+    actions.uploadFiles(files);
   }
 
   render() {

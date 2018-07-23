@@ -15,7 +15,6 @@ export default class TwoRunBundle extends React.Component {
     runNames: PropTypes.array.isRequired,
     benchmarkBundle: PropTypes.object.isRequired,
     metricExtractor: PropTypes.object.isRequired,
-    detailBenchmarkBundleFunction: PropTypes.func.isRequired
   };
 
   state = {
@@ -38,7 +37,7 @@ export default class TwoRunBundle extends React.Component {
   }
 
   render() {
-    const { runNames, benchmarkBundle, metricExtractor, detailBenchmarkBundleFunction } = this.props;
+    const { runNames, benchmarkBundle, metricExtractor } = this.props;
 
     const benchmarks1 = benchmarkBundle.benchmarksFromRun(0);
     const benchmarks2 = benchmarkBundle.benchmarksFromRun(1);
@@ -59,7 +58,7 @@ export default class TwoRunBundle extends React.Component {
 
     return (
       <div>
-        <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
+        <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } />
         <div style={ { fontSize: '0.90em' } }>
           { scoresChart }
         </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { actions } from 'store/store.js'
 import TocLink from 'components/TocLink.jsx'
 
 var Scroll = require('react-scroll');
@@ -13,7 +14,6 @@ export default class TocList extends React.PureComponent {
     static propTypes = {
         categories: PropTypes.array.isRequired,
         activeCategory: PropTypes.string.isRequired,
-        selectCategoryFunction: PropTypes.func.isRequired,
         elementIds: PropTypes.array.isRequired,
         elementNames: PropTypes.array.isRequired,
         linkControlsCreators: PropTypes.array.isRequired,
@@ -33,13 +33,13 @@ export default class TocList extends React.PureComponent {
     }
 
     render() {
-        const { categories, activeCategory, selectCategoryFunction, elementIds, elementNames, linkControlsCreators } = this.props;
-
+        const { categories, activeCategory, elementIds, elementNames, linkControlsCreators } = this.props;
+        //TODO extract TocElement to own component and make onClick handlers unique: https://stackoverflow.com/a/38908620/672008
         return (
             <ul className="nav">
                 { categories.map(category => <li key={ category } className={ category === activeCategory ? 'active' : '' }>
                     <div>
-                        <a onClick={ selectCategoryFunction.bind(null, category) }>
+                        <a onClick={ () => actions.selectCategory(category) }>
                             { category }
                         </a>
                     </div>

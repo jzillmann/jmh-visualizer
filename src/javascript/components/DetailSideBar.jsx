@@ -7,6 +7,7 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 
 import BackIcon from 'react-icons/lib/md/keyboard-backspace'
 
+import { actions } from 'store/store.js'
 import TocList from 'components/TocList.jsx'
 
 export default class DetailSideBar extends React.Component {
@@ -15,12 +16,10 @@ export default class DetailSideBar extends React.Component {
     benchmarkBundle: PropTypes.object.isRequired,
     benchmarkBundles: PropTypes.array.isRequired,
     secondaryMetrics: PropTypes.array.isRequired,
-    goBackFunction: PropTypes.func.isRequired,
-    detailBenchmarkBundleFunction: PropTypes.func.isRequired,
   };
 
   render() {
-    const { benchmarkBundle, benchmarkBundles, secondaryMetrics, goBackFunction, detailBenchmarkBundleFunction } = this.props;
+    const { benchmarkBundle, benchmarkBundles, secondaryMetrics } = this.props;
     const benchmarkBundleOptions = benchmarkBundles.map(bundle => <option key={ bundle.key } value={ bundle.key }>
       { bundle.name }
     </option>);
@@ -28,13 +27,13 @@ export default class DetailSideBar extends React.Component {
     const metrics = ['Score'].concat(secondaryMetrics);
 
     return <div>
-      <a onClick={ goBackFunction }>
+      <a onClick={ () => actions.goBack() }>
         <BackIcon /> Back..</a>
       <br />
       <br />
       <FormGroup bsSize="small" controlId="theForm">
         <InputGroup>
-          <FormControl componentClass="select" onChange={ (event) => detailBenchmarkBundleFunction(event.target.value) } defaultValue={ benchmarkBundle.key }>
+          <FormControl componentClass="select" onChange={ (event) => actions.detailBenchmarkBundle(event.target.value) } defaultValue={ benchmarkBundle.key }>
             { benchmarkBundleOptions }
           </FormControl>
         </InputGroup>

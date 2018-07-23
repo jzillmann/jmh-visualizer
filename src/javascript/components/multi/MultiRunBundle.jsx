@@ -11,14 +11,13 @@ export default class MultiRunBundle extends React.Component {
         runNames: PropTypes.array.isRequired,
         benchmarkBundle: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
-        detailBenchmarkBundleFunction: PropTypes.func.isRequired
     };
 
     render() {
-        const { runNames, benchmarkBundle, metricExtractor, detailBenchmarkBundleFunction } = this.props;
+        const { runNames, benchmarkBundle, metricExtractor } = this.props;
         return (
             <div>
-                <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } detailBenchmarkBundleFunction={ detailBenchmarkBundleFunction } />
+                <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } />
                 <div style={ { fontSize: '0.90em' } }>
                     <LineChartView runNames={ runNames } benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } />
                 </div>

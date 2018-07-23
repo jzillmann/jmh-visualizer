@@ -15,6 +15,7 @@ import UpIcon from 'react-icons/lib/fa/location-arrow'
 import Slider from 'react-rangeslider'
 import 'react-rangeslider/lib/index.css'
 
+import { actions } from 'store/store.js'
 import Tooltipped from 'components/lib/Tooltipped.jsx'
 
 import TwoRunsSummaryChart from 'components/two/TwoRunsSummaryChart.jsx'
@@ -31,7 +32,6 @@ export default class TwoRunsSummaryView extends React.Component {
     runIndex: PropTypes.array.isRequired,
     minDeviation: PropTypes.number.isRequired,
     metricExtractor: PropTypes.object.isRequired,
-    detailBenchmarkBundleFunction: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -50,7 +50,7 @@ export default class TwoRunsSummaryView extends React.Component {
   }
 
   render() {
-    const { runNames, runIndex, benchmarkBundles, metricExtractor, detailBenchmarkBundleFunction } = this.props;
+    const { runNames, runIndex, benchmarkBundles, metricExtractor } = this.props;
     const { minDeviation } = this.state;
 
     const benchmarkDiffs = flatten(benchmarkBundles.map(benchmarkBundle => benchmarkBundle.benchmarkMethods.map(benchmarkMethod => {
@@ -103,7 +103,7 @@ export default class TwoRunsSummaryView extends React.Component {
         </td>
         <td>
           <Tooltipped tooltip={ benchmarkDiff.bundleKey + '#' + benchmarkDiff.benchmarkMethod.name + '()' } position='right'>
-            <span className='clickable' onClick={ detailBenchmarkBundleFunction.bind(null, benchmarkDiff.bundleKey) }>{ benchmarkDiff.bundleName + ' - ' + benchmarkDiff.benchmarkMethod.name + ' ' } <span style={ { color: color } }>{ icon } { benchmarkDiff.scoreDiff }%</span></span>
+            <span className='clickable' onClick={ () => actions.detailBenchmarkBundle(benchmarkDiff.bundleKey) }>{ benchmarkDiff.bundleName + ' - ' + benchmarkDiff.benchmarkMethod.name + ' ' } <span style={ { color: color } }>{ icon } { benchmarkDiff.scoreDiff }%</span></span>
           </Tooltipped>
         </td>
         <td>

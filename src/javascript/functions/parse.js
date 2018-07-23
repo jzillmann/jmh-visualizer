@@ -14,7 +14,7 @@ export function parseFullClassName(benchmark) {
     return nameParts.join('.');
 }
 
-function parseClassNameFromFullName(fullName) {
+export function parseClassNameFromFullName(fullName) {
     return fullName.split('.').reverse()[0];
 }
 
@@ -61,9 +61,6 @@ export function getUniqueBenchmarkModesAccrossBundles(benchmarkBundles, metricEx
     return Array.from(modes);
 }
 
-/*
- * 
- */
 export function parseBenchmarkBundles(benchmarkRuns) {
     const classToBenchmarksMap = parseMultiRunBenchmarkMap(benchmarkRuns);
     const benchmarkBundles = [];

@@ -51,7 +51,6 @@ const config = {
         detailedBenchmarkBundle: null,
         activeCategory: 'Benchmarks',
         focusedBundles: new Set(),
-        mainView: 'upload'
     },
     actionsCreators: {
         uploadFiles: async (state, actions, files, trigger) => loadBenchmarksAsync(state, trigger, () => actions.uploadFiles(files, true), () => parseBenchmarks(files)),

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Dropzone from 'react-dropzone'
 import UploadIcon from 'react-icons/lib/fa/cloud-upload'

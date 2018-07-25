@@ -7,7 +7,6 @@ import BenchmarkSelection from 'models/BenchmarkSelection.js';
 import RunSideBar from 'components/RunSideBar.jsx';
 import SingleRunView from 'components/single/SingleRunView.jsx';
 import TwoRunsView from 'components/two/TwoRunsView.jsx';
-import TwoRunsSummaryView from 'components/two/TwoRunsSummaryView.jsx';
 import MultiRunView from 'components/multi/MultiRunView.jsx';
 
 import PrimaryMetricExtractor from 'models/extractor/PrimaryMetricExtractor.js'
@@ -15,12 +14,9 @@ import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.
 
 
 /* eslint react/prop-types: 0 */
-const RunScreen = ({ benchmarkSelection, runView, selectedMetric, focusedBundles }) => {
+const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles }) => {
 
-    const benchmarkRuns = benchmarkSelection.benchmarkRuns;
     const benchmarkBundles = benchmarkSelection.benchmarkBundles;
-    const runSelection = benchmarkSelection.runSelection;
-
     const metricType = selectedMetric;
     const metricExtractor = createMetricExtractor(selectedMetric);
     const categories = ['Benchmarks'];
@@ -28,7 +24,7 @@ const RunScreen = ({ benchmarkSelection, runView, selectedMetric, focusedBundles
 
     let filteredBenchmarkBundles = metricType === 'Score' ? benchmarkBundles : benchmarkBundles.filter(benchmarkBundle => benchmarkBundle.allBenchmarks().find(benchmark => metricExtractor.hasMetric(benchmark)));
     let sideBarBenchmarks = filteredBenchmarkBundles;
-    if (shouldFilterFocusedBenchmarks(benchmarkRuns, focusedBundles, runView, runSelection)) {
+    if (focusedBundles.size > 0) {
         filteredBenchmarkBundles = filteredBenchmarkBundles.filter(benchmarkBundle => focusedBundles.has(benchmarkBundle.key));
     }
     const metricsSet = new Set(['Score']);
@@ -46,41 +42,17 @@ const RunScreen = ({ benchmarkSelection, runView, selectedMetric, focusedBundles
             metricExtractor={ metricExtractor }
         />
     } else if (benchmarkSelection.runNames.length == 2) {
-        if (runView === 'Summary') {
-            sideBarBenchmarks = [];
-            mainView = <TwoRunsSummaryView
-                runNames={ benchmarkSelection.runNames }
-                runIndex={ [0, 1] }
-                benchmarkBundles={ filteredBenchmarkBundles }
-                minDeviation={ 5 }
-                metricExtractor={ metricExtractor }
-            />
-        } else {
-            mainView = <TwoRunsView
-                runNames={ benchmarkSelection.runNames }
-                benchmarkBundles={ filteredBenchmarkBundles }
-                metricExtractor={ metricExtractor }
-            />
-        }
+        mainView = <TwoRunsView
+            runNames={ benchmarkSelection.runNames }
+            benchmarkBundles={ filteredBenchmarkBundles }
+            metricExtractor={ metricExtractor }
+        />
     } else {
-        if (runView === 'Summary') {
-            sideBarBenchmarks = [];
-            const firstBenchmark = benchmarkSelection.runNames.length - 2;
-            const secondBenchmark = benchmarkSelection.runNames.length - 1;
-            mainView = <TwoRunsSummaryView
-                runNames={ benchmarkSelection.runNames }
-                runIndex={ [firstBenchmark, secondBenchmark] }
-                benchmarkBundles={ filteredBenchmarkBundles }
-                minDeviation={ 5 }
-                metricExtractor={ metricExtractor }
-            />
-        } else {
-            mainView = <MultiRunView
-                runNames={ benchmarkSelection.runNames }
-                benchmarkBundles={ filteredBenchmarkBundles }
-                metricExtractor={ metricExtractor }
-            />
-        }
+        mainView = <MultiRunView
+            runNames={ benchmarkSelection.runNames }
+            benchmarkBundles={ filteredBenchmarkBundles }
+            metricExtractor={ metricExtractor }
+        />
     }
 
     return (
@@ -96,32 +68,12 @@ const RunScreen = ({ benchmarkSelection, runView, selectedMetric, focusedBundles
     );
 }
 
-export default connect(({ benchmarkRuns, runSelection, runView, selectedMetric, focusedBundles }) => ({
+export default connect(({ benchmarkRuns, runSelection, selectedMetric, focusedBundles }) => ({
     benchmarkSelection: new BenchmarkSelection(benchmarkRuns, runSelection),
-    runView,
     selectedMetric,
     focusedBundles
 }))(RunScreen)
 
 function createMetricExtractor(metricType) {
     return metricType === 'Score' ? new PrimaryMetricExtractor() : new SecondaryMetricExtractor(metricType);
-}
-
-function showSummaryView(benchmarkRuns, runView, runSelection) {
-    if (benchmarkRuns.length < 2) {
-        return false;
-    }
-    if (runView !== 'Summary') {
-        return false;
-    }
-    for (var runSelected of runSelection) {
-        if (!runSelected) {
-            return false;
-        }
-    }
-    return true;
-}
-
-function shouldFilterFocusedBenchmarks(benchmarkRuns, focusedBundles, runView, runSelection) {
-    return focusedBundles.size > 0 && !showSummaryView(benchmarkRuns, runView, runSelection);
 }

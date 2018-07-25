@@ -8,9 +8,10 @@ import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
 import UploadScreen from 'components/UploadScreen.jsx';
 import RunScreen from 'components/RunScreen.jsx';
 import DetailScreen from 'components/DetailScreen.jsx';
+import SummaryScreen from 'components/SummaryScreen.jsx';
 
 /* eslint react/prop-types: 0 */
-const App = ({ initialLoading, benchmarkRuns, detailedBenchmarkBundle }) => {
+const App = ({ initialLoading, benchmarkRuns, runSelection, runView, detailedBenchmarkBundle }) => {
     if (initialLoading) {
         return (<div style={ { position: 'fixed', top: '50%', left: '50%' } }><DoingWorkSpinner /></div>);
     }
@@ -22,7 +23,12 @@ const App = ({ initialLoading, benchmarkRuns, detailedBenchmarkBundle }) => {
         if (detailedBenchmarkBundle) { // Details View
             screen = <DetailScreen />
         } else { // Run View
-            screen = <RunScreen />
+            const selectedRuns = runSelection.filter(isSelected => isSelected);
+            if (selectedRuns.length > 1 && runView === 'Summary') {
+                screen = <SummaryScreen />
+            } else {
+                screen = <RunScreen />
+            }
         }
     }
 
@@ -36,8 +42,10 @@ const App = ({ initialLoading, benchmarkRuns, detailedBenchmarkBundle }) => {
     );
 }
 
-export default connect(({ initialLoading, benchmarkRuns, detailedBenchmarkBundle }) => ({
+export default connect(({ initialLoading, benchmarkRuns, runSelection, runView, detailedBenchmarkBundle }) => ({
     initialLoading,
     benchmarkRuns: benchmarkRuns,
+    runSelection: runSelection,
+    runView: runView,
     detailedBenchmarkBundle: detailedBenchmarkBundle,
 }))(App)

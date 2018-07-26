@@ -34,6 +34,7 @@ Comes with 2 companion projects:
 
 ## Major Changes
 
+- **Jul 2018** - 0.8 Revamp Summary Page + Chart transitions
 - **Jan 2018** - 0.7.3 External URL/Gist support
 - **Okt 2017** - 0.7 Multi-Run support
 - **Aug 2017** - 0.6 Layout change & Summary support

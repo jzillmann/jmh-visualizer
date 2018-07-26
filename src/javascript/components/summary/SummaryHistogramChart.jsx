@@ -35,7 +35,7 @@ class SummaryHistogramChart extends React.Component {
 
         const data = benchmarkDiffs.map((benchmarkDiff, i) => ({
             idx: i,
-            name: `${benchmarkDiff.bundleName} (${benchmarkDiff.benchmarkMethod.params ? benchmarkDiff.benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') : ''})`,
+            name: `${benchmarkDiff.bundleName}#${benchmarkDiff.benchmarkMethod.name}(${benchmarkDiff.benchmarkMethod.params ? benchmarkDiff.benchmarkMethod.params.map(param => param[0] + '=' + param[1]).join(':') : ''})`,
             scoreDiff: Math.max(-100, Math.min(100, benchmarkDiff.scoreDiff)),
             errorDiff: Math.max(-100, Math.min(100, benchmarkDiff.scoreErrorDiff)),
             score1stRun: benchmarkDiff.score1stRun,
@@ -49,8 +49,12 @@ class SummaryHistogramChart extends React.Component {
 
         return (
             <ResponsiveContainer width='100%' height={ 150 }>
-                <BarChart data={ data }
-                    margin={ { top: 5, right: 20, left: -20, bottom: 5 } }>
+                <BarChart
+                    data={ data }
+                    margin={ { top: 5, right: 20, left: -20, bottom: 5 } }
+                    barGap={ 0 }
+                    barCategoryGap='9%'
+                >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="idx" />
                     <YAxis />

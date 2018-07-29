@@ -74,9 +74,9 @@ export default class SummaryView extends React.Component {
       }
     }).filter(element => element !== undefined)));
 
-    const improvedBenchmarkDiffs = benchmarkDiffs.filter(element => (element.scoreDiff >= minDeviation)).sort((a, b) => b.scoreDiff - a.scoreDiff);
-    const declinedBenchmarkDiffs = benchmarkDiffs.filter(element => (element.scoreDiff <= -minDeviation)).sort((a, b) => a.scoreDiff - b.scoreDiff);
-    const unchangedBenchmarkDiffs = benchmarkDiffs.filter(element => (element.scoreDiff < minDeviation && element.scoreDiff > -minDeviation)).sort((a, b) => b.scoreDiff - a.scoreDiff);
+    const improvedBenchmarkDiffs = benchmarkDiffs.filter(element => (element.scoreDiff != 0 && element.scoreDiff >= minDeviation)).sort((a, b) => b.scoreDiff - a.scoreDiff);
+    const declinedBenchmarkDiffs = benchmarkDiffs.filter(element => (element.scoreDiff != 0 && element.scoreDiff <= -minDeviation)).sort((a, b) => a.scoreDiff - b.scoreDiff);
+    const unchangedBenchmarkDiffs = benchmarkDiffs.filter(element => (element.scoreDiff == 0 || (element.scoreDiff < minDeviation && element.scoreDiff > -minDeviation))).sort((a, b) => b.scoreDiff - a.scoreDiff);
 
     return (
       <div>

@@ -13,6 +13,7 @@ export default class SingleRunChartTooltip extends Component {
 
     static propTypes = {
         label: PropTypes.any,
+        paramNames: PropTypes.array,
         scoreUnit: PropTypes.string,
         roundScores: PropTypes.bool,
         payload: PropTypes.arrayOf(PropTypes.shape({
@@ -24,7 +25,7 @@ export default class SingleRunChartTooltip extends Component {
     };
 
     render() {
-        const { label, payload, scoreUnit, roundScores } = this.props;
+        const { label, payload, scoreUnit, roundScores, paramNames } = this.props;
         if (!payload || payload.length == 0) {
             return null;
         }
@@ -33,8 +34,8 @@ export default class SingleRunChartTooltip extends Component {
         const tableHeaders = [];
         if (payload.length > 1) {
             tableHeaders.push(<th key='1'>
-                Run
-                              </th>);
+                { paramNames.join(':') }
+            </th>);
         }
         tableHeaders.push(<th key='2'>
             Score

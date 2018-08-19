@@ -22,11 +22,12 @@ export default class BarChartView extends React.Component {
         const { benchmarkBundle, metricExtractor, dataMax, logScale } = this.props;
 
         const dataSet = createDataSetFromBenchmarks(benchmarkBundle, metricExtractor);
+        const domainMax = dataMax && dataMax > 0 ? Math.round(dataMax) : 'auto';
 
         let scale, domainMin, chartMarginRight;
         if (logScale) {
             scale = 'log';
-            domainMin = 'auto';
+            domainMin = dataMax && dataMax > 0 ? 0.1 : 'auto';
             chartMarginRight = 90;
         } else {
             scale = 'linear';
@@ -35,15 +36,10 @@ export default class BarChartView extends React.Component {
         }
 
         const { paramNames } = dataSet;
-
-
-        const domainMax = dataMax && dataMax > 0 ? Math.round(dataMax) : 'auto';
         const chartHeight = 100 + dataSet.data.length * dataSet.barGroups.length * 36;
         const maxMethodNameLength = dataSet.data.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current), 32);
-
         const singleBar = dataSet.barGroups.length == 1;
         const bars = dataSet.barGroups.map((barGroup, i) => {
-
             return <Bar
                 key={ barGroup }
                 dataKey={ barGroup }

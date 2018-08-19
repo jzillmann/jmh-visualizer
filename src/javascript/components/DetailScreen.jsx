@@ -46,8 +46,6 @@ const DetailScreen = ({ detailedBenchmarkBundle, benchmarkSelection, chartConfig
         chartGeneratorFunction = multiRunChartGenerator;
     }
 
-    console.log(chartConfig);
-
     let mainView;
     if (error) {
         mainView = (<div>{ error }</div>);

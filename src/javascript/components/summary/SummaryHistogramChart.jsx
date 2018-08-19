@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { ResponsiveContainer, BarChart, Bar, ReferenceLine, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Surface, Symbols } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, ReferenceLine, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, Surface, Symbols } from 'recharts';
 
-import { green, red } from 'functions/colors.js'
+import { green, red, blue, yellow } from 'functions/colors.js'
 
 /* eslint react/prop-types: 0 */
 class SummaryHistogramChart extends React.Component {
@@ -45,7 +45,7 @@ class SummaryHistogramChart extends React.Component {
             scoreUnit: benchmarkDiff.scoreUnit
         }));
 
-        const dataSets = [{ dataKey: 'scoreDiff', color: green }, { dataKey: 'errorDiff', color: red }];
+        const dataSets = [{ dataKey: 'scoreDiff', color: green }, { dataKey: 'errorDiff', color: blue }];
 
         return (
             <ResponsiveContainer width='100%' height={ 150 }>
@@ -71,11 +71,33 @@ class SummaryHistogramChart extends React.Component {
                         content={ this.renderCusomizedLegend.bind(this) } />
                     <ReferenceLine y={ 0 } stroke='#000' />
                     {
-                        dataSets.filter(elem => !disabledLabels.includes(elem.dataKey)).map(activeElem => <Bar key={ activeElem.dataKey } dataKey={ activeElem.dataKey } fill={ activeElem.color } />)
+                        dataSets.filter(elem => !disabledLabels.includes(elem.dataKey)).map(activeElem =>
+                            <Bar key={ activeElem.dataKey } dataKey={ activeElem.dataKey }  >
+                                { data.map(entry => (
+                                    <Cell key={ entry.idx } fill={ this.barColor(activeElem.dataKey, entry) } />
+                                )) }
+                            </Bar>
+                        )
                     }
                 </BarChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer >
         )
+    }
+
+    barColor(dataKey, dataEntry) {
+        if (dataKey === 'scoreDiff') {
+            if (dataEntry.scoreDiff > 0) {
+                return green;
+            } else {
+                return red;
+            }
+        } else {
+            if (dataEntry.errorDiff > 0) {
+                return blue;
+            } else {
+                return yellow;
+            }
+        }
     }
 
     renderCusomizedLegend({ payload }) {

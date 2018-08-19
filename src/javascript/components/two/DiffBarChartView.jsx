@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Bar, LabelList, ReferenceLine, Cell } from 'recharts';
 
+import { createDataSetFromBenchmarks } from 'components/two/DiffBarDataSet.js'
 import DiffLabel from 'components/two/DiffLabel.jsx';
 import TwoRunsChartTooltip from 'components/two/TwoRunsChartTooltip.jsx';
 import { red, green, yellow, tooltipBackground } from 'functions/colors.js'
@@ -10,20 +11,21 @@ import { red, green, yellow, tooltipBackground } from 'functions/colors.js'
 export default class DiffBarChartView extends React.Component {
 
     static propTypes = {
-        dataSet: PropTypes.object.isRequired,
         runNames: PropTypes.array.isRequired,
+        benchmarkBundle: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
     };
 
-    shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
-        //only update if order of runs has changed
-        return this.props.runNames[0] !== nextProps.runNames[0] || this.props.metricExtractor.metricKey !== nextProps.metricExtractor.metricKey;
-    }
-
     render() {
-        const { runNames, dataSet } = this.props;
+        const { runNames, benchmarkBundle, metricExtractor } = this.props;
+        const dataSet = createDataSetFromBenchmarks(benchmarkBundle, metricExtractor);
         const maxMethodNameLength = dataSet.data.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current), 32);
         const chartHeight = 100 + dataSet.data.length * 45;
+
+        if (dataSet.data.length == 0) {
+            return <div>No data for comparision!</div>
+        }
+
         return (
             <ResponsiveContainer width='100%' height={ chartHeight }>
                 <BarChart

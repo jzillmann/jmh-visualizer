@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 
-import BundleHeader from 'components/BundleHeader.jsx'
+import ChartHeader from 'components/ChartHeader.jsx'
+import { DetailsButton } from 'components/Icons.jsx'
 import DiffBarChartView from 'components/two/DiffBarChartView.jsx'
-import { createDataSetFromBenchmarks } from 'components/two/DiffBarDataSet.js'
 
 // The view for a bunch of benchmarks, usually all of a benchmark class
 export default class TwoRunBundle extends React.Component {
@@ -54,11 +54,13 @@ export default class TwoRunBundle extends React.Component {
       }
     });
 
-    var scoresChart = hasSomethingToCompare ? <DiffBarChartView runNames={ runNames } dataSet={ createDataSetFromBenchmarks(benchmarkBundle, metricExtractor) } metricExtractor={ metricExtractor } /> : null;
+    var scoresChart = hasSomethingToCompare ? <DiffBarChartView runNames={ runNames } benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } /> : null;
 
     return (
       <div>
-        <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } />
+        <ChartHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } >
+          <DetailsButton key='details' benchmarkBundle={ benchmarkBundle } />
+        </ChartHeader>
         <div style={ { fontSize: '0.90em' } }>
           { scoresChart }
         </div>

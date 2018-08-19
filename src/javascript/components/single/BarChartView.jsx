@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend, Bar, ErrorBar } from 'recharts';
 
+import { createDataSetFromBenchmarks } from 'components/single/BarDataSet.js'
 import BarLabel from 'components/single/BarLabel.jsx';
 import SingleRunChartTooltip from 'components/single/SingleRunChartTooltip.jsx';
 import { blue, green, lightBlack, tooltipBackground, barColors } from 'functions/colors.js'
@@ -11,18 +12,27 @@ import { blue, green, lightBlack, tooltipBackground, barColors } from 'functions
 export default class BarChartView extends React.Component {
 
     static propTypes = {
-        dataSet: PropTypes.object.isRequired,
-        dataMax: PropTypes.number
+        benchmarkBundle: PropTypes.object.isRequired,
+        metricExtractor: PropTypes.object.isRequired,
+        dataMax: PropTypes.number,
+        logScale: PropTypes.bool.isRequired
     };
 
-    shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
-        const dataSet1 = this.props.dataSet;
-        const dataSet2 = nextProps.dataSet;
-        return !(dataSet1.id === dataSet2.id && this.props.dataMax == nextProps.dataMax);
-    }
-
     render() {
-        const { dataSet, dataMax } = this.props;
+        const { benchmarkBundle, metricExtractor, dataMax, logScale } = this.props;
+
+        const dataSet = createDataSetFromBenchmarks(benchmarkBundle, metricExtractor);
+
+        let scale, domainMin, chartMarginRight;
+        if (logScale) {
+            scale = 'log';
+            domainMin = 'auto';
+            chartMarginRight = 90;
+        } else {
+            scale = 'linear';
+            domainMin = 0;
+            chartMarginRight = 45;
+        }
 
         const { paramNames } = dataSet;
 
@@ -54,14 +64,13 @@ export default class BarChartView extends React.Component {
 
         return (
             <div>
-                <ResponsiveContainer width='100%' height={ chartHeight }>
+                <ResponsiveContainer width='100%' height={ chartHeight } >
                     <BarChart
                         layout="vertical"
-                        width={ 900 }
                         height={ chartHeight }
                         data={ dataSet.data }
-                        margin={ { top: 20, right: 45, left: maxMethodNameLength * 4, bottom: 5 } }>
-                        <XAxis type="number" domain={ [0, domainMax] } />
+                        margin={ { top: 20, right: chartMarginRight, left: maxMethodNameLength * 4, bottom: 5 } }>
+                        <XAxis type="number" domain={ [domainMin, domainMax] } scale={ scale } allowDataOverflow />
                         <YAxis dataKey="name" type="category" />
                         <CartesianGrid strokeDasharray="3 3" />
                         <Tooltip content={ <SingleRunChartTooltip

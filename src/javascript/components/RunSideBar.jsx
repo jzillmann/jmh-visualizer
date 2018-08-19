@@ -19,13 +19,14 @@ export default class RunSideBar extends React.Component {
     benchmarkBundles: PropTypes.array.isRequired,
     metrics: PropTypes.array.isRequired,
     metricExtractor: PropTypes.object.isRequired,
+    buttons: PropTypes.array,
     focusedBenchmarkBundles: PropTypes.object.isRequired,
     categories: PropTypes.array.isRequired,
     activeCategory: PropTypes.string.isRequired,
   };
 
   render() {
-    const { benchmarkBundles, metrics, metricExtractor, focusedBenchmarkBundles, categories, activeCategory } = this.props;
+    const { benchmarkBundles, metrics, metricExtractor, buttons, focusedBenchmarkBundles, categories, activeCategory } = this.props;
 
     const metricsOptions = metrics.filter(aMetric => aMetric.startsWith('·') || aMetric === 'Score').map(metric => <option key={ metric } value={ metric }>
       { metric }
@@ -43,30 +44,33 @@ export default class RunSideBar extends React.Component {
       actions.detailBenchmarkBundle(elementId);
     } } className="clickable"><sup><DetailsIcon /></sup>{ ' ' }</span>);
 
-    return <div>
-      <FormGroup controlId="formControlsSelectMultiple" bsSize="small">
-        <InputGroup>
-          <Tooltipped tooltip="No secondary metrics found!!" position="bottom" disabled={ metrics.length > 1 }>
-            <FormControl
-              componentClass="select"
-              onChange={ (event) => {
-                actions.selectMetric(event.target.value);
-              } }
-              value={ metricExtractor.metricKey }
-              disabled={ metrics.length < 2 }>
-              { metricsOptions }
-            </FormControl>
-          </Tooltipped>
-        </InputGroup>
-      </FormGroup>
-      <hr />
-      <TocList
-        categories={ categories }
-        activeCategory={ activeCategory }
-        elementIds={ elementIds }
-        elementNames={ elementNames }
-        linkControlsCreators={ [focusControlCreator, detailsControlCreator] } />
-    </div>
+    return (
+      <div>
+        <FormGroup controlId="formControlsSelectMultiple" bsSize="small">
+          <InputGroup>
+            <Tooltipped tooltip="No secondary metrics found!!" position="bottom" disabled={ metrics.length > 1 }>
+              <FormControl
+                componentClass="select"
+                onChange={ (event) => {
+                  actions.selectMetric(event.target.value);
+                } }
+                value={ metricExtractor.metricKey }
+                disabled={ metrics.length < 2 }>
+                { metricsOptions }
+              </FormControl>
+            </Tooltipped>
+          </InputGroup>
+        </FormGroup>
+        { buttons }
+        <hr style={ { marginTop: '10px', marginBottom: '10px' } } />
+        <TocList
+          categories={ categories }
+          activeCategory={ activeCategory }
+          elementIds={ elementIds }
+          elementNames={ elementNames }
+          linkControlsCreators={ [focusControlCreator, detailsControlCreator] } />
+      </div>
+    );
   }
 
 }

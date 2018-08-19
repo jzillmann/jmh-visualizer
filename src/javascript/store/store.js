@@ -51,6 +51,9 @@ const config = {
         detailedBenchmarkBundle: null,
         activeCategory: 'Benchmarks',
         focusedBundles: new Set(),
+        chartConfig: {
+            logScale: false
+        }
     },
     actionsCreators: {
         uploadFiles: async (state, actions, files, trigger) => loadBenchmarksAsync(state, trigger, () => actions.uploadFiles(files, true), () => parseBenchmarks(files)),
@@ -84,6 +87,9 @@ const config = {
         // expects array of boolean with length of total JMH runs + the runView ('Summary', 'Compare')
         selectBenchmarkRuns: (state, action, runSelection, runView) => {
             return { runSelection: runSelection, runView: runView };
+        },
+        logScale: (state) => {
+            return { chartConfig: { logScale: !state.chartConfig.logScale } }
         },
         goBack: () => {
             history.goBack();

@@ -21,7 +21,7 @@ export default class TwoRunsChartTooltip extends Component {
 
   render() {
     const { label, payload, runNames, roundScores } = this.props;
-    if (payload.length == 0) {
+    if (payload == null || payload.length == 0) {
       return null;
     }
     const score1 = payload[0].payload.score1stRun;

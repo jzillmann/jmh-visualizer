@@ -18,8 +18,23 @@ function selectSingleRun(benchmarkRuns, runView, runIndex) {
     actions.selectBenchmarkRuns(runSelection, runView);
 }
 
-function selectAll(benchmarkRuns, runView) {
-    const runSelection = benchmarkRuns.map(() => true);
+function selectAll(oldRunSelection, runView) {
+    const runSelection = oldRunSelection.map(() => true);
+    actions.selectBenchmarkRuns(runSelection, runView);
+}
+
+function selectAllWithPossibleSwitchView(oldRunSelection, runView) {
+    let runSelection;
+    if (oldRunSelection.some(elem => !elem)) {
+        runSelection = oldRunSelection.map(() => true);
+    } else {
+        runSelection = oldRunSelection;
+        if (runView === 'Compare') {
+            runView = 'Summary';
+        } else {
+            runView = 'Compare';
+        }
+    }
     actions.selectBenchmarkRuns(runSelection, runView);
 }
 
@@ -55,7 +70,7 @@ const RunSelectionBar = ({ benchmarkRuns, runSelection, runView, detailedBenchma
     });
     let allButton;
     if (runViews.length > 1) {
-        const runViewMenuItems = runViews.map(runViewLabel => <MenuItem key={ runViewLabel } onClick={ () => selectAll(benchmarkRuns, runViewLabel) }>
+        const runViewMenuItems = runViews.map(runViewLabel => <MenuItem key={ runViewLabel } onClick={ () => selectAll(runSelection, runViewLabel) }>
             { runViewLabel }
         </MenuItem>);
         allButton = <SplitButton
@@ -63,11 +78,11 @@ const RunSelectionBar = ({ benchmarkRuns, runSelection, runView, detailedBenchma
             title={ runView }
             bsStyle={ showAll ? 'primary' : 'default' }
             bsSize="small"
-            onClick={ () => selectAll(benchmarkRuns, runView) }>
+            onClick={ () => selectAllWithPossibleSwitchView(runSelection, runView) }>
             { runViewMenuItems }
         </SplitButton>;
     } else {
-        allButton = <Button bsStyle={ showAll ? 'primary' : 'default' } bsSize="small" onClick={ () => selectAll(benchmarkRuns, runView) }>
+        allButton = <Button bsStyle={ showAll ? 'primary' : 'default' } bsSize="small" onClick={ () => selectAll(runSelection, runView) }>
             { runViews[0] }
         </Button>
     }

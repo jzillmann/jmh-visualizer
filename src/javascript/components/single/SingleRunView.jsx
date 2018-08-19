@@ -18,6 +18,7 @@ export default class SingleRunView extends React.Component {
         benchmarkBundles: PropTypes.array.isRequired,
         focusedBundles: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
+        chartConfig: PropTypes.object.isRequired,
     };
 
     constructor(props) {
@@ -34,7 +35,7 @@ export default class SingleRunView extends React.Component {
     }
 
     render() {
-        const { runName, focusedBundles, benchmarkBundles, metricExtractor } = this.props;
+        const { runName, focusedBundles, benchmarkBundles, metricExtractor, chartConfig } = this.props;
         const { axisScalesSync } = this.state;
 
         let synchronizeAxisScalesToggle;
@@ -75,9 +76,9 @@ export default class SingleRunView extends React.Component {
         benchmarkBundles.forEach(bundle => {
             elements.push(<TocElement key={ bundle.key } name={ bundle.key }>
                 <SingleRunBundle
-                    runName={ runName }
                     benchmarkBundle={ bundle }
                     metricExtractor={ metricExtractor }
+                    chartConfig={ chartConfig }
                     dataMax={ dataMax } />
             </TocElement>);
         });

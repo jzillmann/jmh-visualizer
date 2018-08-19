@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { ResponsiveContainer, ComposedChart, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend, Line, Area } from 'recharts';
+import { ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend, Line, ErrorBar } from 'recharts';
 
 import { scaleOrdinal, schemeCategory20 } from 'd3-scale';
 const lineColors = scaleOrdinal(schemeCategory20).range();
-// import { lineColors ,tooltipBackground,red} from 'functions/colors.js'
-import { tooltipBackground, red } from 'functions/colors.js'
+import { tooltipBackground } from 'functions/colors.js'
 
 import MultiRunChartTooltip from 'components/multi/MultiRunChartTooltip.jsx'
 import { shouldRound, round } from 'functions/util.js'
@@ -18,6 +17,7 @@ export default class LineChartView extends React.Component {
         runNames: PropTypes.array.isRequired,
         benchmarkBundle: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
+        logScale: PropTypes.bool.isRequired
     };
 
     constructor(props) {
@@ -28,7 +28,11 @@ export default class LineChartView extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) { // eslint-disable-line no-unused-vars
-        return this.props.runNames[0] !== nextProps.runNames[0] || this.props.benchmarkBundle.key !== nextProps.benchmarkBundle.key || this.props.metricExtractor.metricKey !== nextProps.metricExtractor.metricKey || this.state.activeLine !== nextState.activeLine;
+        return this.props.runNames[0] !== nextProps.runNames[0]
+            || this.props.benchmarkBundle.key !== nextProps.benchmarkBundle.key
+            || this.props.metricExtractor.metricKey !== nextProps.metricExtractor.metricKey
+            || this.props.logScale !== nextProps.logScale
+            || this.state.activeLine !== nextState.activeLine;
     }
 
     activateLineFromLegend(params) {
@@ -48,9 +52,15 @@ export default class LineChartView extends React.Component {
     }
 
     render() {
-        const { runNames, benchmarkBundle, metricExtractor } = this.props;
+        const { runNames, benchmarkBundle, metricExtractor, logScale } = this.props;
         const { activeLine } = this.state;
         const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
+
+        let scale, domain;
+        if (logScale) {
+            scale = 'log';
+            domain = ['auto', 'auto'];
+        }
 
         const dataSet = runNames.map((runName, runIndex) => {
             const runObject = {
@@ -61,10 +71,16 @@ export default class LineChartView extends React.Component {
                 if (benchmark && metricExtractor.hasMetric(benchmark)) {
                     const score = round(metricExtractor.extractScore(benchmark), shouldRoundScores);
                     const scoreError = round(metricExtractor.extractScoreError(benchmark), shouldRoundScores);
+                    const scoreConfidence = metricExtractor.extractScoreConfidence(benchmark).map(scoreConf => round(scoreConf, shouldRoundScores));
                     const scoreUnit = metricExtractor.extractScoreUnit(benchmark);
+                    let errorBarInterval = 0
+                    if (!isNaN(scoreError)) {
+                        errorBarInterval = [score - scoreConfidence[0], scoreConfidence[1] - score];
+                    }
                     runObject[benchmarkMethod.key] = score;
                     runObject.scoreUnit = scoreUnit;
                     runObject[benchmarkMethod.key + '-scoreError'] = scoreError;
+                    runObject[benchmarkMethod.key + '-errorBarInterval'] = errorBarInterval;
                     runObject[benchmarkMethod.key + '-label'] = score.toLocaleString() + ' ' + scoreUnit;
                     runObject[benchmarkMethod.key + '-errorLabel'] = scoreError.toLocaleString() + ' ' + scoreUnit;
                 }
@@ -72,11 +88,18 @@ export default class LineChartView extends React.Component {
             return runObject;
         });
 
-        const lines = benchmarkBundle.benchmarkMethods.map((benchmarkMethod, i) => {
+        const lines = benchmarkBundle.benchmarkMethods.filter(benchmarkMethod => (!logScale || isInAllRuns(runNames, benchmarkMethod))).map((benchmarkMethod, i) => {
             const isActive = activeLine === benchmarkMethod.key;
-            const strokeWidth = isActive ? 9 : 3;
+            const strokeWidth = isActive ? 7 : 3;
             const strokeOpacity = !activeLine || isActive ? 1 : 0.1;
-            const label = isActive ? <LabelList dataKey={ benchmarkMethod.key + '-label' } content={ <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> } /> : undefined;
+            let label, errorBarStrokeWIdth;
+            if (isActive) {
+                label = <LabelList dataKey={ benchmarkMethod.key + '-label' } content={ <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> } />;
+                errorBarStrokeWIdth = 1;
+            } else {
+                errorBarStrokeWIdth = 0;
+            }
+            const errorBar = (<ErrorBar dataKey={ benchmarkMethod.key + '-errorBarInterval' } width={ 4 } strokeWidth={ errorBarStrokeWIdth } />);
 
             return <Line
                 key={ benchmarkMethod.key }
@@ -87,36 +110,37 @@ export default class LineChartView extends React.Component {
                 strokeOpacity={ strokeOpacity }
                 onMouseEnter={ this.activateLine.bind(this, benchmarkMethod.key) }
                 onMouseLeave={ this.deactivateLine.bind(this) }
-                isAnimationActive={ false } >
+                isAnimationActive={ true }
+                animationDuration={ 540 }
+            >
                 { label }
+                { errorBar }
             </Line>;
         });
 
         const tooltip = activeLine ? undefined : <Tooltip content={ <MultiRunChartTooltip roundScores={ shouldRoundScores } /> } wrapperStyle={ { backgroundColor: tooltipBackground, opacity: 0.95 } } />;
-        const scoreErrorArea = activeLine ? <Area
-            type='monotone'
-            dataKey={ activeLine + '-scoreError' }
-            stroke={ red }
-            fill={ red }
-            legendType='none'
-            isAnimationActive={ false } >
-            <LabelList dataKey={ activeLine + '-errorLabel' } content={ <Label runCount={ runNames.length } shouldRoundScores={ shouldRoundScores } /> } />
-        </Area> : undefined;
-
         return (
             <ResponsiveContainer width='100%' height={ 450 }>
-                <ComposedChart data={ dataSet }>
+                <LineChart data={ dataSet } margin={ { top: 45, right: 0, left: 0, bottom: 27 } }>
                     <XAxis dataKey="name" />
-                    <YAxis />
+                    <YAxis scale={ scale } domain={ domain } />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Legend onMouseEnter={ this.activateLineFromLegend.bind(this) } onMouseLeave={ this.deactivateLine.bind(this) } />
                     { tooltip }
                     { lines }
-                    { scoreErrorArea }
-                </ComposedChart>
+                </LineChart>
             </ResponsiveContainer>
         );
     }
+}
+
+function isInAllRuns(runNames, benchmarkMethod) {
+    for (let index = 0; index < runNames.length; index++) {
+        if (!benchmarkMethod.benchmarks[index]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function Label(params) {

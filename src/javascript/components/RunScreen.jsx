@@ -1,7 +1,8 @@
 import React from 'react';
-import { connect } from 'store/store.js'
+import { connect, actions } from 'store/store.js'
 
 import SplitPane from 'components/lib/SplitPane.jsx'
+import { ScaleButton } from 'components/Icons.jsx'
 
 import BenchmarkSelection from 'models/BenchmarkSelection.js';
 import RunSideBar from 'components/RunSideBar.jsx';
@@ -14,7 +15,7 @@ import SecondaryMetricExtractor from 'models/extractor/SecondaryMetricExtractor.
 
 
 /* eslint react/prop-types: 0 */
-const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles }) => {
+const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles, chartConfig }) => {
 
     const benchmarkBundles = benchmarkSelection.benchmarkBundles;
     const metricType = selectedMetric;
@@ -40,6 +41,7 @@ const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles }) => {
             benchmarkBundles={ filteredBenchmarkBundles }
             focusedBundles={ focusedBundles }
             metricExtractor={ metricExtractor }
+            chartConfig={ chartConfig }
         />
     } else if (benchmarkSelection.runNames.length == 2) {
         mainView = <TwoRunsView
@@ -52,7 +54,15 @@ const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles }) => {
             runNames={ benchmarkSelection.runNames }
             benchmarkBundles={ filteredBenchmarkBundles }
             metricExtractor={ metricExtractor }
+            chartConfig={ chartConfig }
         />
+    }
+
+    let buttons = [];
+    if (benchmarkSelection.runNames.length == 1 || benchmarkSelection.runNames.length > 2) {
+        buttons = [
+            <ScaleButton key='scaleButton' active={ chartConfig.logScale } action={ actions.logScale } />
+        ];
     }
 
     return (
@@ -60,6 +70,7 @@ const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles }) => {
             benchmarkBundles={ sideBarBenchmarks }
             metrics={ metrics }
             metricExtractor={ metricExtractor }
+            buttons={ buttons }
             focusedBenchmarkBundles={ focusedBundles }
             categories={ categories }
             activeCategory={ activeCategory }
@@ -68,10 +79,11 @@ const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles }) => {
     );
 }
 
-export default connect(({ benchmarkRuns, runSelection, selectedMetric, focusedBundles }) => ({
+export default connect(({ benchmarkRuns, runSelection, selectedMetric, focusedBundles, chartConfig }) => ({
     benchmarkSelection: new BenchmarkSelection(benchmarkRuns, runSelection),
     selectedMetric,
-    focusedBundles
+    focusedBundles,
+    chartConfig
 }))(RunScreen)
 
 function createMetricExtractor(metricType) {

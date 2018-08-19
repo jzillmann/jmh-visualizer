@@ -4,24 +4,38 @@ import PropTypes from 'prop-types';
 import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 
-import BundleHeader from 'components/BundleHeader.jsx'
+import ChartHeader from 'components/ChartHeader.jsx'
+import { DetailsButton, ScaleButton } from 'components/Icons.jsx'
 import BarChartView from 'components/single/BarChartView.jsx'
-
-
-import { createDataSetFromBenchmarks } from 'components/single/BarDataSet.js'
 
 // The view for a bunch of benchmarks, usually all of a benchmark class
 export default class SingleRunBundle extends React.Component {
 
     static propTypes = {
-        runName: PropTypes.string.isRequired,
         benchmarkBundle: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
+        chartConfig: PropTypes.object.isRequired,
         dataMax: PropTypes.number
     };
 
-    state = {
-        showJson: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            showJson: false,
+            logScale: props.chartConfig.logScale
+        };
+    }
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        if (nextProps.chartConfig.logScale !== this.state.logScale) {
+            this.setState({ logScale: nextProps.chartConfig.logScale });
+        }
+    }
+
+    toggleLogScale() {
+        this.setState({
+            logScale: !this.state.logScale
+        });
     }
 
     toggleShowJson() {
@@ -31,21 +45,29 @@ export default class SingleRunBundle extends React.Component {
     }
 
     render() {
-        const { runName, benchmarkBundle, metricExtractor, dataMax } = this.props;
 
+        const { benchmarkBundle, metricExtractor, dataMax } = this.props;
+        const { showJson, logScale } = this.state;
         const benchmarks = benchmarkBundle.allBenchmarks();
-        const scoresChart = <BarChartView dataSet={ createDataSetFromBenchmarks(runName, benchmarkBundle, metricExtractor) } dataMax={ dataMax } />;
 
         return (
             <div>
-                <BundleHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } />
+                <ChartHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } >
+                    <DetailsButton key='details' benchmarkBundle={ benchmarkBundle } />
+                    <ScaleButton key='scale' active={ logScale } action={ this.toggleLogScale.bind(this) } />
+                </ChartHeader>
                 <div style={ { fontSize: '0.90em' } }>
-                    { scoresChart }
+                    <BarChartView
+                        benchmarkBundle={ benchmarkBundle }
+                        metricExtractor={ metricExtractor }
+                        dataMax={ dataMax }
+                        logScale={ logScale }
+                    />
                 </div>
                 <Button bsSize="small" onClick={ this.toggleShowJson.bind(this) }>
                     Show JSON
               </Button>
-                <Collapse in={ this.state.showJson }>
+                <Collapse in={ showJson }>
                     <div>
                         <pre>{ JSON.stringify(benchmarks, null, '\t') }</pre>
                         <Button bsStyle="primary" onClick={ this.toggleShowJson.bind(this) }>

@@ -1,18 +1,22 @@
 import React from 'react';
-import { connect } from 'store/store.js'
+import { connect, actions } from 'store/store.js'
 
 import SplitPane from 'components/lib/SplitPane.jsx'
 
+import { ScaleButton } from 'components/Icons.jsx'
 import BenchmarkSelection from 'models/BenchmarkSelection.js';
 import BenchmarkBundle from 'models/BenchmarkBundle.js';
 import DetailSideBar from 'components/DetailSideBar.jsx';
-import SingleDetailView from 'components/single/SingleDetailView.jsx';
-import TwoDetailView from 'components/two/TwoDetailView.jsx';
-import MultiRunDetailView from 'components/multi/MultiRunDetailView.jsx';
+import DetailView from 'components/DetailView.jsx'
+
+import BarChartView from 'components/single/BarChartView.jsx'
+import DiffBarChartView from 'components/two/DiffBarChartView.jsx'
+import LineChartView from 'components/multi/LineChartView.jsx'
+
 import { parseClassNameFromFullName } from 'functions/parse.js';
 
 /* eslint react/prop-types: 0 */
-const DetailScreen = ({ detailedBenchmarkBundle, benchmarkSelection }) => {
+const DetailScreen = ({ detailedBenchmarkBundle, benchmarkSelection, chartConfig }) => {
 
     const benchmarkBundles = benchmarkSelection.benchmarkBundles;
     const runNames = benchmarkSelection.runNames;
@@ -28,13 +32,39 @@ const DetailScreen = ({ detailedBenchmarkBundle, benchmarkSelection }) => {
         return aggregate;
     }, new Set()));
 
-    let mainView;
+
+    let error, chartGeneratorFunction;
     if (runNames.length == 1) {
-        mainView = <SingleDetailView runName={ runNames[0] } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
+        if (detailBundle.methodNames.length == 0) {
+            error = `No benchmark results for run  ${runNames[0]}`;
+        } else {
+            chartGeneratorFunction = singleRunChartGenerator;
+        }
     } else if (runNames.length == 2) {
-        mainView = <TwoDetailView runNames={ runNames } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
+        chartGeneratorFunction = twoRunsChartGenerator;
     } else {
-        mainView = <MultiRunDetailView runNames={ runNames } benchmarkBundle={ detailBundle } secondaryMetrics={ secondaryMetrics } />
+        chartGeneratorFunction = multiRunChartGenerator;
+    }
+
+    console.log(chartConfig);
+
+    let mainView;
+    if (error) {
+        mainView = (<div>{ error }</div>);
+    } else {
+        mainView = <DetailView
+            runNames={ runNames }
+            benchmarkBundle={ detailBundle }
+            secondaryMetrics={ secondaryMetrics }
+            chartConfig={ chartConfig }
+            chartGeneratorFunction={ chartGeneratorFunction }
+        />
+    }
+    let buttons = [];
+    if (benchmarkSelection.runNames.length == 1 || benchmarkSelection.runNames.length > 2) {
+        buttons = [
+            <ScaleButton key='scaleButton' active={ chartConfig.logScale } action={ actions.logScale } />
+        ];
     }
 
     return (
@@ -42,12 +72,26 @@ const DetailScreen = ({ detailedBenchmarkBundle, benchmarkSelection }) => {
             benchmarkBundle={ detailBundle }
             benchmarkBundles={ benchmarkBundles }
             secondaryMetrics={ secondaryMetrics }
+            buttons={ buttons }
         /> } />
     );
 }
 
-export default connect(({ detailedBenchmarkBundle, benchmarkRuns, runSelection }) => ({
+export default connect(({ detailedBenchmarkBundle, benchmarkRuns, runSelection, chartConfig }) => ({
     detailedBenchmarkBundle,
-    benchmarkSelection: new BenchmarkSelection(benchmarkRuns, runSelection)
+    benchmarkSelection: new BenchmarkSelection(benchmarkRuns, runSelection),
+    chartConfig
 }))(DetailScreen)
 
+
+function singleRunChartGenerator(runNames, benchmarkBundle, metricsExtractor, chartConfig) {
+    return <BarChartView benchmarkBundle={ benchmarkBundle } metricExtractor={ metricsExtractor } logScale={ chartConfig.logScale } />
+}
+
+function twoRunsChartGenerator(runNames, benchmarkBundle, metricsExtractor) {
+    return <DiffBarChartView runNames={ runNames } benchmarkBundle={ benchmarkBundle } metricExtractor={ metricsExtractor } />
+}
+
+function multiRunChartGenerator(runNames, benchmarkBundle, metricsExtractor, chartConfig) {
+    return <LineChartView runNames={ runNames } benchmarkBundle={ benchmarkBundle } metricExtractor={ metricsExtractor } logScale={ chartConfig.logScale } />;
+}

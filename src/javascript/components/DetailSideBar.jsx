@@ -16,10 +16,11 @@ export default class DetailSideBar extends React.Component {
     benchmarkBundle: PropTypes.object.isRequired,
     benchmarkBundles: PropTypes.array.isRequired,
     secondaryMetrics: PropTypes.array.isRequired,
+    buttons: PropTypes.array,
   };
 
   render() {
-    const { benchmarkBundle, benchmarkBundles, secondaryMetrics } = this.props;
+    const { benchmarkBundle, benchmarkBundles, secondaryMetrics, buttons } = this.props;
     const benchmarkBundleOptions = benchmarkBundles.map(bundle => <option key={ bundle.key } value={ bundle.key }>
       { bundle.name }
     </option>);
@@ -38,7 +39,8 @@ export default class DetailSideBar extends React.Component {
           </FormControl>
         </InputGroup>
       </FormGroup>
-      <hr />
+      { buttons }
+      <hr style={ { marginTop: '10px', marginBottom: '10px' } } />
       <TocList
         categories={ ['Metrics'] }
         activeCategory={ 'Metrics' }

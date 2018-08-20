@@ -6,12 +6,20 @@ import Tooltipped from 'components/lib/Tooltipped.jsx'
 
 import ScaleIcon from 'react-icons/lib/fa/balance-scale'
 import DetailsIcon from 'react-icons/lib/fa/search-plus'
+import SortIcon from 'react-icons/lib/fa/sort-amount-desc'
 
 export { ScaleIcon }
-
 const activeColor = yellow;
-
 /* eslint react/prop-types: 0 */
+
+export const SortButton = ({ active, action }) => {
+    return <IconButton
+        IconName={ SortIcon }
+        tooltip='Sort by Score/Name'
+        active={ active }
+        action={ action } />
+};
+
 export const ScaleButton = ({ active, action }) => {
     return <IconButton
         IconName={ ScaleIcon }

@@ -13,7 +13,7 @@ a {
     cursor: pointer;
 }
 .clickable:hover {
-    color: #337ab7;
+    color: #b7a533;
 }
 
 .superscript { position: relative; top: -0.5em; font-size: 80%; }

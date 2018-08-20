@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, actions } from 'store/store.js'
 
 import SplitPane from 'components/lib/SplitPane.jsx'
-import { ScaleButton } from 'components/Icons.jsx'
+import { SortButton, ScaleButton } from 'components/Icons.jsx'
 
 import BenchmarkSelection from 'models/BenchmarkSelection.js';
 import RunSideBar from 'components/RunSideBar.jsx';
@@ -48,6 +48,7 @@ const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles, chartCo
             runNames={ benchmarkSelection.runNames }
             benchmarkBundles={ filteredBenchmarkBundles }
             metricExtractor={ metricExtractor }
+            chartConfig={ chartConfig }
         />
     } else {
         mainView = <MultiRunView
@@ -59,10 +60,14 @@ const RunScreen = ({ benchmarkSelection, selectedMetric, focusedBundles, chartCo
     }
 
     let buttons = [];
-    if (benchmarkSelection.runNames.length == 1 || benchmarkSelection.runNames.length > 2) {
-        buttons = [
-            <ScaleButton key='scaleButton' active={ chartConfig.logScale } action={ actions.logScale } />
-        ];
+    if (benchmarkSelection.runNames.length == 1) {
+        buttons.push(<SortButton key='sortButton' active={ chartConfig.sort } action={ actions.sort } />);
+        buttons.push(<span key='sep1'> | </span>);
+        buttons.push(<ScaleButton key='scaleButton' active={ chartConfig.logScale } action={ actions.logScale } />);
+    } else if (benchmarkSelection.runNames.length == 2) {
+        buttons.push(<SortButton key='sortButton' active={ chartConfig.sort } action={ actions.sort } />);
+    } else {
+        buttons.push(<ScaleButton key='scaleButton' active={ chartConfig.logScale } action={ actions.logScale } />);
     }
 
     return (

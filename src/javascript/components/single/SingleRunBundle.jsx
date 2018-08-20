@@ -5,7 +5,7 @@ import Collapse from 'react-bootstrap/lib/Collapse'
 import Button from 'react-bootstrap/lib/Button'
 
 import ChartHeader from 'components/ChartHeader.jsx'
-import { DetailsButton, ScaleButton } from 'components/Icons.jsx'
+import { DetailsButton, SortButton, ScaleButton } from 'components/Icons.jsx'
 import BarChartView from 'components/single/BarChartView.jsx'
 
 // The view for a bunch of benchmarks, usually all of a benchmark class
@@ -21,15 +21,25 @@ export default class SingleRunBundle extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            sort: props.chartConfig.sort,
+            logScale: props.chartConfig.logScale,
             showJson: false,
-            logScale: props.chartConfig.logScale
         };
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
+        if (nextProps.chartConfig.sort !== this.state.sort) {
+            this.setState({ sort: nextProps.chartConfig.sort });
+        }
         if (nextProps.chartConfig.logScale !== this.state.logScale) {
             this.setState({ logScale: nextProps.chartConfig.logScale });
         }
+    }
+
+    toggleSort() {
+        this.setState({
+            sort: !this.state.sort
+        });
     }
 
     toggleLogScale() {
@@ -47,13 +57,14 @@ export default class SingleRunBundle extends React.Component {
     render() {
 
         const { benchmarkBundle, metricExtractor, dataMax } = this.props;
-        const { showJson, logScale } = this.state;
+        const { sort, logScale, showJson } = this.state;
         const benchmarks = benchmarkBundle.allBenchmarks();
 
         return (
             <div>
                 <ChartHeader benchmarkBundle={ benchmarkBundle } metricExtractor={ metricExtractor } >
                     <DetailsButton key='details' benchmarkBundle={ benchmarkBundle } />
+                    <SortButton key='sort' active={ sort } action={ this.toggleSort.bind(this) } />
                     <ScaleButton key='scale' active={ logScale } action={ this.toggleLogScale.bind(this) } />
                 </ChartHeader>
                 <div style={ { fontSize: '0.90em' } }>
@@ -61,7 +72,7 @@ export default class SingleRunBundle extends React.Component {
                         benchmarkBundle={ benchmarkBundle }
                         metricExtractor={ metricExtractor }
                         dataMax={ dataMax }
-                        logScale={ logScale }
+                        chartConfig={ { sort: sort, logScale: logScale } }
                     />
                 </div>
                 <Button bsSize="small" onClick={ this.toggleShowJson.bind(this) }>

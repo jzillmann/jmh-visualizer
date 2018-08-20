@@ -52,6 +52,7 @@ const config = {
         activeCategory: 'Benchmarks',
         focusedBundles: new Set(),
         chartConfig: {
+            sort: false,
             logScale: false
         }
     },
@@ -88,8 +89,11 @@ const config = {
         selectBenchmarkRuns: (state, action, runSelection, runView) => {
             return { runSelection: runSelection, runView: runView };
         },
+        sort: (state) => {
+            return { chartConfig: { ...state.chartConfig, sort: !state.chartConfig.sort } }
+        },
         logScale: (state) => {
-            return { chartConfig: { logScale: !state.chartConfig.logScale } }
+            return { chartConfig: { ...state.chartConfig, logScale: !state.chartConfig.logScale } }
         },
         goBack: () => {
             history.goBack();

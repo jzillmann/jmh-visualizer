@@ -3,7 +3,7 @@ import { connect, actions } from 'store/store.js'
 
 import SplitPane from 'components/lib/SplitPane.jsx'
 
-import { ScaleButton } from 'components/Icons.jsx'
+import { SortButton, ScaleButton } from 'components/Icons.jsx'
 import BenchmarkSelection from 'models/BenchmarkSelection.js';
 import BenchmarkBundle from 'models/BenchmarkBundle.js';
 import DetailSideBar from 'components/DetailSideBar.jsx';
@@ -59,10 +59,14 @@ const DetailScreen = ({ detailedBenchmarkBundle, benchmarkSelection, chartConfig
         />
     }
     let buttons = [];
-    if (benchmarkSelection.runNames.length == 1 || benchmarkSelection.runNames.length > 2) {
-        buttons = [
-            <ScaleButton key='scaleButton' active={ chartConfig.logScale } action={ actions.logScale } />
-        ];
+    if (benchmarkSelection.runNames.length == 1) {
+        buttons.push(<SortButton key='sortButton' active={ chartConfig.sort } action={ actions.sort } />);
+        buttons.push(<span key='sep1'> | </span>);
+        buttons.push(<ScaleButton key='scaleButton' active={ chartConfig.logScale } action={ actions.logScale } />);
+    } else if (benchmarkSelection.runNames.length == 2) {
+        buttons.push(<SortButton key='sortButton' active={ chartConfig.sort } action={ actions.sort } />);
+    } else {
+        buttons.push(<ScaleButton key='scaleButton' active={ chartConfig.logScale } action={ actions.logScale } />);
     }
 
     return (
@@ -83,11 +87,11 @@ export default connect(({ detailedBenchmarkBundle, benchmarkRuns, runSelection, 
 
 
 function singleRunChartGenerator(runNames, benchmarkBundle, metricsExtractor, chartConfig) {
-    return <BarChartView benchmarkBundle={ benchmarkBundle } metricExtractor={ metricsExtractor } logScale={ chartConfig.logScale } />
+    return <BarChartView benchmarkBundle={ benchmarkBundle } metricExtractor={ metricsExtractor } chartConfig={ chartConfig } />
 }
 
-function twoRunsChartGenerator(runNames, benchmarkBundle, metricsExtractor) {
-    return <DiffBarChartView runNames={ runNames } benchmarkBundle={ benchmarkBundle } metricExtractor={ metricsExtractor } />
+function twoRunsChartGenerator(runNames, benchmarkBundle, metricsExtractor, chartConfig) {
+    return <DiffBarChartView runNames={ runNames } benchmarkBundle={ benchmarkBundle } metricExtractor={ metricsExtractor } sort={ chartConfig.sort } />
 }
 
 function multiRunChartGenerator(runNames, benchmarkBundle, metricsExtractor, chartConfig) {

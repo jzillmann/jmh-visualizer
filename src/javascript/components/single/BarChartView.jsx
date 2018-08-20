@@ -15,15 +15,15 @@ export default class BarChartView extends React.Component {
         benchmarkBundle: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
         dataMax: PropTypes.number,
-        logScale: PropTypes.bool.isRequired
+        chartConfig: PropTypes.object.isRequired
     };
 
     render() {
-        const { benchmarkBundle, metricExtractor, dataMax, logScale } = this.props;
+        const { benchmarkBundle, metricExtractor, dataMax, chartConfig } = this.props;
+        const { logScale, sort } = chartConfig;
+        const dataSet = createDataSetFromBenchmarks(benchmarkBundle, metricExtractor, sort);
 
-        const dataSet = createDataSetFromBenchmarks(benchmarkBundle, metricExtractor);
         const domainMax = dataMax && dataMax > 0 ? Math.round(dataMax) : 'auto';
-
         let scale, domainMin, chartMarginRight;
         if (logScale) {
             scale = 'log';

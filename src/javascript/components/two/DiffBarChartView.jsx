@@ -14,11 +14,12 @@ export default class DiffBarChartView extends React.Component {
         runNames: PropTypes.array.isRequired,
         benchmarkBundle: PropTypes.object.isRequired,
         metricExtractor: PropTypes.object.isRequired,
+        sort: PropTypes.bool.isRequired,
     };
 
     render() {
-        const { runNames, benchmarkBundle, metricExtractor } = this.props;
-        const dataSet = createDataSetFromBenchmarks(benchmarkBundle, metricExtractor);
+        const { runNames, benchmarkBundle, metricExtractor, sort } = this.props;
+        const dataSet = createDataSetFromBenchmarks(benchmarkBundle, metricExtractor, sort);
         const maxMethodNameLength = dataSet.data.map((element) => element.name.length).reduce((previous, current) => Math.max(previous, current), 32);
         const chartHeight = 100 + dataSet.data.length * 45;
 

@@ -2,7 +2,7 @@ import { getMetricType } from 'models/MetricType.js'
 
 import { shouldRound, round } from 'functions/util.js'
 
-export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor) {
+export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor, sort) {
 
     const shouldRoundScores = shouldRound(benchmarkBundle.benchmarkMethods, metricExtractor);
     const data = benchmarkBundle.benchmarkMethods.map((benchmarkMethod, i) => {
@@ -37,6 +37,10 @@ export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor) {
             }
         }
     }).filter((element) => element !== undefined);
+
+    if (sort) {
+        data.sort((a, b) => b.scoreDiff - a.scoreDiff);
+    }
 
     return {
         data: data,

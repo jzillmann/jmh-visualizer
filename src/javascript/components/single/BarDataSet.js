@@ -77,21 +77,19 @@ function createBarDataSet(benchmarkMethods, metricExtractor, sort, groupFunction
             const [benchmark] = benchmarkMethod.benchmarks;
             if (metricExtractor.hasMetric(benchmark)) {
                 const score = round(metricExtractor.extractScore(benchmark), shouldRoundScores);
-                const scoreConfidence = metricExtractor.extractScoreConfidence(benchmark).map(scoreConf => round(scoreConf, shouldRoundScores));
+                const minMax = metricExtractor.extractMinMax(benchmark).map(minOrMax => round(minOrMax, shouldRoundScores));
                 const scoreError = round(metricExtractor.extractScoreError(benchmark), shouldRoundScores);
                 let errorBarInterval = 0
                 if (!isNaN(scoreError)) {
-                    errorBarInterval = [score - scoreConfidence[0], scoreConfidence[1] - score];
+                    errorBarInterval = [score - minMax[0], minMax[1] - score];
                 }
                 scoreUnit = metricExtractor.extractScoreUnit(benchmark);
-                dataMax = Math.max(dataMax, score);
-                dataMax = Math.max(dataMax, scoreConfidence[1]);
-                dataMax = Math.max(dataMax, 1);
+                dataMax = metricExtractor.extractMinMax(benchmark)[1];
 
                 const barGroup = barGroupFunction(benchmarkMethod);
                 barGroups.add(barGroup);
                 dataObject[barGroup] = score;
-                dataObject[barGroup + 'Confidence'] = scoreConfidence;
+                dataObject[barGroup + 'MinMax'] = minMax;
                 dataObject[barGroup + 'Error'] = scoreError;
                 dataObject[barGroup + 'ErrorBarInterval'] = errorBarInterval;
                 if (benchmark.mode === 'sample') {

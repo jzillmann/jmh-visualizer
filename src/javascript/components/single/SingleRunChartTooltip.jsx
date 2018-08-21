@@ -33,47 +33,30 @@ export default class SingleRunChartTooltip extends Component {
         // Assemble table headers showing score, error, etc...
         const tableHeaders = [];
         if (payload.length > 1) {
-            tableHeaders.push(<th key='1'>
-                { paramNames.join(':') }
-            </th>);
+            tableHeaders.push(<th key='1'>{ paramNames.join(':') }</th>);
         }
-        tableHeaders.push(<th key='2'>
-            Score
-                          </th>);
-        tableHeaders.push(<th key='3'>
-            Error
-                          </th>);
-        tableHeaders.push(<th key='4'>
-            Confidence
-                          </th>);
-        tableHeaders.push(<th key='5'>
-            Unit
-                          </th>);
+        tableHeaders.push(<th key='2'>Score</th>);
+        tableHeaders.push(<th key='3'>Min</th>);
+        tableHeaders.push(<th key='4'>Max</th>);
+        tableHeaders.push(<th key='5'>Error</th>);
+        tableHeaders.push(<th key='7'>Unit</th>);
 
         // Assemble table rows showing score, error, etc... per bar
         const tableRows = payload.map(barPayload => {
-            const confidenceInterval = barPayload.payload[barPayload.dataKey + 'Confidence'];
+            const score = formatNumber(barPayload.payload[barPayload.dataKey], roundScores);
+            const minMax = barPayload.payload[barPayload.dataKey + 'MinMax'];
+            const min = formatNumber(minMax[0], roundScores);
+            const max = formatNumber(minMax[1], roundScores);
             const columnValues = [];
             if (payload.length > 1) {
-                columnValues.push(<td key='run'>
-                    { barPayload.dataKey }
-                </td>);
+                columnValues.push(<td key='run'>{ barPayload.dataKey }</td>);
             }
-            columnValues.push(<td key='score' style={ { color: blue } }>
-                { formatNumber(barPayload.payload[barPayload.dataKey], roundScores) }
-            </td>);
-            columnValues.push(<td key='error' style={ { color: red } }>
-                { formatNumber(barPayload.payload[barPayload.dataKey + 'Error'], roundScores) }
-            </td>);
-            columnValues.push(<td key='confidence'>
-                { barPayload.payload[barPayload.dataKey] ? formatNumber(confidenceInterval[0], roundScores) + ' - ' + formatNumber(confidenceInterval[1], roundScores) : "n/a" }
-            </td>);
-            columnValues.push(<td key='unit'>
-                { scoreUnit }
-            </td>);
-            return <tr key={ barPayload.name }>
-                { columnValues }
-            </tr>
+            columnValues.push(<td key='score' style={ { color: blue } }>{ score }</td>);
+            columnValues.push(<td key='min' style={ { color: blue } }>{ min }</td>);
+            columnValues.push(<td key='max' style={ { color: blue } }>{ max }</td>);
+            columnValues.push(<td key='error' style={ { color: red } }>{ formatNumber(barPayload.payload[barPayload.dataKey + 'Error'], roundScores) }</td>);
+            columnValues.push(<td key='unit'>{ scoreUnit }</td>);
+            return <tr key={ barPayload.name }>{ columnValues }</tr>
         });
 
         //Assemble iteration charts showing the raw iteration data per run 
@@ -104,15 +87,9 @@ export default class SingleRunChartTooltip extends Component {
                     });
                     return <div key={ 'fork' + forkIndex }>
                         <br />
-                        <div>
-                            <b>{ `Fork ${forkIndex} / ${forkHistograms.length}` }</b>
-                        </div>
-                        <div>
-                            { histogramCharts }
-                        </div>
-                        <div>
-                            { `Showing ${histogramCharts.length}  runs from ${forkHistograms[forkIndex].length} ...` }
-                        </div>
+                        <div><b>{ `Fork ${forkIndex} / ${forkHistograms.length}` }</b></div>
+                        <div>{ histogramCharts }</div>
+                        <div>{ `Showing ${histogramCharts.length}  runs from ${forkHistograms[forkIndex].length} ...` }</div>
                     </div>
                 });
             }
@@ -156,9 +133,7 @@ export default class SingleRunChartTooltip extends Component {
                     condensed
                     hover>
                     <thead>
-                        <tr>
-                            { tableHeaders }
-                        </tr>
+                        <tr>{ tableHeaders }</tr>
                     </thead>
                     <tbody>
                         { tableRows }

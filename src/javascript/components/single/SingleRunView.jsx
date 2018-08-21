@@ -56,8 +56,7 @@ export default class SingleRunView extends React.Component {
             if (axisScalesSync && axisScalesSyncPossible) {
                 dataMax = 0;
                 benchmarkBundles.forEach(benchmarkBundle => benchmarkBundle.allBenchmarks().forEach(benchmark => {
-                    dataMax = Math.max(dataMax, metricExtractor.extractScore(benchmark));
-                    dataMax = Math.max(dataMax, metricExtractor.extractScoreConfidence(benchmark)[1]);
+                    dataMax = Math.max(dataMax, metricExtractor.extractMinMax(benchmark)[1]);
                 }));
             }
         }

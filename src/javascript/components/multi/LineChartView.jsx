@@ -71,15 +71,16 @@ export default class LineChartView extends React.Component {
                 if (benchmark && metricExtractor.hasMetric(benchmark)) {
                     const score = round(metricExtractor.extractScore(benchmark), shouldRoundScores);
                     const scoreError = round(metricExtractor.extractScoreError(benchmark), shouldRoundScores);
-                    const scoreConfidence = metricExtractor.extractScoreConfidence(benchmark).map(scoreConf => round(scoreConf, shouldRoundScores));
+                    const minMax = metricExtractor.extractMinMax(benchmark).map(minOrMax => round(minOrMax, shouldRoundScores));
                     const scoreUnit = metricExtractor.extractScoreUnit(benchmark);
                     let errorBarInterval = 0
                     if (!isNaN(scoreError)) {
-                        errorBarInterval = [score - scoreConfidence[0], scoreConfidence[1] - score];
+                        errorBarInterval = [score - minMax[0], minMax[1] - score];
                     }
                     runObject[benchmarkMethod.key] = score;
                     runObject.scoreUnit = scoreUnit;
                     runObject[benchmarkMethod.key + '-scoreError'] = scoreError;
+                    runObject[benchmarkMethod.key + '-minMax'] = minMax;
                     runObject[benchmarkMethod.key + '-errorBarInterval'] = errorBarInterval;
                     runObject[benchmarkMethod.key + '-label'] = score.toLocaleString() + ' ' + scoreUnit;
                     runObject[benchmarkMethod.key + '-errorLabel'] = scoreError.toLocaleString() + ' ' + scoreUnit;

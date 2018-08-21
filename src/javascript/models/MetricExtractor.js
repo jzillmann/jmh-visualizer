@@ -25,10 +25,6 @@ export default class MetricExtractor {
         return this.getMetricObject(benchmark).scoreError;
     }
 
-    extractScoreConfidence(benchmark) {
-        return this.getMetricObject(benchmark).scoreConfidence;
-    }
-
     extractScoreUnit(benchmark) {
         return this.getMetricObject(benchmark).scoreUnit;
     }
@@ -39,6 +35,30 @@ export default class MetricExtractor {
 
     extractRawDataHistogram(benchmark) {
         return this.getMetricObject(benchmark).rawDataHistogram;
+    }
+
+    extractMinMax(benchmark) {
+        const score = this.extractScore(benchmark);
+        let min = score;
+        let max = score;
+        if (benchmark.mode === 'sample') {
+            const histogramPerFork = this.extractRawDataHistogram(benchmark);
+            histogramPerFork.forEach(scoresArray => scoresArray.forEach(timeOccurence => {
+                const duration = timeOccurence[0];
+                if (!isNaN(duration)) {
+                    min = Math.min(min, duration);
+                    max = Math.max(max, duration);
+                }
+            }));
+            return [min, max];
+        } else {
+            const scoresPerFork = this.extractRawData(benchmark);
+            scoresPerFork.forEach(scoresArray => scoresArray.forEach(iterationScore => {
+                min = Math.min(min, iterationScore);
+                max = Math.max(max, iterationScore);
+            }));
+            return [min, max];
+        }
     }
 
 }

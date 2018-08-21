@@ -49,20 +49,12 @@ const SummaryTable = ({ name, benchmarkDiffs, lastRunIndex }) => {
                 { benchmarkDiff.benchmarkMethod.benchmarks[lastRunIndex].mode + ' in ' + benchmarkDiff.scoreUnit }
             </td>
             <td>
-                <div>
-                    { benchmarkDiff.score1stRun.toLocaleString() }
-                </div>
-                <div>
-                    { benchmarkDiff.score2ndRun.toLocaleString() }
-                </div>
+                <div>{ benchmarkDiff.score1stRun.toLocaleString() }</div>
+                <div>{ benchmarkDiff.score2ndRun.toLocaleString() }</div>
             </td>
             <td>
-                <div>
-                    { benchmarkDiff.scoreError1stRun.toLocaleString() }
-                </div>
-                <div>
-                    { benchmarkDiff.scoreError2ndRun.toLocaleString() }
-                </div>
+                <div>{ benchmarkDiff.scoreError1stRun.toLocaleString() }</div>
+                <div>{ benchmarkDiff.scoreError2ndRun.toLocaleString() }</div>
             </td>
         </tr>
     });
@@ -72,9 +64,7 @@ const SummaryTable = ({ name, benchmarkDiffs, lastRunIndex }) => {
             <h3>{ `${name} (${benchmarkDiffs.length})` }</h3>
             <Table striped>
                 <thead>
-                    <tr>
-                        { headers }
-                    </tr>
+                    <tr>{ headers }</tr>
                 </thead>
                 <tbody>
                     { rows }

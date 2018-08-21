@@ -46,62 +46,30 @@ export default class TwoRunsChartTooltip extends Component {
             hover>
             <thead>
               <tr>
-                <th>
-                  Run
-                      </th>
-                <th>
-                  Score
-                      </th>
-                <th>
-                  Score Error
-                      </th>
-                <th>
-                  Unit
-                      </th>
+                <th>Run</th>
+                <th>Score</th>
+                <th>Error</th>
+                <th>Unit</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>
-                  { runNames[0] }
-                </td>
-                <td style={ { color: blue } }>
-                  { formatNumber(score1, roundScores) }
-                </td>
-                <td style={ { color: red } }>
-                  { formatNumber(scoreError1, roundScores) }
-                </td>
-                <td>
-                  { scoreUnit }
-                </td>
+                <td>{ runNames[0] }</td>
+                <td style={ { color: blue } }>{ formatNumber(score1, roundScores) }</td>
+                <td style={ { color: red } }>{ formatNumber(scoreError1, roundScores) }</td>
+                <td>{ scoreUnit }</td>
               </tr>
               <tr>
-                <td>
-                  { runNames[1] }
-                </td>
-                <td style={ { color: blue } }>
-                  { formatNumber(score2, roundScores) }
-                </td>
-                <td style={ { color: red } }>
-                  { formatNumber(scoreError2, roundScores) }
-                </td>
-                <td>
-                  { scoreUnit }
-                </td>
+                <td>{ runNames[1] }</td>
+                <td style={ { color: blue } }>{ formatNumber(score2, roundScores) }</td>
+                <td style={ { color: red } }>{ formatNumber(scoreError2, roundScores) }</td>
+                <td>{ scoreUnit }</td>
               </tr>
               <tr>
-                <td>
-                  Change
-                      </td>
-                <td>
-                  { (scoreChange > 0 ? '+' : '') + formatNumber(scoreChange, roundScores) }
-                </td>
-                <td>
-                  { (scoreErrorChange > 0 ? '+' : '') + formatNumber(scoreErrorChange, roundScores) }
-                </td>
-                <td>
-                  { scoreUnit }
-                </td>
+                <td>Change</td>
+                <td>{ (scoreChange > 0 ? '+' : '') + formatNumber(scoreChange, roundScores) }</td>
+                <td>{ (scoreErrorChange > 0 ? '+' : '') + formatNumber(scoreErrorChange, roundScores) }</td>
+                <td>{ scoreUnit }</td>
               </tr>
             </tbody>
           </Table>

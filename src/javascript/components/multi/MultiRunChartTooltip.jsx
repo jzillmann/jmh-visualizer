@@ -25,18 +25,12 @@ export default class MultiRunChartTooltip extends Component {
       return null;
     }
     const tableRows = payload.map(dataPoint => <tr key={ dataPoint.name }>
-      <td>
-        { dataPoint.name }
-      </td>
-      <td style={ { color: blue } }>
-        { formatNumber(dataPoint.value, roundScores) }
-      </td>
-      <td style={ { color: red } }>
-        { formatNumber(dataPoint.payload[dataPoint.name + '-scoreError'], roundScores) }
-      </td>
-      <td>
-        { dataPoint.payload.scoreUnit }
-      </td>
+      <td>{ dataPoint.name }</td>
+      <td style={ { color: blue } }>{ formatNumber(dataPoint.value, roundScores) }</td>
+      <td style={ { color: blue } }>{ formatNumber(dataPoint.payload[dataPoint.name + '-minMax'][0], roundScores) }</td>
+      <td style={ { color: blue } }>{ formatNumber(dataPoint.payload[dataPoint.name + '-minMax'][1], roundScores) }</td>
+      <td style={ { color: red } }>{ formatNumber(dataPoint.payload[dataPoint.name + '-scoreError'], roundScores) }</td>
+      <td>{ dataPoint.payload.scoreUnit }</td>
     </tr>);
     return (
       <div>
@@ -51,18 +45,12 @@ export default class MultiRunChartTooltip extends Component {
             hover>
             <thead>
               <tr>
-                <th>
-                  Benchmark
-                      </th>
-                <th>
-                  Score
-                      </th>
-                <th>
-                  Score Error
-                      </th>
-                <th>
-                  Unit
-                      </th>
+                <th>Benchmark</th>
+                <th>Score</th>
+                <th>Min</th>
+                <th>Max</th>
+                <th>Score Error</th>
+                <th>Unit</th>
               </tr>
             </thead>
             <tbody>

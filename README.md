@@ -24,16 +24,13 @@ Comes with 2 companion projects:
   - Line chart
   - Show score and error on hover
 - Visualize secondary metrics like '·gc.alloc.rate'
-- Focus on individual charts with synced axis scales
-- Load benchmarks from external url
-  - [One source](http://jmh.morethan.io?source=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json)
-  - [Multiple sources](http://jmh.morethan.io?sources=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json,https://gist.githubusercontent.com/jzillmann/866d39d43b264f507a67368f2313baca/raw/d0ae1502e8c493e6814c83f2df345fecb763c078/string-concatenation_jdk8.json)
-  - [One gist](http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598)
-  - [Multiple gists](http://jmh.morethan.io?gists=7d23b2382911cc434754a23773b06598,866d39d43b264f507a67368f2313baca)
+- Focus on subselection of charts with synced axis scales
+- Load benchmarks from external url or gists
 
 
 ## Major Changes
 
+- **Aug 2018** - 0.9 Couple of [user requested features](https://github.com/jzillmann/jmh-visualizer/milestone/6)
 - **Jul 2018** - 0.8 Revamp Summary Page + Chart transitions
 - **Jan 2018** - 0.7.3 External URL/Gist support
 - **Okt 2017** - 0.7 Multi-Run support
@@ -50,11 +47,22 @@ Comes with 2 companion projects:
 While this app will visualize any valid JMH JSON you throw at it, you can write your benchmarks in a way that make the visualization much more enjoyable...
 
 - Put those benchmarks in a single class which you most likely wanne compare to each other
-- On the other hand, don't put to much stuff in a single class/chart (since readability will suffer) - deconstruct
+- On the other hand, don't put to much stuff in a single class/chart (since readability will suffer)
 - Don't mix incompatible benchmark styles into one class (like mixing average and single shot is ok, but mixing avarage and throughput doesn't make much sense)
 - Sensibly design your package structure, your class name and you methods names, those are reflected in the auto-generated charts
 - Keep method names short but meaningful
 - The method names reflect initial sort, so if you have benchmarks called 'with1Threads, with10Threads' naming them 'with01Thread, with10Thread' will display nicer
+
+
+## Parameter reference
+
+| Name | Values | What you can do with it? | Example |
+| ------------- | ------------- | ------------- | ------------- |
+| source | $url | Load a single benchmark result from the provided URL | http://jmh.morethan.io?source=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json |
+| sources | $url1,$url2,.. | Load multiple benchmark results from the provided URLs | http://jmh.morethan.io?sources=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json,https://gist.githubusercontent.com/jzillmann/866d39d43b264f507a67368f2313baca/raw/d0ae1502e8c493e6814c83f2df345fecb763c078/string-concatenation_jdk8.json |
+| gist | $gistId | Load a single benchmark result from the provided gist | http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598 |
+| gists | $gistId1,$gistId2,... | Load multiple benchmark results from the provided gists | http://jmh.morethan.io?gists=7d23b2382911cc434754a23773b06598,866d39d43b264f507a67368f2313baca |
+| topBar | oneOf['default', 'off, 'my custom headline'] | Control the header | [Off](http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598&topBar=off), [Custom headline](http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598&topBar=Custom Headline) |
 
 
 ## Contribute

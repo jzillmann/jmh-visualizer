@@ -62,7 +62,7 @@ While this app will visualize any valid JMH JSON you throw at it, you can write 
 | sources | $url1,$url2,.. | Load multiple benchmark results from the provided URLs | http://jmh.morethan.io?sources=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json,https://gist.githubusercontent.com/jzillmann/866d39d43b264f507a67368f2313baca/raw/d0ae1502e8c493e6814c83f2df345fecb763c078/string-concatenation_jdk8.json |
 | gist | $gistId | Load a single benchmark result from the provided gist | http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598 |
 | gists | $gistId1,$gistId2,... | Load multiple benchmark results from the provided gists | http://jmh.morethan.io?gists=7d23b2382911cc434754a23773b06598,866d39d43b264f507a67368f2313baca |
-| topBar | oneOf['default', 'off, 'my custom headline'] | Control the header | [Off](http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598&topBar=off), [Custom headline](http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598&topBar=Custom Headline) |
+| topBar | oneOf['default', 'off, 'my custom headline'] | Control the header | [Off](http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598&topBar=off), [Custom Headline](http://jmh.morethan.io/?gist=7d23b2382911cc434754a23773b06598&topBar=Custom%20Headline) |
 
 
 ## Contribute
@@ -101,6 +101,5 @@ Babel, webpack, react,... and many more for an enjoyable webstack!
 
 ## Donating
 
-_Support this project and other work from [me](https://github.com/jzillmann):_
 [![Support via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/JohannesZillmann/5.4)
 

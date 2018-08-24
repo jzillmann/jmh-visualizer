@@ -5,9 +5,10 @@ import { ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, L
 
 import { scaleOrdinal, schemeCategory20 } from 'd3-scale';
 const lineColors = scaleOrdinal(schemeCategory20).range();
-import { tooltipBackground } from 'functions/colors.js'
 
 import MultiRunChartTooltip from 'components/multi/MultiRunChartTooltip.jsx'
+import { tooltipBackground } from 'functions/colors.js'
+import { tickFormatter } from 'functions/charts.js'
 import { shouldRound, round } from 'functions/util.js'
 import { formatNumber } from 'functions/util.js'
 
@@ -124,7 +125,7 @@ export default class LineChartView extends React.Component {
             <ResponsiveContainer width='100%' height={ 450 }>
                 <LineChart data={ dataSet } margin={ { top: 45, right: 0, left: 0, bottom: 27 } }>
                     <XAxis dataKey="name" />
-                    <YAxis scale={ scale } domain={ domain } />
+                    <YAxis scale={ scale } domain={ domain } tickFormatter={ tickFormatter } />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Legend onMouseEnter={ this.activateLineFromLegend.bind(this) } onMouseLeave={ this.deactivateLine.bind(this) } />
                     { tooltip }

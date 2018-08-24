@@ -6,6 +6,7 @@ import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, CartesianGrid, La
 import { createDataSetFromBenchmarks } from 'components/single/BarDataSet.js'
 import BarLabel from 'components/single/BarLabel.jsx';
 import SingleRunChartTooltip from 'components/single/SingleRunChartTooltip.jsx';
+import { tickFormatter } from 'functions/charts.js'
 import { blue, green, lightBlack, tooltipBackground, barColors } from 'functions/colors.js'
 
 // Gathered report for one benchmark class
@@ -66,7 +67,7 @@ export default class BarChartView extends React.Component {
                         height={ chartHeight }
                         data={ dataSet.data }
                         margin={ { top: 20, right: chartMarginRight, left: maxMethodNameLength * 4, bottom: 5 } }>
-                        <XAxis type="number" domain={ [domainMin, domainMax] } scale={ scale } allowDataOverflow />
+                        <XAxis type="number" domain={ [domainMin, domainMax] } scale={ scale } allowDataOverflow tickFormatter={ tickFormatter } />
                         <YAxis dataKey="name" type="category" />
                         <CartesianGrid strokeDasharray="3 3" />
                         <Tooltip content={ <SingleRunChartTooltip

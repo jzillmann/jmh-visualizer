@@ -88,7 +88,7 @@ const RunSelectionBar = ({ benchmarkRuns, runSelection, runView, detailedBenchma
     }
 
     return (
-        <div style={ { textAlign: 'center', marginTop: '-9px', marginBottom: '15px' } }>
+        <div style={ { textAlign: 'center', marginTop: '-9px', marginBottom: '15px', paddingRight: '20%' } }>
             <ButtonGroup>
                 { runComponents }
             </ButtonGroup>

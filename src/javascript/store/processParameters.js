@@ -1,6 +1,14 @@
 import { getUniqueNames } from 'functions/util.js'
 import BenchmarkRun from 'models/BenchmarkRun.js';
 
+
+export function addSettingsFromParameters(settings) {
+    const topBar = getParameterByName('topBar');
+    if (topBar) {
+        settings.topBar = topBar;
+    }
+}
+
 export function getBenchmarksLoadFunctionForDefinedExamples(examples) {
     var example = getParameterByName('example');
     if (!example) {

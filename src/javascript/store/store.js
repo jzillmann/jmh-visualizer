@@ -1,7 +1,7 @@
 import createStore from 'react-waterfall'
 import createHistory from 'history/createBrowserHistory'
 
-import { getBenchmarksLoadFunctionForDefinedExamples, getBenchmarksLoadFunctionForSourceExamples } from 'processParameters.js';
+import { addSettingsFromParameters, getBenchmarksLoadFunctionForDefinedExamples, getBenchmarksLoadFunctionForSourceExamples } from 'store/processParameters.js';
 import Examples from 'models/Examples.js';
 import { exampleRun1 } from 'exampleBenchmark1.js';
 import { exampleRun2 } from 'exampleBenchmark2.js';
@@ -25,6 +25,10 @@ const examples = new Examples({
     })
 });
 
+// Get default settings from settings.js and enrich with parameters
+const settings = defaultSettings;// eslint-disable-line no-undef
+addSettingsFromParameters(settings);
+
 // Load benchmarks from defined source (provided || example || remote source)
 let benchmarkLoadFunction = null;
 if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
@@ -42,6 +46,7 @@ if (providedBenchmarks.length > 0) { // eslint-disable-line no-undef
 // Setup store
 const config = {
     initialState: {
+        settings: settings,
         initialLoading: benchmarkLoadFunction != null,
         loading: false,
         benchmarkRuns: [],

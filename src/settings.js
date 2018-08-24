@@ -1,3 +1,3 @@
-var settings = { // eslint-disable-line no-unused-vars
-    showHeader: true
+var defaultSettings = { // eslint-disable-line no-unused-vars
+    topBar: 'default' //possible values ['default', 'off', 'my custom headline']
 }

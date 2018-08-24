@@ -8,7 +8,12 @@ import ScaleIcon from 'react-icons/lib/fa/balance-scale'
 import DetailsIcon from 'react-icons/lib/fa/search-plus'
 import SortIcon from 'react-icons/lib/fa/sort-amount-desc'
 
-export { ScaleIcon }
+import LinkIcon from 'react-icons/lib/fa/external-link'
+import GithubIcon from 'react-icons/lib/fa/github'
+import BugIcon from 'react-icons/lib/fa/bug'
+
+export { LinkIcon, GithubIcon, BugIcon }
+
 const activeColor = yellow;
 /* eslint react/prop-types: 0 */
 

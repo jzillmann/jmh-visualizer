@@ -8,15 +8,14 @@ import MenuItem from 'react-bootstrap/lib/MenuItem'
 import Popover from 'react-bootstrap/lib/Popover'
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 
-import LinkIcon from 'react-icons/lib/fa/external-link'
+import { LinkIcon } from 'components/Icons.jsx'
 
 import AppLogo from 'components/AppLogo.jsx';
 import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
-import RunSelectionBar from 'components/RunSelectionBar.jsx'
 
-export default class MainNavi extends React.Component {
+export default class DefaultTopBar extends React.Component {
 
-  onSelectUploadNewFiles() {
+  onReset() {
     window.onbeforeunload = null;
     window.location = window.location.href.split('#')[0].split('?')[0];
   }
@@ -31,44 +30,33 @@ export default class MainNavi extends React.Component {
       </Popover>
     );
 
-    const uploadNewFileItem = providedBenchmarks.length > 0 // eslint-disable-line no-undef
-      ? null : <MenuItem onSelect={ this.onSelectUploadNewFiles }> Reset & Upload New
-                     </MenuItem>;
+    const showReset = providedBenchmarks.length == 0; // eslint-disable-line no-undef
 
-    const navBar = settings.showHeader // eslint-disable-line no-undef
-      ? <Navbar inverse={ true } fluid={ true }>
+    return (
+      <Navbar inverse={ true } fluid={ true } style={ { marginBottom: '0px' } }>
         <Navbar.Header>
           <Navbar.Brand>
             <Dropdown id="logo-dropdown">
               <AppLogo bsRole="toggle" />
               <Dropdown.Menu>
-                { uploadNewFileItem }
+                { showReset > 0 &&
+                  <MenuItem onSelect={ this.onReset }> Reset & Upload New</MenuItem>
+                }
+                { showReset > 0 &&
+                  <MenuItem divider />
+                }
+                <MenuItem href="https://github.com/jzillmann/jmh-visualizer/issues" target="_blank"><LinkIcon />{ ' Feedback & Bug Reports ' }</MenuItem>
+                <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank"><LinkIcon />{ ' Code @ Github ' }</MenuItem>
                 <MenuItem divider />
-                <MenuItem href="https://github.com/jzillmann/jmh-visualizer/issues" target="_blank">
-                  <LinkIcon />
-                  { ' Feedback & Bug Reports ' }
-                </MenuItem>
-                <MenuItem href="http://github.com/jzillmann/jmh-visualizer" target="_blank">
-                  <LinkIcon />
-                  { ' Code @ Github ' }
-                </MenuItem>
-                <MenuItem divider />
-                <MenuItem href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank">
-                  <LinkIcon />
-                  { ' JMH ' }
-                </MenuItem>
-                <MenuItem href="http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/" target="_blank">
-                  <LinkIcon />
-                  { ' JMH Samples' }
-                </MenuItem>
+                <MenuItem href="http://openjdk.java.net/projects/code-tools/jmh/" target="_blank"><LinkIcon />{ ' JMH ' }</MenuItem>
+                <MenuItem href="http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/" target="_blank"><LinkIcon />{ ' JMH Samples' }</MenuItem>
                 <MenuItem divider />
                 <OverlayTrigger
                   trigger="click"
                   rootClose
                   placement="bottom"
                   overlay={ aboutPopover }>
-                  <MenuItem eventKey="3"> About
-                          </MenuItem>
+                  <MenuItem eventKey="3"> About</MenuItem>
                 </OverlayTrigger>
               </Dropdown.Menu>
             </Dropdown>
@@ -79,13 +67,7 @@ export default class MainNavi extends React.Component {
             <DoingWorkSpinner />
           </NavItem>
         </Nav>
-      </Navbar> : null;
-
-    return (
-      <div>
-        { navBar }
-        <RunSelectionBar />
-      </div>
+      </Navbar>
     );
   }
 }

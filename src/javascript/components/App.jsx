@@ -2,9 +2,11 @@ import React from 'react';
 
 import { connect } from 'store/store.js'
 
-import MainNavi from 'components/MainNavi.jsx';
+import TopBar from 'components/global/TopBar.jsx';
+import Footer from 'components/global/Footer.jsx';
 import DoingWorkSpinner from 'components/DoingWorkSpinner.jsx';
 
+import RunSelectionBar from 'components/RunSelectionBar.jsx'
 import UploadScreen from 'components/UploadScreen.jsx';
 import RunScreen from 'components/RunScreen.jsx';
 import DetailScreen from 'components/DetailScreen.jsx';
@@ -15,7 +17,6 @@ const App = ({ initialLoading, benchmarkRuns, runSelection, runView, detailedBen
     if (initialLoading) {
         return (<div style={ { position: 'fixed', top: '50%', left: '50%' } }><DoingWorkSpinner /></div>);
     }
-
     let screen;
     if (benchmarkRuns.length == 0) {
         screen = <UploadScreen />
@@ -34,18 +35,20 @@ const App = ({ initialLoading, benchmarkRuns, runSelection, runView, detailedBen
 
     return (
         <div>
-            <MainNavi />
-            <div style={ { paddingBottom: 20 + 'px' } }>
+            <TopBar />
+            <div style={ { paddingTop: '20px', paddingBottom: '20px' } }>
+                <RunSelectionBar />
                 { screen }
             </div>
+            <Footer />
         </div>
     );
 }
 
 export default connect(({ initialLoading, benchmarkRuns, runSelection, runView, detailedBenchmarkBundle }) => ({
     initialLoading,
-    benchmarkRuns: benchmarkRuns,
-    runSelection: runSelection,
-    runView: runView,
-    detailedBenchmarkBundle: detailedBenchmarkBundle,
+    benchmarkRuns,
+    runSelection,
+    runView,
+    detailedBenchmarkBundle,
 }))(App)

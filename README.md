@@ -30,7 +30,7 @@ Comes with 2 companion projects:
 
 ## Major Changes
 
-- **Aug 2018** - 0.9 Couple of [user requested features](https://github.com/jzillmann/jmh-visualizer/milestone/6)
+- **Aug 2018** - 0.9 Couple of [user requested features](https://github.com/jzillmann/jmh-visualizer/milestone/6?closed=1)
 - **Jul 2018** - 0.8 Revamp Summary Page + Chart transitions
 - **Jan 2018** - 0.7.3 External URL/Gist support
 - **Okt 2017** - 0.7 Multi-Run support

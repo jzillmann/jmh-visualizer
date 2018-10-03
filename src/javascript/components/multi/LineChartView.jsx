@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 import { ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, LabelList, Legend, Line, ErrorBar } from 'recharts';
 
-import { scaleOrdinal, schemeCategory20 } from 'd3-scale';
-const lineColors = scaleOrdinal(schemeCategory20).range();
+import { scaleOrdinal } from 'd3-scale';
+import { schemeCategory10 } from 'd3-scale-chromatic';
+const lineColors = scaleOrdinal(schemeCategory10).range();
 
 import MultiRunChartTooltip from 'components/multi/MultiRunChartTooltip.jsx'
 import { tooltipBackground } from 'functions/colors.js'

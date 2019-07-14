@@ -27,14 +27,14 @@
     "url": "https://github.com/jzillmann/jmh-visualizer"
   },
   "dependencies": {
-    "bootstrap": "^3.3.7",
-    "core-js": "^2.5.7",
+    "bootstrap": "^3.4.1",
+    "core-js": "^2.6.9",
     "d3-scale-chromatic": "^1.3.3",
     "history": "^4.7.2",
     "prop-types": "^15.6.2",
-    "react": "^16.4.2",
+    "react": "^16.8.6",
     "react-bootstrap": "^0.32.4",
-    "react-dom": "^16.4.2",
+    "react-dom": "^16.8.6",
     "react-dropzone": "^3.13.4",
     "react-icons": "^2.2.7",
     "react-overlays": "^0.8.3",
@@ -59,15 +59,15 @@
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.25.0",
     "esformatter-jsx": "^7.0.1",
-    "eslint": "^5.6.1",
+    "eslint": "^5.16.0",
     "eslint-plugin-jasmine": "^2.10.1",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react": "^7.14.2",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^5.2.0",
     "style-loader": "^0.21.0",
     "url-loader": "^1.1.1",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2"
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.6"
   }
 }

@@ -153,6 +153,7 @@ class ChartTooltip extends React.Component {
         label: PropTypes.any,
         payload: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.any,
+            color: PropTypes.any,
             payload: PropTypes.any,
             value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
             unit: PropTypes.any,

@@ -6,12 +6,27 @@ export default class ScoreExtractor extends MetricExtractor {
         super('Score');
     }
 
-    getMetricObject(benchmark) { // eslint-disable-line no-unused-vars
+    getMetricObject(benchmark) {
         return benchmark.primaryMetric;
     }
 
-    extractType(benchmark) { // eslint-disable-line no-unused-vars
+    extractType(benchmark) {
         return benchmark.mode;
+    }
+
+    hasHistogram(benchmark) {
+        return benchmark.mode === 'sample';
+    }
+
+    extractRawDataScores(benchmark) {
+        if (this.hasHistogram(benchmark)) {
+            return this.extractRawDataHistogram(benchmark).flatMap(
+                forkArrays => forkArrays.flatMap(
+                    scoresArray => scoresArray.map(
+                        timeOccurence => timeOccurence[0]))
+            );
+        }
+        return this.extractRawData(benchmark).flatMap(forkArrays => forkArrays.map(elem => elem));
     }
 
 }

@@ -13,6 +13,10 @@ export default class MetricExtractor {
         throw new TypeError("Do not call abstract method foo from child.");
     }
 
+    hasHistogram(benchmark) { // eslint-disable-line no-unused-vars
+        throw new TypeError("Do not call abstract method foo from child.");
+    }
+
     hasMetric(benchmark) { // eslint-disable-line no-unused-vars
         return !!this.getMetricObject(benchmark);
     }
@@ -37,28 +41,20 @@ export default class MetricExtractor {
         return this.getMetricObject(benchmark).rawDataHistogram;
     }
 
-    extractMinMax(benchmark) {
+    extractRawDataScores(benchmark) { // eslint-disable-line no-unused-vars
+        throw new TypeError("Do not call abstract method foo from child.");
+    }
+
+    extractMinMax(benchmark) { // eslint-disable-line no-unused-vars
         const score = this.extractScore(benchmark);
         let min = score;
         let max = score;
-        if (benchmark.mode === 'sample') {
-            const histogramPerFork = this.extractRawDataHistogram(benchmark);
-            histogramPerFork.forEach(scoresArray => scoresArray.forEach(timeOccurence => {
-                const duration = timeOccurence[0];
-                if (!isNaN(duration)) {
-                    min = Math.min(min, duration);
-                    max = Math.max(max, duration);
-                }
-            }));
-            return [min, max];
-        } else {
-            const scoresPerFork = this.extractRawData(benchmark);
-            scoresPerFork.forEach(scoresArray => scoresArray.forEach(iterationScore => {
-                min = Math.min(min, iterationScore);
-                max = Math.max(max, iterationScore);
-            }));
-            return [min, max];
-        }
+        const rawDataScores = this.extractRawDataScores(benchmark);
+        rawDataScores.forEach(rawDataScore => {
+            min = Math.min(min, rawDataScore);
+            max = Math.max(max, rawDataScore);
+        });
+        return [min, max];
     }
 
 }

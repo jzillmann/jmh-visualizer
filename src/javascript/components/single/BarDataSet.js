@@ -92,7 +92,7 @@ function createBarDataSet(benchmarkMethods, metricExtractor, sort, groupFunction
                 dataObject[barGroup + 'MinMax'] = minMax;
                 dataObject[barGroup + 'Error'] = scoreError;
                 dataObject[barGroup + 'ErrorBarInterval'] = errorBarInterval;
-                if (benchmark.mode === 'sample') {
+                if (metricExtractor.hasHistogram(benchmark)) {
                     dataObject[barGroup + 'SubScoresHistogram'] = metricExtractor.extractRawDataHistogram(benchmark);
                 } else {
                     dataObject[barGroup + 'SubScores'] = metricExtractor.extractRawData(benchmark);

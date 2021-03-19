@@ -34,11 +34,11 @@ export function getBenchmarksLoadFunctionForSourceExamples() {
         } else {
             const gist = getParameterByName('gist');
             if (gist) {
-                return (benchmarkLoadFunction) => fetchFromUrls(benchmarkLoadFunction, [`https://gist.githubusercontent.com/raw/${gist}`]);
+                return (benchmarkLoadFunction) => fetchFromGists(benchmarkLoadFunction, [gist]);
             } else {
                 const gists = getParameterByName('gists');
                 if (gists) {
-                    return (benchmarkLoadFunction) => fetchFromUrls(benchmarkLoadFunction, gists.split(',').map(gist => `https://gist.githubusercontent.com/raw/${gist}`));
+                    return (benchmarkLoadFunction) => fetchFromGists(benchmarkLoadFunction, gists.split(','));
                 }
             }
         }
@@ -71,7 +71,35 @@ function fetchFromUrls(benchmarkLoadFunction, urls) {
             alert(`Could not fetch data from ${url}: ${error}`);
         });
     });
+}
 
+function fetchFromGists(benchmarkLoadFunction, gists) {
+    let fetchedGists = 0;
+    const benchmarkRuns = [];
+    gists.forEach((gist) => {
+        const url = `https://api.github.com/gists/${gist}`
+        fetch(url).then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }).then((json) => {
+            Object.entries(json.files).forEach(([key,value])=>{
+                benchmarkRuns.push(
+                    new BenchmarkRun({
+                        name: `${gist}/${key}`,
+                        benchmarks: JSON.parse(value.content)
+                    })
+                );
+            }); 
+            fetchedGists++;
+            if (fetchedGists == gists.length) {
+                benchmarkLoadFunction(benchmarkRuns);
+            }
+        }).catch(function (error) {
+            alert(`Could not fetch data from ${url}: ${error}`);
+        });
+    });
 }
 
 // backwards compatibility - Jan 2018

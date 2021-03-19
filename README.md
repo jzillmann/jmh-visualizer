@@ -30,6 +30,7 @@ Comes with 2 companion projects:
 
 ## Major Changes
 
+- **Mar 2021** - 0.9.3 Support [Gists containing multiple files](https://github.com/jzillmann/jmh-visualizer/issues/33)
 - **Aug 2018** - 0.9 Couple of [user requested features](https://github.com/jzillmann/jmh-visualizer/milestone/6?closed=1)
 - **Jul 2018** - 0.8 Revamp Summary Page + Chart transitions
 - **Jan 2018** - 0.7.3 External URL/Gist support
@@ -61,6 +62,7 @@ While this app will visualize any valid JMH JSON you throw at it, you can write 
 | source | $url | Load a single benchmark result from the provided URL | http://jmh.morethan.io?source=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json |
 | sources | $url1,$url2,.. | Load multiple benchmark results from the provided URLs | http://jmh.morethan.io?sources=https://gist.githubusercontent.com/jzillmann/7d23b2382911cc434754a23773b06598/raw/1bcad4bb64624d8a2be15114a4eee4c406c3ae95/string-concatenation_jdk7.json,https://gist.githubusercontent.com/jzillmann/866d39d43b264f507a67368f2313baca/raw/d0ae1502e8c493e6814c83f2df345fecb763c078/string-concatenation_jdk8.json |
 | gist | $gistId | Load a single benchmark result from the provided gist | http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598 |
+| gist (multi-file)| $gistId | Load multiple benchmark results from the provided gist | http://jmh.morethan.io?gist=4c9e282fff30b5fa455ae2496acf4e05 |
 | gists | $gistId1,$gistId2,... | Load multiple benchmark results from the provided gists | http://jmh.morethan.io?gists=7d23b2382911cc434754a23773b06598,866d39d43b264f507a67368f2313baca |
 | topBar | oneOf['default', 'off, 'my custom headline'] | Control the header | [Off](http://jmh.morethan.io?gist=7d23b2382911cc434754a23773b06598&topBar=off), [Custom Headline](http://jmh.morethan.io/?gist=7d23b2382911cc434754a23773b06598&topBar=Custom%20Headline) |
 

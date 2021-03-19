@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import { actions } from 'store/store.js'
 import TocLink from 'components/TocLink.jsx'
 
-var Scroll = require('react-scroll');
-var scrollSpy = Scroll.scrollSpy;
-var scroller = Scroll.scroller;
+import {  scrollSpy, scroller } from 'react-scroll'
 
 //Constructs a sidebar with a set of controls and links to the MainView sections
 export default class TocList extends React.PureComponent {

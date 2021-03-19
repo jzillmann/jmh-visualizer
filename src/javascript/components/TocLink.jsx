@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-var Scroll = require('react-scroll');
+import { ScrollLink } from 'react-scroll'
 
 // A link in TocSidebar pointing to a TocElement
 class TocLink extends React.Component {
@@ -20,7 +20,7 @@ class TocLink extends React.Component {
 
 }
 
-const EnhancedTocLink = Scroll.Helpers.Scroll(TocLink);
+const EnhancedTocLink = ScrollLink(TocLink);
 export { EnhancedTocLink as default }
 
 

@@ -5,8 +5,8 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Badge from 'react-bootstrap/lib/Badge';
 
-import Slider from 'react-rangeslider';
-import 'react-rangeslider/lib/index.css';
+import Slider from '@appigram/react-rangeslider';
+import '@appigram/react-rangeslider/lib/index.css';
 
 import SummaryChangeChart from 'components/summary/SummaryChangeChart.jsx';
 import SummaryChangeLevelChart from 'components/summary/SummaryChangeLevelChart.jsx';

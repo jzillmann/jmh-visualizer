@@ -1,5 +1,5 @@
 import createStore from 'react-waterfall'
-import createHistory from 'history/createBrowserHistory'
+import { createBrowserHistory } from 'history'
 
 import { addSettingsFromParameters, getBenchmarksLoadFunctionForDefinedExamples, getBenchmarksLoadFunctionForSourceExamples } from 'store/processParameters.js';
 import Examples from 'models/Examples.js';
@@ -8,7 +8,7 @@ import { exampleRun2 } from 'exampleBenchmark2.js';
 import { exampleRun3 } from 'exampleBenchmark3.js';
 import BenchmarkRun from 'models/BenchmarkRun.js';
 
-const history = createHistory();
+const history = createBrowserHistory();
 
 const examples = new Examples({
     run1: new BenchmarkRun({

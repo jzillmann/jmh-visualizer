@@ -75,30 +75,31 @@ function fetchFromUrls(benchmarkLoadFunction, urls) {
 
 function fetchFromGists(benchmarkLoadFunction, gists) {
     let fetchedGists = 0;
-    const benchmarkRuns = [];
-    gists.forEach((gist) => {
+    const benchmarkRuns = Array(gists.length);
+    gists.forEach((gist, gistIndex) => {
         const url = `https://api.github.com/gists/${gist}`
-        fetch(url).then((response) => {
+        fetch(url)
+          .then((response) => {
             if (!response.ok) {
-                throw Error(response.statusText);
+              throw Error(response.statusText);
             }
             return response.json();
-        }).then((json) => {
-            Object.entries(json.files).forEach(([key,value])=>{
-                benchmarkRuns.push(
-                    new BenchmarkRun({
-                        name: `${gist}/${key}`,
-                        benchmarks: JSON.parse(value.content)
-                    })
-                );
-            }); 
+          })
+          .then((json) => {
+            Object.entries(json.files).forEach(([key, value]) => {
+              benchmarkRuns[gistIndex] = new BenchmarkRun({
+                name: `${gist}/${key}`,
+                benchmarks: JSON.parse(value.content),
+              });
+            });
             fetchedGists++;
             if (fetchedGists == gists.length) {
-                benchmarkLoadFunction(benchmarkRuns);
+              benchmarkLoadFunction(benchmarkRuns);
             }
-        }).catch(function (error) {
+          })
+          .catch(function (error) {
             alert(`Could not fetch data from ${url}: ${error}`);
-        });
+          });
     });
 }
 

@@ -40,7 +40,16 @@ export function createDataSetFromBenchmarks(benchmarkBundle, metricExtractor, so
                 return createBarDataSet(benchmarkMethods, metricExtractor, sort, (method) => `${method.params[0][0]} =  ${method.params[0][1]}`, () => `${metricType} ${scoreUnit}`, []);
             } else {
                 // case 2
-                return createBarDataSet(benchmarkMethods, metricExtractor, sort, (method) => method.name, (method) => method.params[0][1], paramNames);
+                return createBarDataSet(benchmarkMethods, metricExtractor, sort, (method) => method.name, (method) => {
+                  // Kind of a hack.
+                  // The tests of a class aren't homogenous but the code is build on that assumption.
+                  // While this prevents an inital error, it might lead to a break down later down the road.
+                  // The sane option would probably be to distribute the benchmark methods to in different bundles (and have different charts)
+                  if (!method.params) {
+                    return "";
+                  }
+                  return method.params[0][1];
+                }, paramNames);
             }
         } else if (paramNames.length == 2 && methodCount == 1) {
             // case 3

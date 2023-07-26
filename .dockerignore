@@ -1,0 +1,16 @@
+# Ignore everything
+*
+
+# Allow files and directories
+!src/*
+!webpack.config.js
+!package.json
+!package-lock.json
+!.babelrc
+
+# Ignore unnecessary files inside allowed directories
+# This should go after the allowed directories
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db

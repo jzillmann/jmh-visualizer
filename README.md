@@ -82,6 +82,15 @@ Use the [issue tracker](https://github.com/jzillmann/jmh-visualizer/issues) and/
 - ```npm run release``` Build production version
 - ```npm run deploy``` Build production version & move it to the github pages fodler
 
+#### Docker Build & Run
+
+```bash
+docker build . -t jmh-visualizer
+docker run --rm -d -p 80:80 --name jmh-visualizer jmh-visualizer 
+```
+
+Now you can access the UI on ```http://localhost```.
+
 #### Realease
 - Increase version in package.json
 - Update README.md in case of major releases
